@@ -13,9 +13,21 @@ Game::~Game()
 
 }
 
+//GAME FRAMEWORK LOGIC
+
 void Game::update(sf::Time deltaTime)
 {
+	//HANDLE STATES
 
+	GameState *currentState = getActiveState();
+	if (currentState != nullptr)
+	{
+		currentState->handleInput();
+		currentState->update(deltaTime);
+		mWindow.clear(sf::Color::Blue);
+		currentState->draw(deltaTime);
+		mWindow.display();
+	}
 }
 
 void Game::render()
@@ -37,6 +49,11 @@ void Game::processEvents()
 	}
 }
 
+void Game::handleInput()
+{
+	processEvents();
+}
+
 void Game::run()
 {
 	sf::Clock gameClock;
@@ -49,10 +66,41 @@ void Game::run()
 		while (timeSinceLastUpdate > timePerFrame)
 		{
 			timeSinceLastUpdate -= timePerFrame;
-			processEvents();
+			handleInput();
 			update(timePerFrame);
 		}
 
 		render();
 	}
+}
+
+//GAMESTATE LOGIC
+
+void Game::pushState(GameState *state)
+{
+	this->stateStack.push(state);
+}
+
+void Game::popState()
+{
+	delete this->stateStack.top();
+	this->stateStack.pop();
+}
+
+void Game::changeState(GameState *state)
+{
+	//IF THE STACK IS NOT EMPTY, REMOVE THE CURRENT STATE
+	if (!this->stateStack.empty())
+		popState();
+	pushState(state);
+}
+
+GameState* Game::getActiveState()
+{
+	//IF THE STATESTACK IS EMPTY, RETURN NULLPTR - THIS MEANS THERE ARE NO GAMESTATES
+	if (this->stateStack.empty())
+		return nullptr;
+
+	//ELSE, GET THE TOP OF THE STACK AND RETURN
+	return this->stateStack.top();
 }
