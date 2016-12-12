@@ -4,7 +4,7 @@ const sf::Time Game::timePerFrame = sf::seconds(1.f / 60.f);
 
 
 Game::Game()
-	: mWindow(sf::VideoMode(800, 600), "Tanks")
+	: mWindow(sf::VideoMode(1920, 1080), "Tanks")
 {
 }
 
