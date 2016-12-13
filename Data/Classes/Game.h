@@ -1,9 +1,10 @@
 #ifndef GAME_H
-
 #define GAME_H
 
 //CUSTOM CLASSES AND OTHER HELPERS
 #include "GameState.h"
+#include "ResourceHolder.h"
+#include "Enums.h"
 
 
 //SFML LIBRARIES
@@ -16,6 +17,7 @@
 
 //STL LIBRARIES
 #include <stack>
+#include <string>
 
 
 //DECLARE GAMESTATE TO LET THE GAME CLASS KNOW ABOUT GAMESTATE
@@ -48,8 +50,7 @@ public:
 	GameState*										getActiveState();
 
 private:
-
-
+	ResourceHolder<sf::Texture, Texture>			mSprites;
 private:
 	void											processEvents();
 	void											update(sf::Time deltaTime);
