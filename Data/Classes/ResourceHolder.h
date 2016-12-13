@@ -5,6 +5,7 @@
 #include <map>
 #include <exception>
 #include <string>
+#include <algorithm>
 
 template<typename Resource, typename Identifier>
 class ResourceHolder {
@@ -23,14 +24,18 @@ void ResourceHolder<Resource, Identifier>::load(Identifier id, const std::string
 	if (!resource->loadFromFile(pathfile)) {
 		throw std::runtime_error("Resource missing.\n");
 	}
+
+	insertResource(id, std::move(resource));
 }
 
 template<typename Resource, typename Identifier>
 Resource& ResourceHolder<Resource, Identifier>::get(Identifier id) {
+	auto res = mResourceMap.find(id);
 
+	return *res->second;
 }
 
 template<typename Resource, typename Identifier>
 void ResourceHolder<Resource, Identifier>::insertResource(Identifier id, std::unique_ptr<Resource> res) {
-
+	mResourceMap.insert(std::make_pair(id, std::move(res)));
 }

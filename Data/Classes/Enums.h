@@ -1,4 +1,4 @@
-
-enum class Sprite {
+#pragma once
+enum class Texture {
 	TEST
 };
