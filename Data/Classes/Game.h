@@ -31,16 +31,12 @@ class Game
 
 public:
 
-
 	std::stack<GameState*>							stateStack;
 	sf::RenderWindow								mWindow;
-	
-
-
 	static const sf::Time							timePerFrame;
 
 public:
-													Game();
+													Game(unsigned int w, unsigned int h);
 													~Game();
 	void											run();
 
@@ -50,8 +46,12 @@ public:
 	GameState*										getActiveState();
 
 private:
-	ResourceHolder<sf::Texture, Texture>			mSprites;
+	ResourceHolder<sf::Texture, Texture>			mTextures;
+	unsigned int									mWidth;
+	unsigned int									mHeight;
 private:
+	void											loadTextures();
+	void											loadWorld();
 	void											processEvents();
 	void											update(sf::Time deltaTime);
 	void											handleInput();

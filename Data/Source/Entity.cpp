@@ -12,3 +12,7 @@ Entity::Entity(const sf::Vector2f& pos, sf::Sprite* sprite)
 : mSprite(sprite){
 	setPos(mSprite->getPosition());
 }
+
+void Entity::draw(sf::RenderWindow* window) {
+	window->draw(*mSprite);
+}
