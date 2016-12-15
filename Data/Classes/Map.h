@@ -8,11 +8,15 @@
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <string>
 
+class Tile;
+
 class Map {
 public:
 											Map(ResourceHolder<sf::Texture, Texture>* res);
 											Map(std::string& path, ResourceHolder<sf::Texture, Texture>* res);
 	void									loadFromFile(std::string& path);
+
+	void									generateTerrain();
 	void									insertObject(int x, int y, std::string& id);
 	void									updateTiles(sf::Time dt);
 	void									drawTiles(sf::RenderWindow* window);

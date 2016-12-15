@@ -23,7 +23,7 @@ void Tile::update(sf::Time dt) {
 }
 
 void Tile::insertEntity(Entity* entity) {
-	mEntities.insert(mEntities.begin(), entity);
+	mEntities.insert(mEntities.end(), entity);
 }
 
 void Tile::eraseEntity(Entity* entity) {

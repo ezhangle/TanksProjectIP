@@ -1,13 +1,12 @@
 #include "Game.h"
-#include "GameState.h"
 
 const sf::Time Game::timePerFrame = sf::seconds(1.f / 60.f);
 
 
 Game::Game(unsigned int w, unsigned int h)
-	: mWidth(w)
-	, mHeight(h)
-	, mWindow(sf::VideoMode(w, h), "Tanks")
+	: mWidth(w),
+	mHeight(h),
+	mWindow(sf::VideoMode(w, h), "Tanks")
 {
 	loadTextures();
 	loadWorld();
@@ -19,7 +18,12 @@ Game::~Game()
 }
 
 void Game::loadTextures() {
-	mTextures.load(Texture::TEST, "Assets/Textures/test.jpg");
+	mTextures.load(Texture::TERRAIN_GR_01, "Assets/Textures/TERRAIN_GR_01.png");
+
+	mTextures.load(Texture::ROCK_01, "Assets/Textures/ROCK_01.png");
+
+	mTextures.load(Texture::TANK1_BODY, "Assets/Textures/TANK1_BODY.png");
+	mTextures.load(Texture::TANK1_GUN, "Assets/Textures/TANK1_GUN.png");
 }
 
 void Game::loadWorld() {
@@ -41,6 +45,8 @@ void Game::update(sf::Time deltaTime)
 		currentState->draw(deltaTime);
 		mWindow.display();
 	}
+
+	mWorld.mMaps[0]->updateTiles(deltaTime);
 }
 
 void Game::render()
@@ -63,15 +69,9 @@ void Game::processEvents()
 	}
 }
 
-void Game::handleRealTimeInput()
-{
-
-}
-
 void Game::handleInput()
 {
 	processEvents();
-	handleRealTimeInput();
 }
 
 void Game::run()
@@ -124,4 +124,3 @@ GameState* Game::getActiveState()
 	//ELSE, GET THE TOP OF THE STACK AND RETURN
 	return this->stateStack.top();
 }
-

@@ -4,6 +4,8 @@
 #include <SFML\Graphics\RenderWindow.hpp>
 #include "Entity.h"
 
+class Entity;
+
 class Tile {
 public:
 	Tile();
@@ -12,6 +14,6 @@ public:
 	void					insertEntity(Entity* entity);
 	void					eraseEntity(Entity* entity);
 	void					eraseEntity(std::list<Entity*>::iterator it);
-private:
+public:
 	std::list<Entity*>		mEntities;
 };

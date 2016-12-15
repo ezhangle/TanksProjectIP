@@ -8,11 +8,18 @@ void Entity::setPos(sf::Vector2f* pos) {
 	mSprite->setPosition(*pos);
 }
 
-Entity::Entity(sf::Vector2f* pos, sf::Sprite* sprite)
-: mSprite(sprite){
-	setPos(pos);
-}
-
 void Entity::draw(sf::RenderWindow* window) {
 	window->draw(*mSprite);
 }
+
+Entity::Entity(sf::Vector2f* pos, sf::Sprite* sprite, Map* map)
+: mSprite(sprite),
+mCurrentMap(map){
+	setPos(pos);
+}
+
+Entity::Entity(Map* map)
+:mCurrentMap(map){
+
+}
+

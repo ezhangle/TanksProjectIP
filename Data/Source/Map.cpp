@@ -1,6 +1,7 @@
 #pragma once
 #include "Map.h"
 #include "Terrain.h"
+#include "Tank.h"
 #include <fstream>
 
 Map::Map(ResourceHolder<sf::Texture, Texture>* res)
@@ -31,6 +32,8 @@ void Map::loadFromFile(std::string& path) {
 		mTiles[i] = new Tile[mColumns];
 	}
 
+	generateTerrain();
+
 	int objects;
 	in >> objects;
 
@@ -44,9 +47,36 @@ void Map::loadFromFile(std::string& path) {
 	in.close();
 }
 
+void Map::generateTerrain() {
+	std::string terrain_01("TERRAIN_GR_01");
+	for (int i = 0; i < mRows; ++i) {
+		for (int j = 0; j < mColumns; ++j) {
+			insertObject(i, j, terrain_01);
+		}
+	}
+}
+
 void Map::insertObject(int x, int y, std::string& id) {
-	if (id == "pet") {
-		mTiles[x][y].insertEntity(new Terrain(new sf::Vector2f(x*TILE_WIDTH, y*TILE_HEIGHT), new sf::Sprite(mTextures->get(Texture::TEST)), false));
+	if (id == "ROCK_01")
+		mTiles[x][y].insertEntity(new Terrain(new sf::Vector2f(x*TILE_WIDTH, y*TILE_HEIGHT), 
+			new sf::Sprite(mTextures->get(Texture::ROCK_01)), 
+			true,
+			this));
+
+	if (id == "TERRAIN_GR_01") 
+		mTiles[x][y].insertEntity(new Terrain(new sf::Vector2f(x*TILE_WIDTH, y*TILE_HEIGHT), 
+			new sf::Sprite(mTextures->get(Texture::TERRAIN_GR_01)), 
+			false,
+			this));
+
+	if (id == "TANK1") {
+		mTiles[x][y].insertEntity(new Tank(new sf::Sprite(mTextures->get(Texture::TANK1_BODY)),
+			new sf::Sprite(mTextures->get(Texture::TANK1_GUN)),
+			new sf::Vector2f(x*TILE_WIDTH, y*TILE_HEIGHT),
+			new sf::Vector2f(20.f, 20.f),
+			10.f,
+			10.f,
+			this));
 	}
 }
 
