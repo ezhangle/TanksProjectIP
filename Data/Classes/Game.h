@@ -35,6 +35,7 @@ public:
 	std::stack<GameState*>							stateStack;
 	sf::RenderWindow								mWindow;
 	static const sf::Time							timePerFrame;
+	sf::Sprite										mBackground;
 
 public:
 													Game(unsigned int w, unsigned int h);
@@ -51,10 +52,12 @@ private:
 	unsigned int									mWidth;
 	unsigned int									mHeight;
 	World											mWorld;
+
 private:
 	void											loadTextures();
 	void											loadWorld();
 	void											processEvents();
+	void											handleRealTimeInput();
 	void											update(sf::Time deltaTime);
 	void											handleInput();
 	void											render();

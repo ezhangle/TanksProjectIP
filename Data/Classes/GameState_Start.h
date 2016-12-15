@@ -5,19 +5,22 @@
 class GameState_Start
 	: public GameState
 {
+public:
+													
+
+public:
+													GameState_Start(Game *game);
+
+	void											draw(const sf::Time deltaTime);
+	void											update(const sf::Time deltaTime);
+	void											handleInput();
+	void											handleEvents();
+	void											handleRealTimeInput();
+
 private:
 	sf::View										mView;
 
 private:
-	void											draw(sf::Time deltaTime);
-	void											update(sf::Time deltaTime);
-	void											handleInput();
-
-public:
-													GameState_Start();
-													~GameState_Start();
-
-public:
 
 
 };

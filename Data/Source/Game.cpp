@@ -1,12 +1,13 @@
 #include "Game.h"
+#include "GameState.h"
 
 const sf::Time Game::timePerFrame = sf::seconds(1.f / 60.f);
 
 
 Game::Game(unsigned int w, unsigned int h)
-	: mWidth(w),
-	mHeight(h),
-	mWindow(sf::VideoMode(w, h), "Tanks")
+	: mWidth(w)
+	, mHeight(h)
+	, mWindow(sf::VideoMode(w, h), "Tanks")
 {
 	loadTextures();
 	loadWorld();
@@ -62,9 +63,15 @@ void Game::processEvents()
 	}
 }
 
+void Game::handleRealTimeInput()
+{
+
+}
+
 void Game::handleInput()
 {
 	processEvents();
+	handleRealTimeInput();
 }
 
 void Game::run()
@@ -117,3 +124,4 @@ GameState* Game::getActiveState()
 	//ELSE, GET THE TOP OF THE STACK AND RETURN
 	return this->stateStack.top();
 }
+
