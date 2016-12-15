@@ -18,11 +18,11 @@ Game::~Game()
 }
 
 void Game::loadTextures() {
-	mTextures.load(Texture::TEST, "Assets/Textures/test.bmp");
+	mTextures.load(Texture::TEST, "Assets/Textures/test.jpg");
 }
 
 void Game::loadWorld() {
-
+	mWorld.loadWorld("Assets/Maps/graph.txt", &mTextures);
 }
 
 //GAME FRAMEWORK LOGIC
@@ -44,7 +44,8 @@ void Game::update(sf::Time deltaTime)
 
 void Game::render()
 {
-
+	mWorld.mMaps[0]->drawTiles(&mWindow);
+	mWindow.display();
 }
 
 void Game::processEvents()

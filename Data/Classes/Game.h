@@ -5,6 +5,7 @@
 #include "GameState.h"
 #include "ResourceHolder.h"
 #include "Enums.h"
+#include "World.h"
 
 
 //SFML LIBRARIES
@@ -49,6 +50,7 @@ private:
 	ResourceHolder<sf::Texture, Texture>			mTextures;
 	unsigned int									mWidth;
 	unsigned int									mHeight;
+	World											mWorld;
 private:
 	void											loadTextures();
 	void											loadWorld();
