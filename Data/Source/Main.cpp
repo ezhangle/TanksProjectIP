@@ -2,6 +2,6 @@
 
 int main()
 {
-	Game game;
+	Game game(1280, 768);
 	game.run();
 }

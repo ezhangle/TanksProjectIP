@@ -3,15 +3,26 @@
 const sf::Time Game::timePerFrame = sf::seconds(1.f / 60.f);
 
 
-Game::Game()
-	: mWindow(sf::VideoMode(800, 600), "Tanks")
+Game::Game(unsigned int w, unsigned int h)
+	: mWidth(w),
+	mHeight(h),
+	mWindow(sf::VideoMode(w, h), "Tanks")
 {
-	mSprites.load(Texture::TEST, "assets/test.bmp");
+	loadTextures();
+	loadWorld();
 }
 
 Game::~Game()
 {
 
+}
+
+void Game::loadTextures() {
+	mTextures.load(Texture::TEST, "Assets/Textures/test.jpg");
+}
+
+void Game::loadWorld() {
+	mWorld.loadWorld("Assets/Maps/graph.txt", &mTextures);
 }
 
 //GAME FRAMEWORK LOGIC
@@ -33,7 +44,8 @@ void Game::update(sf::Time deltaTime)
 
 void Game::render()
 {
-
+	mWorld.mMaps[0]->drawTiles(&mWindow);
+	mWindow.display();
 }
 
 void Game::processEvents()

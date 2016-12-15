@@ -1,10 +1,17 @@
 #pragma once
-
+#include <list>
+#include <SFML\System\Time.hpp>
+#include <SFML\Graphics\RenderWindow.hpp>
 #include "Entity.h"
 
-class Tile{
+class Tile {
 public:
-	Tile(Entity* entity);
+	Tile();
+	void					update(sf::Time dt);
+	void					draw(sf::RenderWindow* window);
+	void					insertEntity(Entity* entity);
+	void					eraseEntity(Entity* entity);
+	void					eraseEntity(std::list<Entity*>::iterator it);
 private:
-	Entity* mEntity;
+	std::list<Entity*>		mEntities;
 };
