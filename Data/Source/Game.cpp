@@ -35,7 +35,7 @@ void Game::loadWorld() {
 void Game::update(sf::Time deltaTime)
 {
 	//HANDLE STATES
-
+	/*
 	GameState *currentState = getActiveState();
 	if (currentState != nullptr)
 	{
@@ -44,7 +44,7 @@ void Game::update(sf::Time deltaTime)
 		mWindow.clear(sf::Color::Blue);
 		currentState->draw(deltaTime);
 		mWindow.display();
-	}
+	}*/
 
 	mWorld.mMaps[0]->updateTiles(deltaTime);
 }
