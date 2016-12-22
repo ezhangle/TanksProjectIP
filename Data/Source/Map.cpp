@@ -48,7 +48,7 @@ void Map::insertObject(std::string& obj, sf::Vector2f* pos) {
 			pos,
 			new sf::Vector2f(150.f, 150.f),
 			10.f,
-			10.f,
+			2.f,
 			keys));
 	}
 
@@ -72,7 +72,7 @@ void Map::insertObject(std::string& obj, sf::Vector2f* pos) {
 			pos,
 			new sf::Vector2f(150.f, 150.f),
 			10.f,
-			10.f,
+			2.f,
 			keys));
 	}
 }
@@ -85,9 +85,6 @@ void Map::update(sf::Time dt) {
 	}
 
 	for (auto it = mEffects.begin(); it != mEffects.end(); ++it) {
-		if ((*it)->bFinished == true)
-			mEffects.erase(it);
-		else
 			(*it)->update(dt);
 	}
 }

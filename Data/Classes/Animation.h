@@ -7,10 +7,12 @@
 class Animation {
 public:
 	Animation(sf::Vector2f* pos, Texture start, Texture end, int frameduration, bool repeated);
+	~Animation();
 
 	void	update(sf::Time dt);
 	void	draw(sf::RenderWindow* window);
 	void	reset();
+	void	selfDestruct();
 public:
 	int							mCurrentFrame;
 	int							mFrameClock;

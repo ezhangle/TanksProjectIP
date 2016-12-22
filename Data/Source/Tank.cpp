@@ -1,9 +1,10 @@
 #include "Tank.h"
 #include "Game.h"
-#include "Collision.h"
 #include "Terrain.h"
 #include "Map.h"
-#include <iostream>
+#include "Projectile.h"
+#include "Animation.h"
+
 #include <cmath>
 Tank::Tank(sf::Sprite* base, sf::Sprite* top, sf::Vector2f* pos, sf::Vector2f* vel, float health, float damage):
 Entity(),
@@ -19,6 +20,9 @@ mDamage(damage)
 	base->setPosition(pos->x, pos->y);
 	top->setPosition(base->getPosition());
 
+	mHitCooldown = 0.2f;
+	mHitCooldownClock.restart();
+
 	
 }
 
@@ -28,7 +32,12 @@ void Tank::draw(sf::RenderWindow* window) {
 }
 
 void Tank::update(sf::Time dt) {
-	
+	if (mHealth <= 0) {
+		Game::get()->mMap->mEffects.insert(Game::get()->mMap->mEffects.begin(), new Animation(new sf::Vector2f(mBase->getPosition()), Texture::expl_10_0000, Texture::expl_10_0031, 50, false));
+		mBase->setTexture(Game::get()->mTextures.get(Texture::tank1b_body_destroyed));
+		mHealth = 1;
+		//selfDestruct();
+	}
 }
 
 void Tank::rotateTurret(float modifier) {
@@ -41,6 +50,7 @@ void Tank::rotateBase(float modifier) {
 	if (checkCollision())
 		mBase->rotate(-modifier);
 }
+
 void Tank::MoveX(float inc) {
 	sf::Vector2f newPos(mBase->getPosition());
 	sf::Vector2f oldPos(newPos);
@@ -57,9 +67,25 @@ void Tank::MoveX(float inc) {
 	}
 }
 
+void Tank::shoot() {
+	if (mHitCooldownClock.getElapsedTime().asSeconds() > mHitCooldown) {
+		sf::Sprite* news = new sf::Sprite(Game::get()->mTextures.get(Texture::bullet_orange));
+		news->setRotation(mTop->getRotation());
+		news->setOrigin(news->getLocalBounds().width / 2.f, news->getLocalBounds().height / 2.f);
+		news->setPosition(mTop->getPosition());
+
+		sf::Vector2f* pos = new sf::Vector2f(sin(mTop->getRotation()*3.14f / 180.f)*mTop->getLocalBounds().width + mTop->getPosition().x,
+			-cos(mTop->getRotation()*3.14f / 180.f)*mTop->getLocalBounds().height + mTop->getPosition().y);
+
+		Map* m = Game::get()->mMap;
+		m->mEntities[2].insert(m->mEntities[2].end(), new Projectile(news, pos, new sf::Vector2f(500.f, 500.f), mDamage));
+
+		mHitCooldownClock.restart();
+	}
+}
+
 bool Tank::checkCollision() {
 	bool collideSolid = false;
-	Collision col;
 
 	Map* map = Game::get()->mMap;
 
@@ -67,7 +93,7 @@ bool Tank::checkCollision() {
 		for (auto it2 = (*it1).begin(); it2 != (*it1).end(); ++it2) {
 			if ((*it2) != this)
 			{
-				if (col.collision(mBase, (*it2)->getSprite())) {
+				if (SAT.collision(mBase, (*it2)->getSprite())) {
 					collideSolid = true;
 				}
 			}
