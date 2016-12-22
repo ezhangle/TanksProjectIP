@@ -1,8 +1,12 @@
 #include "Tank.h"
 #include "Game.h"
+#include "Collision.h"
+#include "Terrain.h"
+#include "Map.h"
 #include <iostream>
-Tank::Tank(sf::Sprite* base, sf::Sprite* top, sf::Vector2f* pos, sf::Vector2f* vel, float health, float damage, Map* map):
-Entity(map),
+#include <cmath>
+Tank::Tank(sf::Sprite* base, sf::Sprite* top, sf::Vector2f* pos, sf::Vector2f* vel, float health, float damage):
+Entity(),
 mBase(base),
 mTop(top),
 mVelocity(vel),
@@ -31,83 +35,58 @@ void Tank::rotateTurret(float modifier) {
 	mTop->setRotation(mTop->getRotation() + modifier);
 }
 
-void Tank::move(Command dir, sf::Time dt) {
+void Tank::rotateBase(float modifier) {
+	mBase->rotate(modifier);
+
+	if (checkCollision())
+		mBase->rotate(-modifier);
+}
+void Tank::MoveX(float inc) {
 	sf::Vector2f newPos(mBase->getPosition());
-	int tileX = (int)newPos.x / 64;
-	int tileY = (int)newPos.y / 64;
-	int tileX2 = tileX;
-	int tileY2 = tileY;
+	sf::Vector2f oldPos(newPos);
 
-	if (dir == Command::RIGHT) {
-		newPos.x += dt.asSeconds() * mVelocity->x;
-		tileX2 = (int)newPos.x / 64;
+	newPos.x += sin(mBase->getRotation()*3.14f / 180.f)* inc * mVelocity->x;
+	newPos.y -= cos(mBase->getRotation()*3.14f / 180.f)* inc * mVelocity->y;
 
-		mBase->setRotation(90.f);
-	}
-
-	if (dir == Command::UP) {
-		newPos.y -= dt.asSeconds() * mVelocity->y;
-		tileY2 = (int)newPos.y / 64;
-
-		mBase->setRotation(0.f);
-	}
-
-	if (dir == Command::DOWN) {
-		newPos.y += dt.asSeconds() * mVelocity->y;
-		tileY2 = (int)newPos.y / 64;
-
-		mBase->setRotation(180.f);
-	}
-
-	if (dir == Command::LEFT) {
-		newPos.x -= dt.asSeconds() * mVelocity->x;
-		tileX2 = (int)newPos.x / 64;
-		
-		mBase->setRotation(-90.f);
-	}
-
-	if (dir == Command::H_DOWN_LEFT) {
-		newPos.x -= dt.asSeconds() * mVelocity->x;
-		newPos.y += dt.asSeconds() * mVelocity->y;
-		tileX2 = tileX2 = (int)newPos.x / 64;
-		tileY2 = tileY2 = (int)newPos.y / 64;
-
-		mBase->setRotation(-135.f);
-	}
-
-	if (dir == Command::H_DOWN_RIGHT) {
-		newPos.x += dt.asSeconds() * mVelocity->x;
-		newPos.y += dt.asSeconds() * mVelocity->y;
-		tileX2 = tileX2 = (int)newPos.x / 64;
-		tileY2 = tileY2 = (int)newPos.y / 64;
-
-		mBase->setRotation(135.f);
-	}
-
-	if (dir == Command::H_UP_LEFT) {
-		newPos.x -= dt.asSeconds() * mVelocity->x;
-		newPos.y -= dt.asSeconds() * mVelocity->y;
-		tileX2 = tileX2 = (int)newPos.x / 64;
-		tileY2 = tileY2 = (int)newPos.y / 64;
-
-		mBase->setRotation(-45.f);
-	}
-
-	if (dir == Command::H_UP_RIGHT) {
-		newPos.x += dt.asSeconds() * mVelocity->x;
-		newPos.y -= dt.asSeconds() * mVelocity->y;
-		tileX2 = tileX2 = (int)newPos.x / 64;
-		tileY2 = tileY2 = (int)newPos.y / 64;
-
-		mBase->setRotation(45.f);
-	}
-
-	if (tileX != tileX2 || tileY2 != tileY) {
-		mCurrentMap->mTiles[(int)Map::Priority::PLAYER][tileX2][tileY2].insertEntity(this);
-		mCurrentMap->mTiles[(int)Map::Priority::PLAYER][tileX][tileY].eraseEntity(this);
-	}
-	
 	mBase->setPosition(newPos);
 	mTop->setPosition(newPos);
 
+	if (checkCollision() || checkOutOfBounds()) {
+		mBase->setPosition(oldPos);
+		mTop->setPosition(oldPos);
+	}
+}
+
+bool Tank::checkCollision() {
+	bool collideSolid = false;
+	Collision col;
+
+	Map* map = Game::get()->mMap;
+
+	for (auto it1 = map->mEntities.begin(); it1 != map->mEntities.end(); ++it1) {
+		for (auto it2 = (*it1).begin(); it2 != (*it1).end(); ++it2) {
+			if ((*it2) != this)
+			{
+				if (col.collision(mBase, (*it2)->getSprite())) {
+					collideSolid = true;
+				}
+			}
+		}
+	}
+
+	return collideSolid;
+}
+
+bool Tank::checkOutOfBounds() {
+	sf::Vector2f pos = mBase->getPosition();
+
+	if (pos.x < 64.f || pos.x > (float)Game::get()->mWidth - 64.f ||
+		pos.y < 64.f || pos.y > (float)Game::get()->mHeight - 64.f)
+		return true;
+
+	return false;
+}
+
+sf::Sprite* Tank::getSprite() {
+	return mBase;
 }

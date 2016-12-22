@@ -1,9 +1,15 @@
 #include "Game.h"
 #include "GameState_Start.h"
+#include <exception>
+#include <iostream>
 
 int main()
 {
-	Game game(1280, 768);
-	game.pushState(new GameState_Start(&game));
-	game.run();
+	try {
+		Game::get()->run();
+	}
+	catch (std::runtime_error& err) {
+		std::cout << err.what();
+	}
+	
 }

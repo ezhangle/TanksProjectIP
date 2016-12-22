@@ -1,14 +1,12 @@
 #ifndef GAME_H
 #define GAME_H
 
-//CUSTOM CLASSES AND OTHER HELPERS
 #include "GameState.h"
 #include "ResourceHolder.h"
 #include "Enums.h"
-#include "World.h"
+#include "Map.h"
 
 
-//SFML LIBRARIES
 #include <SFML\System\NonCopyable.hpp>
 #include <SFML\System\Time.hpp>
 #include <SFML\System\Clock.hpp>
@@ -16,12 +14,10 @@
 #include <SFML\Window\Event.hpp>
 
 
-//STL LIBRARIES
 #include <stack>
 #include <string>
 
 
-//DECLARE GAMESTATE TO LET THE GAME CLASS KNOW ABOUT GAMESTATE
 class GameState;
 
 
@@ -29,7 +25,7 @@ class Game
 	: private sf::NonCopyable
 
 {
-
+	static Game										*instance;
 public:
 
 	std::stack<GameState*>							stateStack;
@@ -47,20 +43,26 @@ public:
 	void											changeState(GameState *state);
 	GameState*										getActiveState();
 
-private:
+public:
 	ResourceHolder<sf::Texture, Texture>			mTextures;
 	unsigned int									mWidth;
 	unsigned int									mHeight;
-	World											mWorld;
+	Map*											mMap;
+	sf::Clock										mClock;
+
+	static Game* get() {
+		if (instance == nullptr)
+			instance = new Game(1280, 640);
+		return instance;
+	}
 
 private:
 	void											loadTextures();
-	void											loadWorld();
 	void											processEvents();
-	void											handleRealTimeInput();
 	void											update(sf::Time deltaTime);
 	void											handleInput();
 	void											render();
+	Map*											getMap();
 										
 };
 

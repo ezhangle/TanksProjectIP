@@ -1,15 +1,20 @@
 #include "Game.h"
-
+#include <fstream>
 const sf::Time Game::timePerFrame = sf::seconds(1.f / 60.f);
-
+Game *Game::instance = nullptr;
 
 Game::Game(unsigned int w, unsigned int h)
 	: mWidth(w),
 	mHeight(h),
 	mWindow(sf::VideoMode(w, h), "Tanks")
 {
+	instance = this;
 	loadTextures();
-	loadWorld();
+
+	std::string path("Assets/Maps/map1.tmap");
+	mMap = new Map(path);
+
+	mClock.restart();
 }
 
 Game::~Game()
@@ -18,23 +23,23 @@ Game::~Game()
 }
 
 void Game::loadTextures() {
-	mTextures.load(Texture::TERRAIN_GR_01, "Assets/Textures/TERRAIN_GR_01.png");
+	std::ifstream in("Assets/Textures/asset_path.txt");
+	std::string path;
+	int i = 0;
 
-	mTextures.load(Texture::ROCK_01, "Assets/Textures/ROCK_01.png");
-
-	mTextures.load(Texture::TANK1_BODY, "Assets/Textures/TANK1_BODY.png");
-	mTextures.load(Texture::TANK1_GUN, "Assets/Textures/TANK1_GUN.png");
+	while (!in.eof()) {
+		in >> path;
+		mTextures.load(static_cast<Texture>(i++), path);
+	}
+	in.close();
 }
 
-void Game::loadWorld() {
-	mWorld.loadWorld("Assets/Maps/graph.txt", &mTextures);
+Map* Game::getMap() {
+	return mMap;
 }
-
-//GAME FRAMEWORK LOGIC
 
 void Game::update(sf::Time deltaTime)
 {
-	//HANDLE STATES
 	/*
 	GameState *currentState = getActiveState();
 	if (currentState != nullptr)
@@ -46,12 +51,12 @@ void Game::update(sf::Time deltaTime)
 		mWindow.display();
 	}*/
 
-	mWorld.mMaps[0]->updateTiles(deltaTime);
+	mMap->update(deltaTime);
 }
 
 void Game::render()
 {
-	mWorld.mMaps[0]->drawTiles(&mWindow);
+	mMap->draw(&mWindow);
 	mWindow.display();
 }
 
@@ -94,8 +99,6 @@ void Game::run()
 	}
 }
 
-//GAMESTATE LOGIC
-
 void Game::pushState(GameState *state)
 {
 	this->stateStack.push(state);
@@ -109,7 +112,6 @@ void Game::popState()
 
 void Game::changeState(GameState *state)
 {
-	//IF THE STACK IS NOT EMPTY, REMOVE THE CURRENT STATE
 	if (!this->stateStack.empty())
 		popState();
 	pushState(state);
@@ -117,10 +119,8 @@ void Game::changeState(GameState *state)
 
 GameState* Game::getActiveState()
 {
-	//IF THE STATESTACK IS EMPTY, RETURN NULLPTR - THIS MEANS THERE ARE NO GAMESTATES
 	if (this->stateStack.empty())
 		return nullptr;
 
-	//ELSE, GET THE TOP OF THE STACK AND RETURN
 	return this->stateStack.top();
 }

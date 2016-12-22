@@ -12,14 +12,13 @@ void Entity::draw(sf::RenderWindow* window) {
 	window->draw(*mSprite);
 }
 
-Entity::Entity(sf::Vector2f* pos, sf::Sprite* sprite, Map* map)
-: mSprite(sprite),
-mCurrentMap(map){
-	setPos(pos);
+sf::Sprite*	Entity::getSprite() {
+	return mSprite;
 }
 
-Entity::Entity(Map* map)
-:mCurrentMap(map){
-
+Entity::Entity(sf::Vector2f* pos, sf::Sprite* sprite)
+: mSprite(sprite)
+{
+	setPos(pos);
 }
 

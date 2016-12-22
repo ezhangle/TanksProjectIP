@@ -8,17 +8,21 @@ class Tank: public Entity {
 public:
 	enum class Command {
 		LEFT, RIGHT, UP, DOWN,
+		ROT_LEFT, ROT_RIGHT,
+		SHOOT,
 
 		NUMBER,
-
-		H_UP_LEFT, H_UP_RIGHT, H_DOWN_LEFT, H_DOWN_RIGHT
 	};
 public:
-						Tank(sf::Sprite* base, sf::Sprite* top, sf::Vector2f* pos, sf::Vector2f* vel, float health, float damage, Map* map);
+						Tank(sf::Sprite* base, sf::Sprite* top, sf::Vector2f* pos, sf::Vector2f* vel, float health, float damage);
 	void				update(sf::Time dt);
 	void				draw(sf::RenderWindow* window);
 	void				rotateTurret(float modifier);
-	void				move(Command dir, sf::Time dt);
+	void				rotateBase(float modifier);
+	void				MoveX(float inc);
+	bool				checkCollision();
+	bool				checkOutOfBounds();
+	virtual sf::Sprite* getSprite();
 
 public:
 	sf::Sprite*			mTop;

@@ -5,8 +5,6 @@
 
 class Terrain : public Entity {
 public:
-							Terrain(sf::Vector2f* pos, sf::Sprite* sprite, bool solid, Map* map);
+							Terrain(sf::Vector2f* pos, sf::Sprite* sprite);
 	virtual void			update(sf::Time dt);
-public:
-	bool					bSolid;
 };
