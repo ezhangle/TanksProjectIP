@@ -47,6 +47,12 @@ enum class Texture {
 	tank3d_gun_destroyed,
 	//end_tanks
 
+	barrel,
+	box,
+	box_2x1,
+	box_2x2,
+	box_small,
+
 	expl_01_0000,
 	expl_01_0001,
 	expl_01_0002,

@@ -19,7 +19,7 @@ void Projectile::update(sf::Time dt) {
 	mSprite->setPosition(newPos);
 
 	if (outOfBounds() || checkCollision()) {
-		selfDestruct();
+		mDelete = true;
 	}
 }
 
@@ -46,8 +46,9 @@ bool Projectile::checkCollision() {
 				if (SAT.collision(mSprite, (*it2)->getSprite())) {
 					Game::get()->mMap->mEffects.insert(Game::get()->mMap->mEffects.begin(), new Animation(new sf::Vector2f(mSprite->getPosition()), Texture::expl_01_0000, Texture::expl_01_0023, 20, false));
 
-					if (Player* proj = dynamic_cast<Player*>((*it2))) {
+					if (Tank* proj = dynamic_cast<Tank*>((*it2))) {
 						proj->mHealth -= mDamage;
+						
 					}
 					collideSolid = true;
 				}

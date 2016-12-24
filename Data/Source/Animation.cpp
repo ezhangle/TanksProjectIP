@@ -31,7 +31,7 @@ void Animation::update(sf::Time dt) {
 		}
 	}
 	else
-		selfDestruct();
+		bFinished = true;
 }
 
 void Animation::draw(sf::RenderWindow* window) {
@@ -52,18 +52,6 @@ void Animation::draw(sf::RenderWindow* window) {
 void Animation::reset() {
 	mCurrentFrame = 0;
 	bFinished = false;
-}
-
-void Animation::selfDestruct() {
-	auto it = Game::get()->mMap->mEffects.begin();
-
-	while ((*it) != this) {
-		++it;
-	}
-
-	Game::get()->mMap->mEffects.erase(it);
-
-	delete this;
 }
 
 Animation::~Animation() {

@@ -11,8 +11,6 @@ mKeys(keys){
 }
 
 void Player::handleInput(sf::Time dt) {
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::K))
-		mHealth = 0.f;
 
 	if (sf::Keyboard::isKeyPressed(mKeys[(int)Command::SHOOT]))
 		shoot();
@@ -23,19 +21,24 @@ void Player::handleInput(sf::Time dt) {
 	else if (sf::Keyboard::isKeyPressed(mKeys[(int)Command::DOWN])) {
 		MoveX(-dt.asSeconds());
 	}
+	else {
+		mAcceleration -= 8.f;
+		if (mAcceleration < 0.f)
+			mAcceleration = 0.f;
+	}
+
 	if (sf::Keyboard::isKeyPressed(mKeys[(int)Command::LEFT])) {
-		rotateBase(dt.asSeconds() * -200);
+		rotateBase(-dt.asSeconds());
 	}	
 	else if (sf::Keyboard::isKeyPressed(mKeys[(int)Command::RIGHT])) {
-		rotateBase(dt.asSeconds() * 200.f);
+		rotateBase(dt.asSeconds());
 	}	
 	
 	if (sf::Keyboard::isKeyPressed(mKeys[(int)Command::ROT_LEFT]))
-		rotateTurret(-dt.asSeconds() * 200.f);
+		rotateTurret(-dt.asSeconds());
 	if (sf::Keyboard::isKeyPressed(mKeys[(int)Command::ROT_RIGHT]))
-		rotateTurret(dt.asSeconds() * 200.f);
+		rotateTurret(dt.asSeconds());
 
-	
 }
 
 void Player::update(sf::Time dt) {

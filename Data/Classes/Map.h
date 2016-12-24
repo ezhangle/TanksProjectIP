@@ -21,7 +21,7 @@ public:
 	void										loadFromFile(std::string& path);
 	void										update(sf::Time dt);
 	void										draw(sf::RenderWindow* window);
-	void										insertObject(std::string& obj, sf::Vector2f* pos);
+	void										insertObject(std::string& obj, sf::Vector2f* pos, std::ifstream& stream);
 public:
 	std::vector<std::list<Entity*>>				mEntities;
 	std::list<Animation*>						mEffects;

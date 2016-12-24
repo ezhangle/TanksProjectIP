@@ -3,8 +3,8 @@
 #include "Map.h"
 #include <SFML/Graphics.hpp>
 
-class Terrain : public Entity {
+class Obstacle : public Entity {
 public:
-							Terrain(sf::Vector2f* pos, sf::Sprite* sprite);
+							Obstacle(sf::Vector2f* pos, sf::Sprite* sprite);
 	virtual void			update(sf::Time dt);
 };

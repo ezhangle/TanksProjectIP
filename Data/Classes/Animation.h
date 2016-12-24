@@ -12,7 +12,7 @@ public:
 	void	update(sf::Time dt);
 	void	draw(sf::RenderWindow* window);
 	void	reset();
-	void	selfDestruct();
+
 public:
 	int							mCurrentFrame;
 	int							mFrameClock;

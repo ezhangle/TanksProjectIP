@@ -21,7 +21,7 @@ public:
 
 	void				rotateTurret(float modifier);
 	void				rotateBase(float modifier);
-	void				MoveX(float inc);
+	bool				MoveX(float inc);
 	void				shoot();
 
 	bool				checkCollision();
@@ -31,7 +31,11 @@ public:
 public:
 	sf::Sprite*			mTop;
 	sf::Sprite*			mBase;
+
 	sf::Vector2f*		mVelocity;
+	float				mAcceleration;
+	float				mMaxAcceleration;
+
 	sf::Clock			mHitCooldownClock;
 	float				mHitCooldown;
 	Collision			SAT;
