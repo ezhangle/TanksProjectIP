@@ -208,3 +208,9 @@ Assets/Textures/Effects/explosion/expl_10_0030.png
 Assets/Textures/Effects/explosion/expl_10_0031.png
 
 Assets/Textures/Effects/bullets/bullet_orange.png
+
+
+Assets/Textures/Buttons/button_ExitGame.png
+Assets/Textures/Buttons/button_StartGame.png
+Assets/Textures/Buttons/button_ChangeTank.png
+Assets/Textures/Buttons/button_Scoreboard.png

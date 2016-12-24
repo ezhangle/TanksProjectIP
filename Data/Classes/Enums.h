@@ -214,6 +214,11 @@ enum class Texture {
 	expl_10_0030,
 	expl_10_0031,
 
-	bullet_orange
+	bullet_orange,
 
+
+	button_ExitGame,
+	button_StartGame,
+	button_ChangeTank,
+	button_Scoreboard,
 };

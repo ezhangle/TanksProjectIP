@@ -1,6 +1,7 @@
 #include "GameState_MainMenu.h"
 
 GameState_MainMenu::GameState_MainMenu(Game *game)
+	: ExitGame(sf::Vector2f(0.0f, 0.0f), button::Action::exitGame)
 {
 	this->game = game;
 	sf::Vector2f mWindowPosition = sf::Vector2f(this->game->mWindow.getSize());

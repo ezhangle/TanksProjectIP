@@ -5,6 +5,7 @@
 
 //CUSTOM CLASSES AND OTHER HELPERS
 #include "GameState.h"
+#include "Button.h"
 
 
 //SFML LIBRARIES
@@ -31,6 +32,8 @@ public:
 
 private:
 	sf::View										mView;
+	Button											ExitGame;
+
 
 private:
 	
