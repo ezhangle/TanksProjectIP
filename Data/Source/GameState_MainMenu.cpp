@@ -14,6 +14,7 @@ GameState_MainMenu::GameState_MainMenu()
 	buildGUI();
 	mSelector.mNumberOfButtons = mButtonVector.size();
 	mSelector.mButtonVector = mButtonVector;
+	mSelector.mSelectedButton = &mButtonVector[0];
 };
 
 void GameState_MainMenu::buildGUI()
