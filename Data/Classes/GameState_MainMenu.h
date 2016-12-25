@@ -6,6 +6,7 @@
 //CUSTOM CLASSES AND OTHER HELPERS
 #include "GameState.h"
 #include "Button.h"
+#include "Selector.h"
 
 
 //SFML LIBRARIES
@@ -20,10 +21,12 @@ class GameState_MainMenu
 public:
 
 
-public:
-													GameState_MainMenu(Game *game);
 
-	void											draw(const sf::Time deltaTime);
+public:
+													GameState_MainMenu();
+
+	void											draw();
+	void											buildGUI();
 	void											update(const sf::Time deltaTime);
 	void											handleInput();
 	void											handleEvents();
@@ -32,7 +35,10 @@ public:
 
 private:
 	sf::View										mView;
-	Button											ExitGame;
+	Game*											game;
+	sf::Sprite										mBackground;
+	std::vector<Button>								mButtonVector;
+	Selector										mSelector;
 
 
 private:

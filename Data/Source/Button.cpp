@@ -1,16 +1,19 @@
 #include "Button.h"
 
-Button::Button(sf::Vector2f buttonPosition, enum button::Action action)
+
+Button::Button(sf::Vector2f buttonPosition, enum button::Action action, sf::Texture &texture)
 	: mPositionVector(buttonPosition)
-	, mButtonRect(buttonPosition, sf::Vector2f(130.0f, 40.0f))
 	, mButtonAction(action)
 	, game(Game::get())
+	, mButtonSprite(texture)
 {
-	mButtonSprite.setTexture(game->mTextures.get(Texture::button_ExitGame));
+	setPosition(mPositionVector);
 };
 
 
-Button::~Button()
+
+
+	Button::~Button()
 {
 
 };
@@ -18,32 +21,32 @@ Button::~Button()
 
 sf::Vector2f Button::getPosition()
 {
-	return mPositionVector;
+	return mButtonSprite.getPosition();
 }
 
 
 void Button::setPosition(sf::Vector2f desiredPosition)
 {
-	
+	mButtonSprite.setPosition(desiredPosition);
 }
 
 void Button::triggerAction()
 {
 	switch (mButtonAction)
 	{
-		case button::Action::exitGame:
+		case button::Action::exit:
 		{
 			game->mWindow.close();
 			break;
 		}
 
-		case button::Action::startGame:
+		case button::Action::play:
 		{
 			//ADD CODE HERE
 			break;
 		}
 
-		case button::Action::changeTank:
+		case button::Action::tankType:
 		{
 			//ADD CODE HERE
 			break;
@@ -53,4 +56,19 @@ void Button::triggerAction()
 		default:
 			break;
 	}
+}
+
+bool Button::isSpriteClicked()
+{
+	sf::FloatRect buttonSpriteRect(mButtonSprite.getPosition().x, mButtonSprite.getPosition().y, mButtonSprite.getGlobalBounds().width, mButtonSprite.getGlobalBounds().height);
+
+	if (buttonSpriteRect.contains(sf::Mouse::getPosition(game->mWindow).x, sf::Mouse::getPosition(game->mWindow).y))
+	{
+		if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+		{
+			return 1;
+		}
+	}
+
+	return 0;
 }

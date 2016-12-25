@@ -209,8 +209,11 @@ Assets/Textures/Effects/explosion/expl_10_0031.png
 
 Assets/Textures/Effects/bullets/bullet_orange.png
 
+Assets/Textures/Buttons/button_Play.png
+Assets/Textures/Buttons/button_TankType.png
+Assets/Textures/Buttons/button_Options.png
+Assets/Textures/Buttons/button_Highscore.png
+Assets/Textures/Buttons/button_Exit.png
+Assets/Textures/Buttons/button_Selector.png
 
-Assets/Textures/Buttons/button_ExitGame.png
-Assets/Textures/Buttons/button_StartGame.png
-Assets/Textures/Buttons/button_ChangeTank.png
-Assets/Textures/Buttons/button_Scoreboard.png
+Assets/Textures/Background/background_MainMenu.jpg

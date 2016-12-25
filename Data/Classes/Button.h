@@ -9,9 +9,11 @@ namespace button
 {
 	enum Action
 	{
-		exitGame,
-		startGame,
-		changeTank
+		exit,
+		play,
+		tankType,
+		highscore,
+		options
 	};
 }
 
@@ -19,20 +21,19 @@ class Button
 {
 
 public:
-
+	sf::Sprite										mButtonSprite;
 
 public:
-													Button(sf::Vector2f buttonPosition, enum button::Action action);
+													Button(sf::Vector2f buttonPosition, enum button::Action action, sf::Texture &texture);
 													~Button();
 	sf::Vector2f									getPosition();
 	void											setPosition(sf::Vector2f desiredPosition);
 	void											triggerAction();
+	bool											isSpriteClicked();
 
 private:
 	sf::Vector2f									mPositionVector;
-	sf::FloatRect									mButtonRect;
 	enum button::Action								mButtonAction;
-	sf::Sprite										mButtonSprite;
 	Game*											game;
 
 private:

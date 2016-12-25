@@ -1,5 +1,5 @@
 #include "Game.h"
-#include "GameState_Start.h"
+#include "GameState_MainMenu.h"
 #include <exception>
 #include <iostream>
 

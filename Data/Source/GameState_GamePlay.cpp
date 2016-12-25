@@ -1,9 +1,9 @@
 #include "GameState_GamePlay.h"
 #include "GameState_MainMenu.h"
 
-GameState_GamePlay::GameState_GamePlay(Game *game)
+GameState_GamePlay::GameState_GamePlay()
 {
-	this->game = game;
+	this->game = Game::get();
 	sf::Vector2f mWindowPosition = sf::Vector2f(this->game->mWindow.getSize());
 	this->mGUIView.setSize(mWindowPosition);
 	this->mGameView.setSize(mWindowPosition);
@@ -17,11 +17,11 @@ void GameState_GamePlay::update(sf::Time deltaTime)
 
 }
 
-void GameState_GamePlay::draw(sf::Time deltaTime)
+void GameState_GamePlay::draw()
 {
 	this->game->mWindow.setView(this->mGameView);
 	this->game->mWindow.clear(sf::Color::Black);
-	this->game->mWindow.draw(this->game->mBackground);
+	//this->game->mWindow.draw(this->game->mBackground);
 }
 
 void GameState_GamePlay::handleInput()
@@ -44,7 +44,7 @@ void GameState_GamePlay::handleEvents()
 				break;
 			}
 
-			case sf::Event::Resized:
+			/*case sf::Event::Resized:
 			{
 				this->mGameView.setSize(eventToBeHandled.size.width, eventToBeHandled.size.height);
 				this->game->mBackground.setPosition(this->game->mWindow.mapPixelToCoords(sf::Vector2i(0, 0)));
@@ -53,11 +53,11 @@ void GameState_GamePlay::handleEvents()
 					float(eventToBeHandled.size.height) / float(this->game->mBackground.getTexture()->getSize().y)
 				);
 				break;
-			}
+			}*/
 
 			case sf::Event::LostFocus:
 			{
-				this->game->changeState(new GameState_MainMenu(game));
+				this->game->changeState(new GameState_MainMenu());
 				break;
 			}
 
@@ -67,7 +67,7 @@ void GameState_GamePlay::handleEvents()
 				{
 					case sf::Keyboard::Escape:
 					{
-						this->game->changeState(new GameState_MainMenu(game));
+						this->game->changeState(new GameState_MainMenu());
 						break;
 					}
 				}

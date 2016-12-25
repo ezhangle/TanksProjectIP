@@ -7,6 +7,7 @@
 #include "Map.h"
 
 
+
 #include <SFML\System\NonCopyable.hpp>
 #include <SFML\System\Time.hpp>
 #include <SFML\System\Clock.hpp>
@@ -16,7 +17,7 @@
 
 #include <stack>
 #include <string>
-
+#include <fstream>
 
 class GameState;
 
@@ -31,10 +32,9 @@ public:
 	std::stack<GameState*>							stateStack;
 	sf::RenderWindow								mWindow;
 	static const sf::Time							timePerFrame;
-	sf::Sprite										mBackground;
 
 public:
-													Game(unsigned int w, unsigned int h);
+													Game(unsigned int w, unsigned int h, bool bFullScreen);
 													~Game();
 	void											run();
 
@@ -52,7 +52,15 @@ public:
 
 	static Game* get() {
 		if (instance == nullptr)
-			instance = new Game(1280, 640);
+		{
+			std::ifstream config("Assets/Config/Config.txt");
+			int w, h;
+			bool bFullScreen;
+			config >> w >> h >> bFullScreen;
+		
+			instance = new Game(w, h, bFullScreen);
+		}
+
 		return instance;
 	}
 

@@ -1,19 +1,24 @@
 #include "Game.h"
 #include <fstream>
+#include "GameState_MainMenu.h"
 const sf::Time Game::timePerFrame = sf::seconds(1.f / 60.f);
 Game *Game::instance = nullptr;
 
-Game::Game(unsigned int w, unsigned int h)
+Game::Game(unsigned int w, unsigned int h, bool bFullScreen)
 	: mWidth(w),
 	mHeight(h),
-	mWindow(sf::VideoMode(w, h), "Tanks")
+	mWindow(sf::VideoMode(w, h), "Thunder Tanks", sf::Style::None)
 {
+	if (bFullScreen)
+		mWindow.create(sf::VideoMode(w, h), "Thunder Tanks", sf::Style::Fullscreen);
+
 	instance = this;
 	loadTextures();
 
+	changeState(new GameState_MainMenu());
 	std::string path("Assets/Maps/map1.tmap");
 	mMap = new Map(path);
-
+	
 	mClock.restart();
 }
 
@@ -40,23 +45,24 @@ Map* Game::getMap() {
 
 void Game::update(sf::Time deltaTime)
 {
-	/*
 	GameState *currentState = getActiveState();
 	if (currentState != nullptr)
 	{
-		currentState->handleInput();
 		currentState->update(deltaTime);
-		mWindow.clear(sf::Color::Blue);
-		currentState->draw(deltaTime);
-		mWindow.display();
-	}*/
+	}
 
-	mMap->update(deltaTime);
+	//mMap->update(deltaTime);
 }
 
 void Game::render()
 {
-	mMap->draw(&mWindow);
+	//mMap->draw(&mWindow);
+	GameState *currentState = getActiveState();
+	if (currentState != nullptr)
+	{
+		mWindow.clear(sf::Color::Blue);
+		currentState->draw();
+	}
 	mWindow.display();
 }
 
@@ -81,6 +87,7 @@ void Game::handleInput()
 
 void Game::run()
 {
+	
 	sf::Clock gameClock;
 	sf::Time timeSinceLastUpdate = sf::Time::Zero;
 
@@ -91,10 +98,8 @@ void Game::run()
 		while (timeSinceLastUpdate > timePerFrame)
 		{
 			timeSinceLastUpdate -= timePerFrame;
-			handleInput();
 			update(timePerFrame);
 		}
-
 		render();
 	}
 }
@@ -106,21 +111,21 @@ void Game::pushState(GameState *state)
 
 void Game::popState()
 {
-	delete this->stateStack.top();
-	this->stateStack.pop();
+	delete stateStack.top();
+	stateStack.pop();
 }
 
 void Game::changeState(GameState *state)
 {
-	if (!this->stateStack.empty())
+	if (!stateStack.empty())
 		popState();
 	pushState(state);
 }
 
 GameState* Game::getActiveState()
 {
-	if (this->stateStack.empty())
+	if (stateStack.empty())
 		return nullptr;
 
-	return this->stateStack.top();
+	return stateStack.top();
 }
