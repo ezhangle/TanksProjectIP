@@ -10,4 +10,7 @@ public:
 	void	update(sf::Time dt);
 public:
 	std::vector<sf::Keyboard::Key> mKeys;
+
+	sf::Clock					   mMoveStateClock;
+	int							   mMoveState;
 };

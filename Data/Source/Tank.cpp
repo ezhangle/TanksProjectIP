@@ -20,7 +20,7 @@ mDamage(damage)
 	base->setPosition(pos->x, pos->y);
 	top->setPosition(base->getPosition());
 
-	mHitCooldown = 0.2f;
+	mHitCooldown = 0.4f;
 	mHitCooldownClock.restart();
 
 	mAcceleration = 0.f;
@@ -39,18 +39,18 @@ void Tank::update(sf::Time dt) {
 		Game::get()->mMap->mEffects.insert(Game::get()->mMap->mEffects.begin(), new Animation(new sf::Vector2f(mBase->getPosition()), Texture::expl_10_0000, Texture::expl_10_0031, 50, false));
 		mDelete = true;
 	}
-
 }
 
 void Tank::rotateTurret(float modifier) {
-	mTop->setRotation(mTop->getRotation() + 250.f * modifier);
+	mTop->setRotation(mTop->getRotation() + 350.f * modifier);
 }
 
 void Tank::rotateBase(float modifier) {
-	mBase->rotate(250.f * modifier);
+	mBase->rotate(300.f * modifier);
 }
 
 bool Tank::MoveX(float inc) {
+
 	if (inc < 0.f)
 		inc /= 1.2f;
 
@@ -89,9 +89,6 @@ void Tank::shoot() {
 
 		Map* m = Game::get()->mMap;
 		m->mEntities[2].insert(m->mEntities[2].end(), new Projectile(news, pos, new sf::Vector2f(500.f, 500.f), mDamage));
-		//m->mEntities[2].insert(m->mEntities[2].end(), new Projectile(news, pos, new sf::Vector2f(550.f, 550.f), mDamage));
-		//m->mEntities[2].insert(m->mEntities[2].end(), new Projectile(news, pos, new sf::Vector2f(600.f, 600.f), mDamage));
-
 
 		mHitCooldownClock.restart();
 	}

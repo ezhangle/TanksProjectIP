@@ -1,7 +1,9 @@
 #pragma once
 #include "Tank.h"
+#include "Player.h"
 #include <SFML/Graphics.hpp>
 #include <stack>
+
 
 
 class AI : public Tank{
@@ -23,6 +25,8 @@ public:
 	void			calculateRandomPath();
 	void			calculatePathMap();
 	void			calculateRotation();
+	void			assignNewPoint();
+
 	void			draw(sf::RenderWindow* window);
 
 public:
@@ -34,6 +38,7 @@ public:
 
 	sf::Vector2f				mLastPoint;
 
+	Player*						mPlayer;
 	float						mTileLength;
 	int							**mPathFindMap;
 	int							mWidth;

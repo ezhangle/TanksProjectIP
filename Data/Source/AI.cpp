@@ -6,21 +6,12 @@
 #include <ctime>
 #include <iostream>
 #include <queue>
-#include <iomanip>
-
-void printMatrix(int **m, int w, int h) {
-	for (int i = 0; i < h; ++i) {
-		for (int j = 0; j < w; ++j)
-			std::cout << std::setw(3) << m[i][j];
-		std::cout << '\n';
-	}
-	std::cout << '\n';
-}
 
 AI::AI(sf::Sprite* base, sf::Sprite* top, sf::Vector2f* pos, sf::Vector2f* vel, float health, float damage):
 Tank(base, top, pos, vel, health, damage),
 mTileLength(64.f),
-mPathFindMap(nullptr){
+mPathFindMap(nullptr),
+mPlayer(nullptr){
 
 	std::srand(std::time(NULL));
 	mWidth = Game::get()->mWidth / mTileLength;
@@ -62,8 +53,14 @@ void AI::initMap() {
 			mPathFindMap[i][left] = -1;
 			mPathFindMap[i][leftPlus] = -1;
 		}
-			
-		
+
+	}
+
+	auto it = Game::get()->mMap->mEntities[2].begin();
+	for (; it != Game::get()->mMap->mEntities[2].end(); ++it) {
+		if (Player* player = dynamic_cast<Player*>(*it)) {
+			mPlayer = player;
+		}
 	}
 
 	float edgeX, edgeY;
@@ -79,25 +76,34 @@ void AI::initMap() {
 }
 
 void AI::calculateRotation() {
-	float distToNext = sqrt((mBase->getPosition().x - mNextPoint.x)*(mBase->getPosition().x - mNextPoint.x) + (mBase->getPosition().y - mNextPoint.y)*(mBase->getPosition().y - mNextPoint.y));
 
-	sf::Vector2f projection(mBase->getPosition());
-	projection.x += sin(mBase->getRotation()*3.14f / 180.f)* distToNext;
-	projection.y -= cos(mBase->getRotation()*3.14f / 180.f)* distToNext;
-	std::cout << projection.x << ' ' << projection.y << std::endl;
+	if (mNextPoint.x > mBase->getPosition().x)
+		mRotationAngle = 90.f;
+	else if(mNextPoint.x < mBase->getPosition().x)
+		mRotationAngle = 270.f;
+	else if (mNextPoint.y > mBase->getPosition().y)
+		mRotationAngle = 180.f;
+	else if (mNextPoint.y < mBase->getPosition().y)
+		mRotationAngle = 0.f;
+}
 
-	float distProjToNext = sqrt((projection.x - mNextPoint.x)*(projection.x - mNextPoint.x) + (projection.y - mNextPoint.y)*(projection.y - mNextPoint.y));
+void AI::assignNewPoint() {
+	if (!mCurrentPath.empty()) {
+		mNextPoint = mCurrentPath.top();
+		mCurrentPath.pop();
 
-	mRotationAngle = acos(1.f - (distProjToNext*distProjToNext)/(2*distToNext*distToNext)) * 180.f / 3.14f;
-
-	std::cout << mRotationAngle;
-
-
-	if (mNextPoint.x < mBase->getPosition().x) {
-		mBase->setRotation(mBase->getRotation()  -mRotationAngle);
+		calculateRotation();
 	}
-	else
-		mBase->setRotation(mBase->getRotation() + mRotationAngle);
+	else {
+		calculatePathMap();
+		calculateRandomPath();
+
+		mBase->setPosition(mCurrentPath.top());
+		mTop->setPosition(mCurrentPath.top());
+		mCurrentPath.pop();
+
+		assignNewPoint();
+	}
 }
 
 void AI::update(sf::Time dt) {
@@ -105,45 +111,108 @@ void AI::update(sf::Time dt) {
 	nextPoint.setPosition(mNextPoint);
 
 	if (mPathFindMap == nullptr) {
-		calculatePathMap();
-		calculateRandomPath();
-		if (!mCurrentPath.empty()) {
-			mNextPoint = mCurrentPath.top();
-			mCurrentPath.pop();
-		}	
-		calculateRotation();
+		assignNewPoint();
 	}
 
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::J))
-		calculateRotation();
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::H)) {
-		float distToNext = sqrt((mBase->getPosition().x - mNextPoint.x)*(mBase->getPosition().x - mNextPoint.x) + (mBase->getPosition().y - mNextPoint.y)*(mBase->getPosition().y - mNextPoint.y));
-		if (distToNext < 10.f) {
-			if (!mCurrentPath.empty()) {
-				mNextPoint = mCurrentPath.top();
-				mCurrentPath.pop();
+	float distToNext = sqrt((mBase->getPosition().x - mNextPoint.x)*(mBase->getPosition().x - mNextPoint.x) + (mBase->getPosition().y - mNextPoint.y)*(mBase->getPosition().y - mNextPoint.y));
+	if (distToNext < 5.f) {
+		mBase->setPosition(mNextPoint);
+		mTop->setPosition(mNextPoint);
+		assignNewPoint();
+	}
+	else {
+
+		float currentRotation = mBase->getRotation();
+
+		if (currentRotation == mRotationAngle) {
+
+			if (!MoveX(dt.asSeconds())) {
+				std::stack<sf::Vector2f> clear;
+				mCurrentPath = clear;
+
+				assignNewPoint();
 			}
-			calculateRotation();
 		}
 		else {
-			//calculateRotation();
-			if (!MoveX(dt.asSeconds())) {
-				calculatePathMap();
-				calculateRandomPath();
-				if (!mCurrentPath.empty()) {
-					mNextPoint = mCurrentPath.top();
-					mCurrentPath.pop();
-				}
-				calculateRotation();
+			if (mRotationAngle == 0.f) {
+				if(currentRotation >= 270.f)
+					mBase->setRotation(currentRotation + 6.f);
+				else
+					mBase->setRotation(currentRotation - 6.f);
+			}
+			else {
+				if(currentRotation > mRotationAngle)
+					mBase->setRotation(currentRotation - 6.f);
+				else
+					mBase->setRotation(currentRotation + 6.f);
 			}
 		}
+
+
+		sf::Vector2f turretProjection(mBase->getPosition());
+		sf::Vector2f playerPosition(mPlayer->mBase->getPosition());
+
+		float d = sqrt((turretProjection.x - playerPosition.x)*(turretProjection.x - playerPosition.x) + (turretProjection.y - playerPosition.y)*(turretProjection.y - playerPosition.y));
+		if (mPlayer->mMoveState > 0) {
+			float d = sqrt((turretProjection.x - playerPosition.x)*(turretProjection.x - playerPosition.x) + (turretProjection.y - playerPosition.y)*(turretProjection.y - playerPosition.y));
+
+			if (mPlayer->mMoveState == 1) {
+				playerPosition.x += sin(mPlayer->mBase->getRotation()*3.14f / 180.f)* (mPlayer->mVelocity->y + mPlayer->mAcceleration)* d / 500.f;
+				playerPosition.y -= cos(mPlayer->mBase->getRotation()*3.14f / 180.f)* (mPlayer->mVelocity->y + mPlayer->mAcceleration)* d / 500.f;
+			}
+			else {
+				playerPosition.x += sin((mPlayer->mBase->getRotation() + 180.f)*3.14f / 180.f)* (mPlayer->mVelocity->y + mPlayer->mAcceleration)* d / 500.f;
+				playerPosition.y -= cos((mPlayer->mBase->getRotation() + 180.f)*3.14f / 180.f)* (mPlayer->mVelocity->y + mPlayer->mAcceleration)* d / 500.f;
+			}
+		}
+		
+		float distanceToPlayer = sqrt((turretProjection.x - playerPosition.x)*(turretProjection.x - playerPosition.x) + (turretProjection.y - playerPosition.y)*(turretProjection.y - playerPosition.y));
+
+		turretProjection.x += sin(mTop->getRotation()*3.14f / 180.f)* distanceToPlayer;
+		turretProjection.y -= cos(mTop->getRotation()*3.14f / 180.f)* distanceToPlayer;
+
+		if (abs(turretProjection.y - playerPosition.y) > 5.f && abs(turretProjection.x - playerPosition.x) > 5.f) {
+
+			float distProjPlayer = sqrt((turretProjection.x - playerPosition.x)*(turretProjection.x - playerPosition.x) + (turretProjection.y - playerPosition.y)*(turretProjection.y - playerPosition.y));
+			float angle = acos(1.f - distProjPlayer / (2 * distanceToPlayer));
+
+			if (playerPosition.x < mBase->getPosition().x) {
+				if (360.f - angle > 180.f)
+					if (turretProjection.y > playerPosition.y)
+						rotateTurret(dt.asSeconds());
+					else
+						rotateTurret(-dt.asSeconds());
+				else {
+					if (turretProjection.y > playerPosition.y)
+						rotateTurret(-dt.asSeconds());
+					else
+						rotateTurret(dt.asSeconds());
+				}
+			}
+			else {
+				if (360.f - angle > 180.f)
+					if (turretProjection.y > playerPosition.y)
+						rotateTurret(-dt.asSeconds());
+					else
+						rotateTurret(dt.asSeconds());
+				else {
+					if (turretProjection.y > playerPosition.y)
+						rotateTurret(dt.asSeconds());
+					else
+						rotateTurret(-dt.asSeconds());
+				}
+			}
+
+
+		}
+		else
+			shoot();
+			
+		
 	}
 	
 		
 	
-
-	
-
 	Tank::update(dt);
 }
 
@@ -195,7 +264,6 @@ void AI::calculatePathMap() {
 		}
 	}
  
-	printMatrix(mPathFindMap, mWidth, mHeight);
 }
 
 void AI::calculateRandomPath() {
@@ -212,7 +280,7 @@ void AI::calculateRandomPath() {
 	toInsert.x = (startPoint.y * mTileLength) + mTileLength / 2.f;
 
 	mCurrentPath.push(toInsert);
-	//std::cout << toInsert.x << ' ' << toInsert.y << '\n';
+
 	while (cost > 0) {
 		cost--;
 
@@ -224,7 +292,7 @@ void AI::calculateRandomPath() {
 				toInsert.y = (startPoint.x * mTileLength) + mTileLength / 2.f;
 				toInsert.x = (startPoint.y * mTileLength) + mTileLength / 2.f;
 				mCurrentPath.push(toInsert);
-				//std::cout << toInsert.x << ' ' << toInsert.y << '\n';
+
 				break;
 			}
 

@@ -40,17 +40,17 @@ void Map::insertObject(std::string& obj, sf::Vector2f* pos, std::ifstream& strea
 		keys[(int)Tank::Command::LEFT] = sf::Keyboard::A;
 		keys[(int)Tank::Command::RIGHT] = sf::Keyboard::D;
 
-		keys[(int)Tank::Command::ROT_LEFT] = sf::Keyboard::Q;
-		keys[(int)Tank::Command::ROT_RIGHT] = sf::Keyboard::E;
+		keys[(int)Tank::Command::ROT_LEFT] = sf::Keyboard::C;
+		keys[(int)Tank::Command::ROT_RIGHT] = sf::Keyboard::V;
 
-		keys[(int)Tank::Command::SHOOT] = sf::Keyboard::Space;
+		keys[(int)Tank::Command::SHOOT] = sf::Keyboard::B;
 	
 		mEntities[TANK].insert(mEntities[TANK].begin(), new Player(
 			new sf::Sprite(Game::get()->mTextures.get(Texture::tank1b_body)),
 			new sf::Sprite(Game::get()->mTextures.get(Texture::tank1b_gun)),
 			pos,
 			new sf::Vector2f(150.f, 150.f),
-			10.f,
+			100.f,
 			2.f,
 			keys));
 	}
