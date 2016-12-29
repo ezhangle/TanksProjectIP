@@ -1,50 +1,35 @@
-#ifndef GAMESTATE_MAINMENU_H
-
-#define GAMESTATE_MAINMENU_H
-
-
-//CUSTOM CLASSES AND OTHER HELPERS
+#pragma once
 #include "GameState.h"
 #include "Button.h"
 #include "Selector.h"
+#include "Game.h"
 
-
-//SFML LIBRARIES
-#include "SFML\Graphics\View.hpp"
-
-//STL LIBRARIES
-
-
-class GameState_MainMenu
+class GameState_Options
 	: public GameState
 {
 public:
 
 
-
 public:
-													GameState_MainMenu();
-													
+													GameState_Options();
+													~GameState_Options();
 
-	void											draw();
 	void											buildGUI();
 	void											update(const sf::Time deltaTime);
+	void											draw();
 	void											handleInput();
 	void											handleEvents();
 	void											handleRealTimeInput();
-			
 
 private:
-	sf::View										mView;
 	Game*											game;
-	sf::Sprite										mBackground;
 	std::vector<Button>								mButtonVector;
 	Selector										mSelector;
-
+	sf::Sprite										mTitle;
+	sf::Sprite										mBackground;
+	sf::View										mView;
 
 private:
-	
+
+
 };
-
-
-#endif

@@ -1,4 +1,10 @@
 #include "Button.h"
+#include "GameState_Options.h"
+#include "GameState_Options_Resolution.h"
+#include "GameState_Options_Fullscreen.h"
+#include "GameState_Options_Vsync.h"
+#include "GameState_Highscore.h"
+#include <iostream>
 
 
 Button::Button(sf::Vector2f buttonPosition, enum button::Action action, sf::Texture &texture)
@@ -6,6 +12,8 @@ Button::Button(sf::Vector2f buttonPosition, enum button::Action action, sf::Text
 	, mButtonAction(action)
 	, game(Game::get())
 	, mButtonSprite(texture)
+	, resolutionData(0, 0)
+	, fullscreenData(2)
 {
 	setPosition(mPositionVector);
 };
@@ -13,7 +21,7 @@ Button::Button(sf::Vector2f buttonPosition, enum button::Action action, sf::Text
 
 
 
-	Button::~Button()
+Button::~Button()
 {
 
 };
@@ -52,6 +60,47 @@ void Button::triggerAction()
 			break;
 		}
 
+		case button::Action::options:
+		{
+			game->pushState(new GameState_Options());
+			break;
+		}
+
+		case button::Action::options_resolution:
+		{
+			game->pushState(new GameState_Options_Resolution());
+			break;
+		}
+
+		case button::Action::options_fullscreen:
+		{
+			game->pushState(new GameState_Options_Fullscreen());
+			break;
+		}
+
+		case button::Action::options_vsync:
+		{
+			game->pushState(new GameState_Options_Vsync());
+			break;
+		}
+
+		case button::Action::highscore:
+		{
+			game->pushState(new GameState_Highscore());
+			break;
+		}
+
+		case button::Action::back:
+		{
+			//game->deleteTopState();
+			game->popState();
+			break;
+		}
+
+		case::button::none:
+		{
+			break;
+		}
 
 		default:
 			break;

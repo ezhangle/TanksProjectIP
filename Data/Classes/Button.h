@@ -5,15 +5,21 @@
 #include <SFML\Graphics\RenderWindow.hpp>
 #include "Game.h"
 
+
 namespace button
 {
 	enum Action
 	{
+		none,
 		exit,
 		play,
 		tankType,
 		highscore,
-		options
+		options,
+		options_resolution,
+		options_fullscreen,
+		options_vsync,
+		back,
 	};
 }
 
@@ -22,6 +28,8 @@ class Button
 
 public:
 	sf::Sprite										mButtonSprite;
+	sf::Vector2u									resolutionData;
+	size_t											fullscreenData;
 
 public:
 													Button(sf::Vector2f buttonPosition, enum button::Action action, sf::Texture &texture);
@@ -35,6 +43,7 @@ private:
 	sf::Vector2f									mPositionVector;
 	enum button::Action								mButtonAction;
 	Game*											game;
+	std::vector<Button*>							mNextButtons;
 
 private:
 	

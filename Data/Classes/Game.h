@@ -19,6 +19,7 @@
 #include <string>
 #include <fstream>
 
+
 class GameState;
 
 
@@ -42,9 +43,11 @@ public:
 	void											popState();
 	void											changeState(GameState *state);
 	GameState*										getActiveState();
+	void											deleteTopState();
 
 public:
 	ResourceHolder<sf::Texture, Texture>			mTextures;
+	ResourceHolder<sf::Font, Font>					mFonts;
 	unsigned int									mWidth;
 	unsigned int									mHeight;
 	Map*											mMap;
@@ -53,10 +56,14 @@ public:
 	static Game* get() {
 		if (instance == nullptr)
 		{
-			std::ifstream config("Assets/Config/Config.txt");
+			std::ifstream resolutionCFG("Assets/Config/resolutionCFG.txt");
+			std::ifstream fullscreenCFG("Assets/Config/fullscreenCFG.txt");
 			int w, h;
 			bool bFullScreen;
-			config >> w >> h >> bFullScreen;
+			resolutionCFG >> w >> h;
+			fullscreenCFG >> bFullScreen;
+			resolutionCFG.close();
+			fullscreenCFG.close();
 		
 			instance = new Game(w, h, bFullScreen);
 		}

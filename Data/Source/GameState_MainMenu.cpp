@@ -6,11 +6,14 @@
 GameState_MainMenu::GameState_MainMenu()
 	: game(Game::get())
 	, mBackground(game->mTextures.get(Texture::background_MainMenu))
-	, mSelector(game->mTextures.get(Texture::button_Selector), sf::Vector2f(45.0f, game->mWindow.getSize().y - 300.0f), 50.0f, mButtonVector)
+	, mSelector(game->mTextures.get(Texture::button_Selector), sf::Vector2f(45.0f, game->mWindow.getSize().y - 250.0f), 50.0f, mButtonVector)
 {
+	mView.setSize(game->mWindow.getSize().x, game->mWindow.getSize().y);
+	mBackground.setScale(game->mWindow.getSize().x / 1920.0f, game->mWindow.getSize().y / 1080.0f);
 	sf::Vector2f mWindowPosition = sf::Vector2f(game->mWindow.getSize());
 	mView.setSize(mWindowPosition);
 	mView.setCenter(mWindowPosition * 0.5f);
+	game->mWindow.setView(mView);
 	buildGUI();
 	mSelector.mNumberOfButtons = mButtonVector.size();
 	mSelector.mButtonVector = mButtonVector;
@@ -19,13 +22,13 @@ GameState_MainMenu::GameState_MainMenu()
 
 void GameState_MainMenu::buildGUI()
 {
-	Button buttonPlay(sf::Vector2f(100.0f, game->mWindow.getSize().y - 300.0f), button::Action::play, game->mTextures.get(Texture::button_Play));
-	Button buttonTankType(sf::Vector2f(100.0f, game->mWindow.getSize().y - 250.0f), button::Action::tankType, game->mTextures.get(Texture::button_TankType));
-	Button buttonOptions(sf::Vector2f(100.0f, game->mWindow.getSize().y - 150.0f), button::Action::options, game->mTextures.get(Texture::button_Options));
-	Button buttonHighscore(sf::Vector2f(100.0f, game->mWindow.getSize().y - 200.0f), button::Action::highscore, game->mTextures.get(Texture::button_Highscore));
+	Button buttonPlay(sf::Vector2f(100.0f, game->mWindow.getSize().y - 250.0f), button::Action::play, game->mTextures.get(Texture::button_Play));
+	//Button buttonTankType(sf::Vector2f(100.0f, game->mWindow.getSize().y - 250.0f), button::Action::tankType, game->mTextures.get(Texture::button_TankType));
+	Button buttonOptions(sf::Vector2f(100.0f, game->mWindow.getSize().y - 200.0f), button::Action::options, game->mTextures.get(Texture::button_Options));
+	Button buttonHighscore(sf::Vector2f(100.0f, game->mWindow.getSize().y - 150.0f), button::Action::highscore, game->mTextures.get(Texture::button_Highscore));
 	Button buttonExit(sf::Vector2f(100.0f, game->mWindow.getSize().y - 100.0f), button::Action::exit, game->mTextures.get(Texture::button_Exit));
 	mButtonVector.push_back(buttonPlay);
-	mButtonVector.push_back(buttonTankType);
+	//mButtonVector.push_back(buttonTankType);
 	mButtonVector.push_back(buttonOptions);
 	mButtonVector.push_back(buttonHighscore);
 	mButtonVector.push_back(buttonExit);
@@ -71,6 +74,12 @@ void GameState_MainMenu::handleEvents()
 				switch (eventToBeHandled.key.code)
 				{
 					case sf::Keyboard::Return:
+					{
+						mSelector.mSelectedButton->triggerAction();
+						break;
+					}
+
+					case sf::Keyboard::Space:
 					{
 						mSelector.mSelectedButton->triggerAction();
 						break;

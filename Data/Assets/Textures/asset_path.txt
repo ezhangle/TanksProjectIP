@@ -214,6 +214,23 @@ Assets/Textures/Buttons/button_TankType.png
 Assets/Textures/Buttons/button_Options.png
 Assets/Textures/Buttons/button_Highscore.png
 Assets/Textures/Buttons/button_Exit.png
+
+Assets/Textures/Buttons/button_Vsync.png
+Assets/Textures/Buttons/button_Options_Resolution.png
+Assets/Textures/Buttons/button_Options_Fullscreen.png
+
+Assets/Textures/Buttons/button_Resolution_1920x1080.png
+Assets/Textures/Buttons/button_Resolution_1600x900.png
+Assets/Textures/Buttons/button_Resolution_1366x768.png
+Assets/Textures/Buttons/button_Resolution_1280x720.png
+
 Assets/Textures/Buttons/button_Selector.png
+Assets/Textures/Buttons/button_Back.png
+Assets/Textures/Buttons/button_Yes.png
+Assets/Textures/Buttons/button_No.png
 
 Assets/Textures/Background/background_MainMenu.jpg
+Assets/Textures/Background/background_Options.jpg
+
+Assets/Textures/Titles/title_MainMenu.png
+Assets/Textures/Titles/title_Options.png

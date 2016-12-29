@@ -1,17 +1,26 @@
 #include "Game.h"
-#include <fstream>
 #include "GameState_MainMenu.h"
+#include <iostream>
+
 const sf::Time Game::timePerFrame = sf::seconds(1.f / 60.f);
 Game *Game::instance = nullptr;
 
 Game::Game(unsigned int w, unsigned int h, bool bFullScreen)
 	: mWidth(w),
 	mHeight(h),
-	mWindow(sf::VideoMode(w, h), "Thunder Tanks", sf::Style::None)
+	mWindow(sf::VideoMode(w, h), "Thunder Tanks", sf::Style::Titlebar)
 {
 	if (bFullScreen)
+	{
+		mWindow.close();
 		mWindow.create(sf::VideoMode(w, h), "Thunder Tanks", sf::Style::Fullscreen);
+	}
+	if (!bFullScreen)
+		mWindow.setPosition(sf::Vector2i(0, 0));
+	
+	
 
+	
 	instance = this;
 	loadTextures();
 
@@ -37,6 +46,8 @@ void Game::loadTextures() {
 		mTextures.load(static_cast<Texture>(i++), path);
 	}
 	in.close();
+
+	mFonts.load(Font::VanillaExtractRegular, "Assets/Fonts/VanillaExtractRegular.ttf");
 }
 
 Map* Game::getMap() {
@@ -110,6 +121,12 @@ void Game::pushState(GameState *state)
 }
 
 void Game::popState()
+{
+	//delete stateStack.top();
+	stateStack.pop();
+}
+
+void Game::deleteTopState()
 {
 	delete stateStack.top();
 	stateStack.pop();

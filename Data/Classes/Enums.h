@@ -216,15 +216,41 @@ expl_10_0031,
 
 bullet_orange,
 
+//Main Menu buttons
 button_Play,
 button_TankType,
 button_Options,
 button_Highscore,
 button_Exit,
+
+//button_Options buttons
+button_Options_Vsync,
+button_Options_Resolution,
+button_Options_Fullscreen,
+button_Resolution_1920x1080,
+button_Resolution_1600x900,
+button_Resolution_1366x768,
+button_resolution_1280x720,
+
+//selectors
 button_Selector,
+button_Back,
+button_Yes,
+button_No,
 
-
+//backgrounds
 background_MainMenu,
+background_Options,
+
+//titles
+title_MainMenu,
+title_Options,
+title_Options_Resolution,
+title_Options_Fullscreen,
 };
 
 
+enum class Font
+{
+	VanillaExtractRegular,
+};
