@@ -12,6 +12,7 @@ mBase(base),
 mTop(top),
 mVelocity(vel),
 mHealth(health),
+mMaxHealth(health),
 mDamage(damage)
 {
 	sf::Vector2f topPos = top->getPosition();
@@ -26,18 +27,33 @@ mDamage(damage)
 	mAcceleration = 0.f;
 	mMaxAcceleration = 60.f;
 
+	mHpBarBase.setTexture(Game::get()->mTextures.get(Texture::hp_base));
+	mHpBarTop.setTexture(Game::get()->mTextures.get(Texture::hp_top));
+
+	mHpBarTop.setPosition(mBase->getPosition().x - mHpBarTop.getLocalBounds().width / 2.f, mBase->getPosition().y - 50.f);
+	mHpBarBase.setPosition(mBase->getPosition().x - mHpBarBase.getLocalBounds().width / 2.f, mBase->getPosition().y - 50.f);
+
 	
 }
 
 void Tank::draw(sf::RenderWindow* window) {
 	window->draw(*mBase);
 	window->draw(*mTop);
+
+	window->draw(mHpBarBase);
+	window->draw(mHpBarTop);
 }
 
 void Tank::update(sf::Time dt) {
 	if (mHealth <= 0) {
 		Game::get()->mMap->mEffects.insert(Game::get()->mMap->mEffects.begin(), new Animation(new sf::Vector2f(mBase->getPosition()), Texture::expl_10_0000, Texture::expl_10_0031, 50, false));
 		mDelete = true;
+	}
+	else {
+		sf::Vector2f newScale;
+		newScale.x = (mHealth / mMaxHealth);
+		newScale.y = 1.f;
+		mHpBarTop.setScale(newScale);
 	}
 }
 
@@ -58,18 +74,26 @@ bool Tank::MoveX(float inc) {
 	if (mAcceleration > mMaxAcceleration) {
 		mAcceleration = mMaxAcceleration;
 	}
-	sf::Vector2f newPos(mBase->getPosition());
-	sf::Vector2f oldPos(newPos);
 
-	newPos.x += sin(mBase->getRotation()*3.14f / 180.f)* inc * (mVelocity->x + mAcceleration);
-	newPos.y -= cos(mBase->getRotation()*3.14f / 180.f)* inc * (mVelocity->y + mAcceleration);
+	sf::Vector2f oldPosPlayer(mBase->getPosition());
+	sf::Vector2f oldPosHpBar(mHpBarBase.getPosition());
+	sf::Vector2f newPos;
 
-	mBase->setPosition(newPos);
-	mTop->setPosition(newPos);
+	newPos.x = sin(mBase->getRotation()*3.14f / 180.f)* inc * (mVelocity->x + mAcceleration);
+	newPos.y = -cos(mBase->getRotation()*3.14f / 180.f)* inc * (mVelocity->y + mAcceleration);
+
+	mBase->move(newPos);
+	mTop->move(newPos);
+
+	mHpBarBase.move(newPos);
+	mHpBarTop.move(newPos);
 
 	if (checkCollision() || checkOutOfBounds()) {
-		mBase->setPosition(oldPos);
-		mTop->setPosition(oldPos);
+		mBase->setPosition(oldPosPlayer);
+		mTop->setPosition(oldPosPlayer);
+
+		mHpBarBase.setPosition(oldPosHpBar);
+		mHpBarTop.setPosition(oldPosHpBar);
 
 		return false;
 	}
@@ -107,7 +131,7 @@ bool Tank::checkCollision() {
 		for (auto it2 = (*it1).begin(); it2 != (*it1).end(); ++it2) {
 			if ((*it2) != this)
 			{
-				if (SAT.collision(mBase, (*it2)->getSprite())) {
+				if (SAT.collision(mBase, (*it2)->getCollisionSprite())) {
 					collideSolid = true;
 					if (Tank* tank = dynamic_cast<Tank*>(*it2)) {
 						collideSolid = false;
@@ -134,6 +158,15 @@ bool Tank::checkOutOfBounds() {
 	return false;
 }
 
-sf::Sprite* Tank::getSprite() {
+void Tank::setPosition(sf::Vector2f& newPos) {
+
+	mBase->setPosition(newPos);
+	mTop->setPosition(newPos);
+
+	mHpBarTop.setPosition(mBase->getPosition().x - mHpBarTop.getLocalBounds().width / 2.f, mBase->getPosition().y - 50.f);
+	mHpBarBase.setPosition(mBase->getPosition().x - mHpBarBase.getLocalBounds().width / 2.f, mBase->getPosition().y - 50.f);
+}
+
+sf::Sprite* Tank::getCollisionSprite() {
 	return mBase;
 }

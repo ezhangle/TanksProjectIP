@@ -6,45 +6,28 @@ enum class Texture {
 
 	//start_tanks
 	tank1_body,
-	tank1_body_destroyed,
-	tank1_dualgun,
-	tank1_dualgun_destroyed,
 	tank1_gun,
-	tank1_gun_destroyed,
+
 	tank1b_body,
-	tank1b_body_destroyed,
-	tank1b_dualgun,
 	tank1b_gun,
-	tank1b_gun_destroyed,
-	tank1b_gun_destroyed_02,
+
 	tank2_body,
-	tank2_body_destroyed,
-	tank2_dualgun,
-	tank2_dualgun_destroyed,
 	tank2_gun,
-	tank2_gun_destroyed,
+
 	tank2b_body,
-	tank2b_body_destroyed,
-	tank2b_dualgun,
-	tank2b_dualgun_destroyed,
 	tank2b_gun,
-	tank2b_gun_destroyed,
+
 	tank3_body,
-	tank3_body_destroyed,
 	tank3_gun,
-	tank3_gun_destroyed,
+
 	tank3b_body,
-	tank3b_body_destroyed,
 	tank3b_gun,
-	tank3b_gun_destroyed,
+
 	tank3c_body,
-	tank3c_body_destroyed,
 	tank3c_gun,
-	tank3c_gun_destroyed,
+
 	tank3d_body,
-	tank3d_body_destroyed,
 	tank3d_gun,
-	tank3d_gun_destroyed,
 	//end_tanks
 
 	barrel,
@@ -216,6 +199,8 @@ enum class Texture {
 
 	bullet_orange,
 
+	hp_base,
+	hp_top,
 
 	button_ExitGame,
 	button_StartGame,

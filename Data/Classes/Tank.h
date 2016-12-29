@@ -15,31 +15,35 @@ public:
 		NUMBER,
 	};
 public:
-						Tank(sf::Sprite* base, sf::Sprite* top, sf::Vector2f* pos, sf::Vector2f* vel, float health, float damage);
-	void				update(sf::Time dt);
-	void				draw(sf::RenderWindow* window);
+							Tank(sf::Sprite* base, sf::Sprite* top, sf::Vector2f* pos, sf::Vector2f* vel, float health, float damage);
+	void					update(sf::Time dt);
+	void					draw(sf::RenderWindow* window);
 
-	void				rotateTurret(float modifier);
-	void				rotateBase(float modifier);
-	bool				MoveX(float inc);
-	void				shoot();
+	void					rotateTurret(float modifier);
+	void					rotateBase(float modifier);
+	bool					MoveX(float inc);
+	void					shoot();
+	void					setPosition(sf::Vector2f& newPos);
 
-	bool				checkCollision();
-	bool				checkOutOfBounds();
-	virtual sf::Sprite* getSprite();
+	bool					checkCollision();
+	bool					checkOutOfBounds();
+	virtual sf::Sprite*		getCollisionSprite();
 
 public:
-	sf::Sprite*			mTop;
-	sf::Sprite*			mBase;
+	sf::Sprite*				mTop;
+	sf::Sprite*				mBase;
+	sf::Sprite				mHpBarBase;
+	sf::Sprite				mHpBarTop;
 
-	sf::Vector2f*		mVelocity;
-	float				mAcceleration;
-	float				mMaxAcceleration;
+	sf::Vector2f*			mVelocity;
+	float					mAcceleration;
+	float					mMaxAcceleration;
 
-	sf::Clock			mHitCooldownClock;
-	float				mHitCooldown;
-	Collision			SAT;
+	sf::Clock				mHitCooldownClock;
+	float					mHitCooldown;
+	Collision				SAT;
 	
-	float				mHealth;
-	float				mDamage;
+	const float				mMaxHealth;
+	float					mHealth;
+	float					mDamage;
 };

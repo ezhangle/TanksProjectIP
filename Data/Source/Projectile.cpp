@@ -43,7 +43,7 @@ bool Projectile::checkCollision() {
 		for (auto it2 = (*it1).begin(); it2 != (*it1).end(); ++it2) {
 			if ((*it2) != this)
 			{
-				if (SAT.collision(mSprite, (*it2)->getSprite())) {
+				if (SAT.collision(mSprite, (*it2)->getCollisionSprite())) {
 					Game::get()->mMap->mEffects.insert(Game::get()->mMap->mEffects.begin(), new Animation(new sf::Vector2f(mSprite->getPosition()), Texture::expl_01_0000, Texture::expl_01_0023, 20, false));
 
 					if (Tank* proj = dynamic_cast<Tank*>((*it2))) {

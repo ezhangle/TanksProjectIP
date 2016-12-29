@@ -19,13 +19,6 @@ mPlayer(nullptr){
 
 	mNextPoint.x = -1.f;
 	mNextPoint.y = -1.f;
-
-	nextPoint.setFillColor(sf::Color::Red);
-	sf::Vector2f size;
-	size.x = 5.f;
-	size.y = 5.f;
-	nextPoint.setSize(size);
-
 }
 
 void AI::initMap() {
@@ -98,8 +91,7 @@ void AI::assignNewPoint() {
 		calculatePathMap();
 		calculateRandomPath();
 
-		mBase->setPosition(mCurrentPath.top());
-		mTop->setPosition(mCurrentPath.top());
+		setPosition(mCurrentPath.top());
 		mCurrentPath.pop();
 
 		assignNewPoint();
@@ -108,16 +100,13 @@ void AI::assignNewPoint() {
 
 void AI::update(sf::Time dt) {
 
-	nextPoint.setPosition(mNextPoint);
-
 	if (mPathFindMap == nullptr) {
 		assignNewPoint();
 	}
 
 	float distToNext = sqrt((mBase->getPosition().x - mNextPoint.x)*(mBase->getPosition().x - mNextPoint.x) + (mBase->getPosition().y - mNextPoint.y)*(mBase->getPosition().y - mNextPoint.y));
 	if (distToNext < 5.f) {
-		mBase->setPosition(mNextPoint);
-		mTop->setPosition(mNextPoint);
+		setPosition(mNextPoint);
 		assignNewPoint();
 	}
 	else {
@@ -217,7 +206,6 @@ void AI::update(sf::Time dt) {
 }
 
 void AI::draw(sf::RenderWindow* window) {
-	window->draw(nextPoint);
 
 	Tank::draw(window);
 }
@@ -275,6 +263,13 @@ void AI::calculateRandomPath() {
 		startPoint.y = rand() % mWidth;
 	} while (mPathFindMap[(int)(startPoint.x)][(int)(startPoint.y)] <= 0);
 
+	calculatePath(startPoint);
+}
+
+void AI::calculatePath(sf::Vector2f& startPoint) {
+
+	sf::Vector2f toInsert;
+
 	int cost = mPathFindMap[(int)(startPoint.x)][(int)(startPoint.y)];
 	toInsert.y = (startPoint.x * mTileLength) + mTileLength / 2.f;
 	toInsert.x = (startPoint.y * mTileLength) + mTileLength / 2.f;
@@ -300,10 +295,6 @@ void AI::calculateRandomPath() {
 			startPoint.y -= dy[i];
 		}
 	}
-}
-
-void AI::calculatePath() {
-
 }
 
 

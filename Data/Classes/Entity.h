@@ -8,7 +8,7 @@ public:
 	~Entity();
 	
 	virtual void									draw(sf::RenderWindow* window);
-	virtual sf::Sprite*								getSprite();
+	virtual sf::Sprite*								getCollisionSprite();
 	virtual void									update(sf::Time dt) = 0;
 	
 public:

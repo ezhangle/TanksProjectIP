@@ -1,45 +1,28 @@
 Assets/Textures/Background/green_bg.png
 
 Assets/Textures/Tanks/tank1_body.png
-Assets/Textures/Tanks/tank1_body_destroyed.png
-Assets/Textures/Tanks/tank1_dualgun.png
-Assets/Textures/Tanks/tank1_dualgun_destroyed.png
 Assets/Textures/Tanks/tank1_gun.png
-Assets/Textures/Tanks/tank1_gun_destroyed.png
+
 Assets/Textures/Tanks/tank1b_body.png
-Assets/Textures/Tanks/tank1b_body_destroyed.png
-Assets/Textures/Tanks/tank1b_dualgun.png
 Assets/Textures/Tanks/tank1b_gun.png
-Assets/Textures/Tanks/tank1b_gun_destroyed.png
-Assets/Textures/Tanks/tank1b_gun_destroyed-02.png
+
 Assets/Textures/Tanks/tank2_body.png
-Assets/Textures/Tanks/tank2_body_destroyed.png
-Assets/Textures/Tanks/tank2_dualgun.png
-Assets/Textures/Tanks/tank2_dualgun_destroyed.png
 Assets/Textures/Tanks/tank2_gun.png
-Assets/Textures/Tanks/tank2_gun_destroyed.png
+
 Assets/Textures/Tanks/tank2b_body.png
-Assets/Textures/Tanks/tank2b_body_destroyed.png
-Assets/Textures/Tanks/tank2b_dualgun.png
-Assets/Textures/Tanks/tank2b_dualgun_destroyed.png
 Assets/Textures/Tanks/tank2b_gun.png
-Assets/Textures/Tanks/tank2b_gun_destroyed.png
+
 Assets/Textures/Tanks/tank3_body.png
-Assets/Textures/Tanks/tank3_body_destroyed.png
 Assets/Textures/Tanks/tank3_gun.png
-Assets/Textures/Tanks/tank3_gun_destroyed.png
+
 Assets/Textures/Tanks/tank3b_body.png
-Assets/Textures/Tanks/tank3b_body_destroyed.png
 Assets/Textures/Tanks/tank3b_gun.png
-Assets/Textures/Tanks/tank3b_gun_destroyed.png
+
 Assets/Textures/Tanks/tank3c_body.png
-Assets/Textures/Tanks/tank3c_body_destroyed.png
 Assets/Textures/Tanks/tank3c_gun.png
-Assets/Textures/Tanks/tank3c_gun_destroyed.png
+
 Assets/Textures/Tanks/tank3d_body.png
-Assets/Textures/Tanks/tank3d_body_destroyed.png
 Assets/Textures/Tanks/tank3d_gun.png
-Assets/Textures/Tanks/tank3d_gun_destroyed.png
 
 Assets/Textures/Misc/barrel.png
 Assets/Textures/Misc/box.png
@@ -209,8 +192,5 @@ Assets/Textures/Effects/explosion/expl_10_0031.png
 
 Assets/Textures/Effects/bullets/bullet_orange.png
 
-
-Assets/Textures/Buttons/button_ExitGame.png
-Assets/Textures/Buttons/button_StartGame.png
-Assets/Textures/Buttons/button_ChangeTank.png
-Assets/Textures/Buttons/button_Scoreboard.png
+Assets/Textures/GUI/hp_base.png
+Assets/Textures/GUI/hp_top.png

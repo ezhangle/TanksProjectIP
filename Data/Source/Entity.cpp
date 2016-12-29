@@ -6,7 +6,7 @@ void Entity::draw(sf::RenderWindow* window) {
 	mDelete = false;
 }
 
-sf::Sprite*	Entity::getSprite() {
+sf::Sprite*	Entity::getCollisionSprite() {
 	return mSprite;
 }
 

@@ -16,22 +16,21 @@ class AI : public Tank{
 	int dx[4] = { 0, -1, 0, 1 };
 	int dy[4] = { 1, 0, -1, 0 };
 public:
-	AI(sf::Sprite* base, sf::Sprite* top, sf::Vector2f* pos, sf::Vector2f* vel, float health, float damage);
-	~AI();
+								AI(sf::Sprite* base, sf::Sprite* top, sf::Vector2f* pos, sf::Vector2f* vel, float health, float damage);
+								~AI();
 
-	virtual void	update(sf::Time dt);
-	void			initMap();
-	void			calculatePath();
-	void			calculateRandomPath();
-	void			calculatePathMap();
-	void			calculateRotation();
-	void			assignNewPoint();
+	virtual void				update(sf::Time dt);
+	void						initMap();
+	void						calculatePath(sf::Vector2f& toInsert);
+	void						calculateRandomPath();
+	void						calculatePathMap();
+	void						calculateRotation();
+	void						assignNewPoint();
 
-	void			draw(sf::RenderWindow* window);
+	void						draw(sf::RenderWindow* window);
 
 public:
 	float						mRotationAngle;
-	sf::RectangleShape			nextPoint;
 
 	std::stack<sf::Vector2f>	mCurrentPath;
 	sf::Vector2f				mNextPoint;

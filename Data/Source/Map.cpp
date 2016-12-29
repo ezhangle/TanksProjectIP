@@ -22,90 +22,59 @@ void Map::loadFromFile(std::string& path) {
 	mBackground.setTexture(Game::get()->mTextures.get((Texture)bground));
 
 	std::string obj;
-	float x, y;
-	while (!in.eof()) {
-		in >> obj >> x >> y;
-		insertObject(obj, new sf::Vector2f(x, y), in);
+	size_t		noObjects;
+
+	in >> noObjects;
+
+	for (size_t i = 0; i < noObjects; ++i) {
+		in >> obj;
+		insertObject(obj, in);
 	}
 	in.close();
 }
 
-void Map::insertObject(std::string& obj, sf::Vector2f* pos, std::ifstream& stream) {
+void Map::insertObject(std::string& obj, std::ifstream& stream) {
 	if (obj == "player1") {
-		std::vector<sf::Keyboard::Key> keys;
-		keys.resize(20);
+		sf::Vector2f* position, *velocity;
+		position = new sf::Vector2f;
+		velocity = new sf::Vector2f;
 
-		keys[(int)Tank::Command::DOWN] = sf::Keyboard::S;
-		keys[(int)Tank::Command::UP] = sf::Keyboard::W;
-		keys[(int)Tank::Command::LEFT] = sf::Keyboard::A;
-		keys[(int)Tank::Command::RIGHT] = sf::Keyboard::D;
+		std::string tankType;
+		float health, damage;
 
-		keys[(int)Tank::Command::ROT_LEFT] = sf::Keyboard::C;
-		keys[(int)Tank::Command::ROT_RIGHT] = sf::Keyboard::V;
+		stream >> tankType;
+		stream >> position->x >> position->y;
+		stream >> velocity->x >> velocity->y;
+		stream >> health >> damage;
 
-		keys[(int)Tank::Command::SHOOT] = sf::Keyboard::B;
-	
-		mEntities[TANK].insert(mEntities[TANK].begin(), new Player(
-			new sf::Sprite(Game::get()->mTextures.get(Texture::tank1b_body)),
-			new sf::Sprite(Game::get()->mTextures.get(Texture::tank1b_gun)),
-			pos,
-			new sf::Vector2f(150.f, 150.f),
-			100.f,
-			2.f,
-			keys));
+		insertPlayerOne(tankType, position, velocity, health, damage);
 	}
-
 	if (obj == "player2") {
-		std::vector<sf::Keyboard::Key> keys;
-		keys.resize(20);
+		
+		sf::Vector2f* position, *velocity;
+		position = new sf::Vector2f;
+		velocity = new sf::Vector2f;
 
-		keys[(int)Tank::Command::DOWN] = sf::Keyboard::Numpad5;
-		keys[(int)Tank::Command::UP] = sf::Keyboard::Numpad8;
-		keys[(int)Tank::Command::LEFT] = sf::Keyboard::Numpad4;
-		keys[(int)Tank::Command::RIGHT] = sf::Keyboard::Numpad6;
+		std::string tankType;
+		float health, damage;
 
-		keys[(int)Tank::Command::ROT_LEFT] = sf::Keyboard::Numpad7;
-		keys[(int)Tank::Command::ROT_RIGHT] = sf::Keyboard::Numpad9;
+		stream >> tankType;
+		stream >> position->x >> position->y;
+		stream >> velocity->x >> velocity->y;
+		stream >> health >> damage;
 
-		keys[(int)Tank::Command::SHOOT] = sf::Keyboard::P;
-
-		mEntities[TANK].insert(mEntities[TANK].begin(), new Player(
-			new sf::Sprite(Game::get()->mTextures.get(Texture::tank1_body)),
-			new sf::Sprite(Game::get()->mTextures.get(Texture::tank1_gun)),
-			pos,
-			new sf::Vector2f(150.f, 150.f),
-			10.f,
-			2.f,
-			keys));
-	}
-
-	if (obj == "ai1") {
-		mEntities[TANK].insert(mEntities[TANK].begin(), new AI(
-			new sf::Sprite(Game::get()->mTextures.get(Texture::tank2_body)),
-			new sf::Sprite(Game::get()->mTextures.get(Texture::tank2_gun)),
-			pos,
-			new sf::Vector2f(150.f, 150.f),
-			10.f,
-			2.f));
+		insertPlayerTwo(tankType, position, velocity, health, damage);
 	}
 
 	if (obj == "static_obstacle") {
-		std::string textureStr;
-		Texture		texture;
+		std::string	textureStr;
+		Texture texture;
+		sf::Vector2f* position = new sf::Vector2f;
+		
 		stream >> textureStr;
-
-		if (textureStr == "box")
-			texture = Texture::box;
-		else if (textureStr == "box_2x1")
-			texture = Texture::box_2x1;
-		else if (textureStr == "box_2x2")
-			texture = Texture::box_2x2;
-		else if (textureStr == "box_small")
-			texture = Texture::box_small;
-		else
-			return;
-
-		mEntities[OBSTACLE].insert(mEntities[OBSTACLE].begin(), new Obstacle(pos, new sf::Sprite(Game::get()->mTextures.get(texture))));
+		stream >> position->x >> position->y;
+	
+		insertStaticObject(textureStr, position);
 	}
 }
 
@@ -153,4 +122,116 @@ void Map::draw(sf::RenderWindow* window) {
 	for (auto it = mEffects.begin(); it != mEffects.end(); ++it) {
 		(*it)->draw(window);
 	}
+}
+
+void Map::insertPlayerOne(const std::string& tankType, sf::Vector2f* position, sf::Vector2f* velocity, float health, float damage) {
+	std::vector<sf::Keyboard::Key> keys;
+	keys.resize(20);
+
+	keys[(int)Tank::Command::DOWN] = sf::Keyboard::S;
+	keys[(int)Tank::Command::UP] = sf::Keyboard::W;
+	keys[(int)Tank::Command::LEFT] = sf::Keyboard::A;
+	keys[(int)Tank::Command::RIGHT] = sf::Keyboard::D;
+
+	keys[(int)Tank::Command::ROT_LEFT] = sf::Keyboard::C;
+	keys[(int)Tank::Command::ROT_RIGHT] = sf::Keyboard::V;
+
+	keys[(int)Tank::Command::SHOOT] = sf::Keyboard::B;
+
+	Texture baseTexture, topTexture;
+	getTankTextureIds(tankType, baseTexture, topTexture);
+
+	mEntities[TANK].insert(mEntities[TANK].begin(), new Player(
+		new sf::Sprite(Game::get()->mTextures.get(baseTexture)),
+		new sf::Sprite(Game::get()->mTextures.get(topTexture)),
+		position,
+		velocity,
+		health,
+		damage,
+		keys));
+}
+
+void Map::insertPlayerTwo(const std::string& tankType, sf::Vector2f* position, sf::Vector2f* velocity, float health, float damage) {
+	std::vector<sf::Keyboard::Key> keys;
+	keys.resize(20);
+
+	keys[(int)Tank::Command::DOWN] = sf::Keyboard::Numpad5;
+	keys[(int)Tank::Command::UP] = sf::Keyboard::Numpad8;
+	keys[(int)Tank::Command::LEFT] = sf::Keyboard::Numpad4;
+	keys[(int)Tank::Command::RIGHT] = sf::Keyboard::Numpad6;
+
+	keys[(int)Tank::Command::ROT_LEFT] = sf::Keyboard::Numpad7;
+	keys[(int)Tank::Command::ROT_RIGHT] = sf::Keyboard::Numpad9;
+
+	keys[(int)Tank::Command::SHOOT] = sf::Keyboard::P;
+
+	Texture baseTexture, topTexture;
+	getTankTextureIds(tankType, baseTexture, topTexture);
+
+	mEntities[TANK].insert(mEntities[TANK].begin(), new Player(
+		new sf::Sprite(Game::get()->mTextures.get(baseTexture)),
+		new sf::Sprite(Game::get()->mTextures.get(topTexture)),
+		position,
+		velocity,
+		health,
+		damage,
+		keys));
+}
+
+void Map::insertStaticObject(const std::string& textureString, sf::Vector2f* position) {
+
+	Texture texture;
+	getStaticObjectTextureId(textureString, texture);
+
+	mEntities[OBSTACLE].insert(mEntities[OBSTACLE].begin(), new Obstacle(position, new sf::Sprite(Game::get()->mTextures.get(texture))));
+}
+
+void Map::getTankTextureIds(const std::string& textureString, Texture& baseTexture, Texture& topTexture) {
+	if (textureString == "tank1") {
+		baseTexture = Texture::tank1_body;
+		topTexture = Texture::tank1_gun;
+	}
+	else if (textureString == "tank1b") {
+		baseTexture = Texture::tank1b_body;
+		topTexture = Texture::tank1b_gun;
+	}
+	else if (textureString == "tank2") {
+		baseTexture = Texture::tank2_body;
+		topTexture = Texture::tank2_gun;
+	}
+	else if (textureString == "tank2b") {
+		baseTexture = Texture::tank2b_body;
+		topTexture = Texture::tank2b_gun;
+	}
+	else if (textureString == "tank3") {
+		baseTexture = Texture::tank3_body;
+		topTexture = Texture::tank3_gun;
+	}
+	else if (textureString == "tank3b") {
+		baseTexture = Texture::tank3b_body;
+		topTexture = Texture::tank3b_gun;
+	}
+	else if (textureString == "tank3c") {
+		baseTexture = Texture::tank3c_body;
+		topTexture = Texture::tank3c_gun;
+	}
+	else if (textureString == "tank3d") {
+		baseTexture = Texture::tank3d_body;
+		topTexture = Texture::tank3d_gun;
+	}
+	else
+		throw std::runtime_error("Map->getTankTextureIds: The specified texture doesn't exist");
+}
+
+void Map::getStaticObjectTextureId(const std::string& textureString, Texture& texture) {
+	if (textureString == "box")
+		texture = Texture::box;
+	else if (textureString == "box_2x1")
+		texture = Texture::box_2x1;
+	else if (textureString == "box_2x2")
+		texture = Texture::box_2x2;
+	else if (textureString == "box_small")
+		texture = Texture::box_small;
+	else
+		throw std::runtime_error("Map->getStaticObjectTextureId: The specified texture doesn't exist");
 }
