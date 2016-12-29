@@ -6,14 +6,15 @@
 #include "Animation.h"
 
 #include <cmath>
-Tank::Tank(sf::Sprite* base, sf::Sprite* top, sf::Vector2f* pos, sf::Vector2f* vel, float health, float damage):
+Tank::Tank(sf::Sprite* base, sf::Sprite* top, sf::Vector2f* pos, sf::Vector2f* vel, float health, float damage, size_t team):
 Entity(),
 mBase(base),
 mTop(top),
 mVelocity(vel),
 mHealth(health),
 mMaxHealth(health),
-mDamage(damage)
+mDamage(damage),
+mTeam(team)
 {
 	sf::Vector2f topPos = top->getPosition();
 	top->setOrigin((float)top->getTexture()->getSize().x / 2, (float)top->getTexture()->getSize().y / 2);
@@ -33,7 +34,9 @@ mDamage(damage)
 	mHpBarTop.setPosition(mBase->getPosition().x - mHpBarTop.getLocalBounds().width / 2.f, mBase->getPosition().y - 50.f);
 	mHpBarBase.setPosition(mBase->getPosition().x - mHpBarBase.getLocalBounds().width / 2.f, mBase->getPosition().y - 50.f);
 
-	
+	mMovingState = 0;
+	mLastPoint = mBase->getPosition();
+	mMovingStateClock.restart();
 }
 
 void Tank::draw(sf::RenderWindow* window) {
@@ -45,6 +48,17 @@ void Tank::draw(sf::RenderWindow* window) {
 }
 
 void Tank::update(sf::Time dt) {
+	if (mBase->getPosition().x != mLastPoint.x && mBase->getPosition().y != mLastPoint.y) {
+		mMovingStateClock.restart();
+	}
+	else {
+		if (mMovingStateClock.getElapsedTime().asSeconds() > 0.1f) {
+			mMovingState = 0;
+			mMovingStateClock.restart();
+		}
+			
+	}
+
 	if (mHealth <= 0) {
 		Game::get()->mMap->mEffects.insert(Game::get()->mMap->mEffects.begin(), new Animation(new sf::Vector2f(mBase->getPosition()), Texture::expl_10_0000, Texture::expl_10_0031, 50, false));
 		mDelete = true;
@@ -62,14 +76,18 @@ void Tank::rotateTurret(float modifier) {
 }
 
 void Tank::rotateBase(float modifier) {
+	mLastPoint = mBase->getPosition();
 	mBase->rotate(300.f * modifier);
 }
 
 bool Tank::MoveX(float inc) {
 
-	if (inc < 0.f)
+	mMovingState = 1;
+	if (inc < 0.f) {
 		inc /= 1.2f;
-
+		mMovingState = 2;
+	}
+		
 	mAcceleration += 1.f;
 	if (mAcceleration > mMaxAcceleration) {
 		mAcceleration = mMaxAcceleration;
@@ -85,6 +103,8 @@ bool Tank::MoveX(float inc) {
 	mBase->move(newPos);
 	mTop->move(newPos);
 
+	mLastPoint = mBase->getPosition();
+
 	mHpBarBase.move(newPos);
 	mHpBarTop.move(newPos);
 
@@ -94,6 +114,8 @@ bool Tank::MoveX(float inc) {
 
 		mHpBarBase.setPosition(oldPosHpBar);
 		mHpBarTop.setPosition(oldPosHpBar);
+
+		mLastPoint = oldPosPlayer;
 
 		return false;
 	}
@@ -112,7 +134,7 @@ void Tank::shoot() {
 			-cos(mTop->getRotation()*3.14f / 180.f)*mTop->getLocalBounds().height + mTop->getPosition().y);
 
 		Map* m = Game::get()->mMap;
-		m->mEntities[2].insert(m->mEntities[2].end(), new Projectile(news, pos, new sf::Vector2f(500.f, 500.f), mDamage));
+		m->mEntities[2].insert(m->mEntities[2].end(), new Projectile(news, pos, new sf::Vector2f(500.f, 500.f), mDamage, this));
 
 		mHitCooldownClock.restart();
 	}

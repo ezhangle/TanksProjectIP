@@ -2,8 +2,13 @@
 #include "Tank.h"
 #include "Player.h"
 #include "Game.h"
-#include "AI.h"
 #include "Obstacle.h"
+
+#include "AI.h"
+#include "AI_Easy.h"
+#include "AI_Medium.h"
+#include "AI_Hard.h"
+
 #include <fstream>
 #include <vector>
 #include <iostream>
@@ -34,36 +39,34 @@ void Map::loadFromFile(std::string& path) {
 }
 
 void Map::insertObject(std::string& obj, std::ifstream& stream) {
+	size_t				team;
+	sf::Vector2f*		position, *velocity;
+	std::string			tankType;
+	float				health, damage;
+
 	if (obj == "player1") {
-		sf::Vector2f* position, *velocity;
+		
 		position = new sf::Vector2f;
 		velocity = new sf::Vector2f;
-
-		std::string tankType;
-		float health, damage;
 
 		stream >> tankType;
 		stream >> position->x >> position->y;
 		stream >> velocity->x >> velocity->y;
-		stream >> health >> damage;
+		stream >> health >> damage >> team;
 
-		insertPlayerOne(tankType, position, velocity, health, damage);
+		insertPlayerOne(tankType, position, velocity, health, damage, team);
 	}
 	if (obj == "player2") {
 		
-		sf::Vector2f* position, *velocity;
 		position = new sf::Vector2f;
 		velocity = new sf::Vector2f;
-
-		std::string tankType;
-		float health, damage;
 
 		stream >> tankType;
 		stream >> position->x >> position->y;
 		stream >> velocity->x >> velocity->y;
-		stream >> health >> damage;
+		stream >> health >> damage >> team;
 
-		insertPlayerTwo(tankType, position, velocity, health, damage);
+		insertPlayerTwo(tankType, position, velocity, health, damage, team);
 	}
 
 	if (obj == "static_obstacle") {
@@ -75,6 +78,21 @@ void Map::insertObject(std::string& obj, std::ifstream& stream) {
 		stream >> position->x >> position->y;
 	
 		insertStaticObject(textureStr, position);
+	}
+
+	if (obj == "ai") {
+
+		position = new sf::Vector2f;
+		velocity = new sf::Vector2f;
+
+		std::string difficulty;
+
+		stream >> difficulty >> tankType;
+		stream >> position->x >> position->y;
+		stream >> velocity->x >> velocity->y;
+		stream >> health >> damage >> team;
+
+		insertAI(difficulty, tankType, position, velocity, health, damage, team);
 	}
 }
 
@@ -124,7 +142,7 @@ void Map::draw(sf::RenderWindow* window) {
 	}
 }
 
-void Map::insertPlayerOne(const std::string& tankType, sf::Vector2f* position, sf::Vector2f* velocity, float health, float damage) {
+void Map::insertPlayerOne(const std::string& tankType, sf::Vector2f* position, sf::Vector2f* velocity, float health, float damage, size_t team) {
 	std::vector<sf::Keyboard::Key> keys;
 	keys.resize(20);
 
@@ -148,10 +166,11 @@ void Map::insertPlayerOne(const std::string& tankType, sf::Vector2f* position, s
 		velocity,
 		health,
 		damage,
-		keys));
+		keys,
+		team));
 }
 
-void Map::insertPlayerTwo(const std::string& tankType, sf::Vector2f* position, sf::Vector2f* velocity, float health, float damage) {
+void Map::insertPlayerTwo(const std::string& tankType, sf::Vector2f* position, sf::Vector2f* velocity, float health, float damage, size_t team) {
 	std::vector<sf::Keyboard::Key> keys;
 	keys.resize(20);
 
@@ -175,7 +194,8 @@ void Map::insertPlayerTwo(const std::string& tankType, sf::Vector2f* position, s
 		velocity,
 		health,
 		damage,
-		keys));
+		keys,
+		team));
 }
 
 void Map::insertStaticObject(const std::string& textureString, sf::Vector2f* position) {
@@ -234,4 +254,42 @@ void Map::getStaticObjectTextureId(const std::string& textureString, Texture& te
 		texture = Texture::box_small;
 	else
 		throw std::runtime_error("Map->getStaticObjectTextureId: The specified texture doesn't exist");
+}
+
+void Map::insertAI(const std::string& difficulty, const std::string& tankType, sf::Vector2f* position, sf::Vector2f* velocity, float health, float damage, size_t team) {
+
+	Texture baseTexture, topTexture;
+	getTankTextureIds(tankType, baseTexture, topTexture);
+
+	if (difficulty == "easy") {
+		mEntities[TANK].insert(mEntities[TANK].begin(), new AI_Easy(
+			new sf::Sprite(Game::get()->mTextures.get(baseTexture)),
+			new sf::Sprite(Game::get()->mTextures.get(topTexture)),
+			position,
+			velocity,
+			health,
+			damage,
+			team));
+	}
+	else if (difficulty == "medium") {
+		mEntities[TANK].insert(mEntities[TANK].begin(), new AI_Medium(
+			new sf::Sprite(Game::get()->mTextures.get(baseTexture)),
+			new sf::Sprite(Game::get()->mTextures.get(topTexture)),
+			position,
+			velocity,
+			health,
+			damage,
+			team));
+	}
+	else if (difficulty == "hard") {
+		mEntities[TANK].insert(mEntities[TANK].begin(), new AI_Hard(
+			new sf::Sprite(Game::get()->mTextures.get(baseTexture)),
+			new sf::Sprite(Game::get()->mTextures.get(topTexture)),
+			position,
+			velocity,
+			health,
+			damage,
+			team));
+	}
+	
 }

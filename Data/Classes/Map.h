@@ -28,9 +28,10 @@ public:
 	sf::Sprite									mBackground;
 
 private:
-	void										insertPlayerOne(const std::string& tankType, sf::Vector2f* position, sf::Vector2f* velocity, float health, float damage);
-	void										insertPlayerTwo(const std::string& tankType, sf::Vector2f* position, sf::Vector2f* velocity, float health, float damage);
+	void										insertPlayerOne(const std::string& tankType, sf::Vector2f* position, sf::Vector2f* velocity, float health, float damage, size_t team);
+	void										insertPlayerTwo(const std::string& tankType, sf::Vector2f* position, sf::Vector2f* velocity, float health, float damage, size_t team);
 	void										insertStaticObject(const std::string& textureString, sf::Vector2f* pos);
+	void										insertAI(const std::string& difficulty, const std::string& tankType, sf::Vector2f* position, sf::Vector2f* velocity, float health, float damage, size_t team);
 
 	void										getTankTextureIds(const std::string& textureString, Texture& baseTexture, Texture& topTexture);
 	void										getStaticObjectTextureId(const std::string& textureString, Texture& texture);

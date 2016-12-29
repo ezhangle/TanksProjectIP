@@ -2,12 +2,14 @@
 #include "Game.h"
 #include "Tank.h"
 #include "Player.h"
+#include "AI.h"
 #include <iostream>
 
-Projectile::Projectile(sf::Sprite* sprite, sf::Vector2f* position, sf::Vector2f* velocity, float damage):
+Projectile::Projectile(sf::Sprite* sprite, sf::Vector2f* position, sf::Vector2f* velocity, float damage, Tank* parent):
 Entity(position, sprite),
 mVelocity(velocity),
-mDamage(damage){
+mDamage(damage),
+mParent(parent){
 
 }
 
@@ -44,17 +46,38 @@ bool Projectile::checkCollision() {
 			if ((*it2) != this)
 			{
 				if (SAT.collision(mSprite, (*it2)->getCollisionSprite())) {
-					Game::get()->mMap->mEffects.insert(Game::get()->mMap->mEffects.begin(), new Animation(new sf::Vector2f(mSprite->getPosition()), Texture::expl_01_0000, Texture::expl_01_0023, 20, false));
+					collideSolid = true;
 
 					if (Tank* proj = dynamic_cast<Tank*>((*it2))) {
-						proj->mHealth -= mDamage;
-						
+						if (mParent->mTeam != proj->mTeam) {
+							proj->mHealth -= mDamage;
+							if (proj->mHealth <= 0.f) {
+					
+								for (auto itAi = Game::get()->mMap->mEntities[2].begin(); itAi != Game::get()->mMap->mEntities[2].end(); ++itAi) {
+									if (AI* ai = dynamic_cast<AI*>((*itAi))) {
+										if (ai->mTarget == proj) {
+											ai->findNewTarget();
+										}
+											
+									}
+								}
+							}
+						}
+						else
+							collideSolid = false;
 					}
-					collideSolid = true;
+
+					if (Projectile* proj = dynamic_cast<Projectile*>((*it2))) {
+						collideSolid = false;
+					}
+					
 				}
 			}
 		}
 	}
+
+	if(collideSolid == true)
+		Game::get()->mMap->mEffects.insert(Game::get()->mMap->mEffects.begin(), new Animation(new sf::Vector2f(mSprite->getPosition()), Texture::expl_01_0000, Texture::expl_01_0023, 20, false));
 
 	return collideSolid;
 

@@ -16,7 +16,7 @@ class AI : public Tank{
 	int dx[4] = { 0, -1, 0, 1 };
 	int dy[4] = { 1, 0, -1, 0 };
 public:
-								AI(sf::Sprite* base, sf::Sprite* top, sf::Vector2f* pos, sf::Vector2f* vel, float health, float damage);
+								AI(sf::Sprite* base, sf::Sprite* top, sf::Vector2f* pos, sf::Vector2f* vel, float health, float damage, size_t team);
 								~AI();
 
 	virtual void				update(sf::Time dt);
@@ -26,6 +26,7 @@ public:
 	void						calculatePathMap();
 	void						calculateRotation();
 	void						assignNewPoint();
+	void						findNewTarget();
 
 	void						draw(sf::RenderWindow* window);
 
@@ -37,7 +38,7 @@ public:
 
 	sf::Vector2f				mLastPoint;
 
-	Player*						mPlayer;
+	Tank*						mTarget;
 	float						mTileLength;
 	int							**mPathFindMap;
 	int							mWidth;
