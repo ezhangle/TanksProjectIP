@@ -82,11 +82,6 @@ void Tank::rotateBase(float modifier) {
 
 bool Tank::MoveX(float inc) {
 
-	mMovingState = 1;
-	if (inc < 0.f) {
-		inc /= 1.2f;
-		mMovingState = 2;
-	}
 		
 	mAcceleration += 1.f;
 	if (mAcceleration > mMaxAcceleration) {
@@ -97,9 +92,17 @@ bool Tank::MoveX(float inc) {
 	sf::Vector2f oldPosHpBar(mHpBarBase.getPosition());
 	sf::Vector2f newPos;
 
-	newPos.x = sin(mBase->getRotation()*3.14f / 180.f)* inc * (mVelocity->x + mAcceleration);
-	newPos.y = -cos(mBase->getRotation()*3.14f / 180.f)* inc * (mVelocity->y + mAcceleration);
-
+	if (inc > 0.f) {
+		mMovingState = 1;
+		newPos.x = sin(mBase->getRotation()*3.14f / 180.f)* inc * (mVelocity->x + mAcceleration);
+		newPos.y = -cos(mBase->getRotation()*3.14f / 180.f)* inc * (mVelocity->y + mAcceleration);
+	}
+	else {
+		mMovingState = 2;
+		newPos.x = sin(mBase->getRotation()*3.14f / 180.f)* inc * 0.5f*(mVelocity->x + mAcceleration);
+		newPos.y = -cos(mBase->getRotation()*3.14f / 180.f)* inc * 0.5f*(mVelocity->y + mAcceleration);
+	}
+	
 	mBase->move(newPos);
 	mTop->move(newPos);
 

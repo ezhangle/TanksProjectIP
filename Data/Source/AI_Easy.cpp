@@ -1,4 +1,5 @@
 #include "AI_Easy.h"
+#include "VectorUtility.h"
 
 AI_Easy::AI_Easy(sf::Sprite* base, sf::Sprite* top, sf::Vector2f* pos, sf::Vector2f* vel, float health, float damage, size_t team):
 AI(base, top, pos, vel, health, damage, team){
@@ -6,11 +7,13 @@ AI(base, top, pos, vel, health, damage, team){
 }
 
 void AI_Easy::update(sf::Time dt) {
+
 	if (mPathFindMap == nullptr) {
 		assignNewPoint();
 	}
 
-	float distToNext = sqrt((mBase->getPosition().x - mNextPoint.x)*(mBase->getPosition().x - mNextPoint.x) + (mBase->getPosition().y - mNextPoint.y)*(mBase->getPosition().y - mNextPoint.y));
+
+	float distToNext = Vector2f::distance(mNextPoint, mBase->getPosition());
 	if (distToNext < 5.f) {
 		setPosition(mNextPoint);
 		assignNewPoint();
@@ -29,6 +32,7 @@ void AI_Easy::update(sf::Time dt) {
 			}
 		}
 		else {
+
 			if (mRotationAngle == 0.f) {
 				if (currentRotation >= 270.f)
 					mBase->setRotation(currentRotation + 6.f);
@@ -51,14 +55,14 @@ void AI_Easy::update(sf::Time dt) {
 		sf::Vector2f turretProjection(mBase->getPosition());
 		sf::Vector2f playerPosition(mTarget->mBase->getPosition());
 
-		float distanceToPlayer = sqrt((turretProjection.x - playerPosition.x)*(turretProjection.x - playerPosition.x) + (turretProjection.y - playerPosition.y)*(turretProjection.y - playerPosition.y));
+		float distanceToPlayer = Vector2f::distance(turretProjection, playerPosition);
 
 		turretProjection.x += sin(mTop->getRotation()*3.14f / 180.f)* distanceToPlayer;
 		turretProjection.y -= cos(mTop->getRotation()*3.14f / 180.f)* distanceToPlayer;
 
 		if (abs(turretProjection.y - playerPosition.y) > 5.f && abs(turretProjection.x - playerPosition.x) > 5.f) {
 
-			float distProjPlayer = sqrt((turretProjection.x - playerPosition.x)*(turretProjection.x - playerPosition.x) + (turretProjection.y - playerPosition.y)*(turretProjection.y - playerPosition.y));
+			float distProjPlayer = Vector2f::distance(turretProjection, playerPosition);
 			float angle = acos(1.f - distProjPlayer / (2 * distanceToPlayer));
 
 			if (playerPosition.x < mBase->getPosition().x) {
@@ -92,8 +96,6 @@ void AI_Easy::update(sf::Time dt) {
 		}
 		else
 			shoot();
-
-
 	}
 
 	AI::update(dt);

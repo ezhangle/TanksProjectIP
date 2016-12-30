@@ -1,9 +1,9 @@
 #include "AI_Hard.h"
+#include "VectorUtility.h"
 #include <iostream>
 
 AI_Hard::AI_Hard(sf::Sprite* base, sf::Sprite* top, sf::Vector2f* pos, sf::Vector2f* vel, float health, float damage, size_t team) :
 	AI(base, top, pos, vel, health, damage, team) {
-
 }
 
 void AI_Hard::update(sf::Time dt) {
@@ -14,7 +14,7 @@ void AI_Hard::update(sf::Time dt) {
 	}
 		
 
-	float distToNext = sqrt((mBase->getPosition().x - mNextPoint.x)*(mBase->getPosition().x - mNextPoint.x) + (mBase->getPosition().y - mNextPoint.y)*(mBase->getPosition().y - mNextPoint.y));
+	float distToNext = Vector2f::distance(mNextPoint, mBase->getPosition());
 	if (distToNext < 5.f) {
 		setPosition(mNextPoint);
 		assignNewPoint();
@@ -55,30 +55,54 @@ void AI_Hard::update(sf::Time dt) {
 
 		sf::Vector2f turretProjection(mBase->getPosition());
 		sf::Vector2f playerPosition(mTarget->mBase->getPosition());
-		
-		float d = sqrt((turretProjection.x - playerPosition.x)*(turretProjection.x - playerPosition.x) + (turretProjection.y - playerPosition.y)*(turretProjection.y - playerPosition.y));
 
 		if (mTarget->mMovingState > 0) {
-			float d = sqrt((turretProjection.x - playerPosition.x)*(turretProjection.x - playerPosition.x) + (turretProjection.y - playerPosition.y)*(turretProjection.y - playerPosition.y));
-
+			sf::Vector2f closingVelocity;
 			if (mTarget->mMovingState == 1) {
-				playerPosition.x += sin(mTarget->mBase->getRotation()*3.14f / 180.f)* (mTarget->mVelocity->y + mTarget->mAcceleration)* d / 500.f;
-				playerPosition.y -= cos(mTarget->mBase->getRotation()*3.14f / 180.f)* (mTarget->mVelocity->y + mTarget->mAcceleration)* d / 500.f;
+				closingVelocity.x = (mTarget->mVelocity->x + mTarget->mAcceleration) - 500.f;
+				closingVelocity.y = (mTarget->mVelocity->y + mTarget->mAcceleration) - 500.f;
 			}
 			else {
-				playerPosition.x += sin((mTarget->mBase->getRotation() + 180.f)*3.14f / 180.f)* (mTarget->mVelocity->y + mTarget->mAcceleration)/1.2f* d / 500.f;
-				playerPosition.y -= cos((mTarget->mBase->getRotation() + 180.f)*3.14f / 180.f)* (mTarget->mVelocity->y + mTarget->mAcceleration)/1.2f* d / 500.f;
+				closingVelocity.x = (mTarget->mVelocity->x)*0.5f - 500.f;
+				closingVelocity.y = (mTarget->mVelocity->y)*0.5f - 500.f;
 			}
-		}
 
-		float distanceToPlayer = sqrt((turretProjection.x - playerPosition.x)*(turretProjection.x - playerPosition.x) + (turretProjection.y - playerPosition.y)*(turretProjection.y - playerPosition.y));
+			sf::Vector2f closingRange(mTarget->mBase->getPosition());
+			closingRange.x -= sin(mTop->getRotation()*3.14f / 180.f)*mTop->getLocalBounds().width + mTop->getPosition().x;
+			closingRange.y -= -cos(mTop->getRotation()*3.14f / 180.f)*mTop->getLocalBounds().height + mTop->getPosition().y;
+
+			float clVelMagn = Vector2f::length(closingVelocity);
+			float clRanMagn = Vector2f::length(closingRange);
+			float clTime = clRanMagn / clVelMagn;
+
+			playerPosition.x += mTarget->mVelocity->x * clTime;
+			playerPosition.y += mTarget->mVelocity->y * clTime;
+
+			float extraAngle = 90.f + atan2(Vector2f::dot(playerPosition, mBase->getPosition()), playerPosition.x*mBase->getPosition().y + playerPosition.y*mBase->getPosition().x) * 180.f / 3.14f;
+
+			float angleOfRotation = (360.f - extraAngle + mTarget->mBase->getRotation()) * 3.14f / 180.f;
+			if (mTarget->mMovingState == 2)
+				angleOfRotation += 180.f * 3.14 / 180.f;
+
+			sf::Vector2f newPos;
+			newPos.x = (playerPosition.x - mTarget->mBase->getPosition().x) * cos(angleOfRotation) - (playerPosition.y - mTarget->mBase->getPosition().y) * sin(angleOfRotation);
+			newPos.y = (playerPosition.x - mTarget->mBase->getPosition().x) * sin(angleOfRotation) + (playerPosition.y - mTarget->mBase->getPosition().y) * cos(angleOfRotation);
+
+			newPos.x += mTarget->mBase->getPosition().x;
+			newPos.y += mTarget->mBase->getPosition().y;
+
+			playerPosition = newPos;
+		}
+		
+
+		float distanceToPlayer = Vector2f::distance(turretProjection, playerPosition);
 
 		turretProjection.x += sin(mTop->getRotation()*3.14f / 180.f)* distanceToPlayer;
 		turretProjection.y -= cos(mTop->getRotation()*3.14f / 180.f)* distanceToPlayer;
 
 		if (abs(turretProjection.y - playerPosition.y) > 5.f && abs(turretProjection.x - playerPosition.x) > 5.f) {
 
-			float distProjPlayer = sqrt((turretProjection.x - playerPosition.x)*(turretProjection.x - playerPosition.x) + (turretProjection.y - playerPosition.y)*(turretProjection.y - playerPosition.y));
+			float distProjPlayer = Vector2f::distance(turretProjection, playerPosition);
 			float angle = acos(1.f - distProjPlayer / (2 * distanceToPlayer));
 
 			if (playerPosition.x < mBase->getPosition().x) {
