@@ -25,7 +25,6 @@ private:
 	Game*											game;
 	std::vector<Button>								mButtonVector;
 	Selector										mSelector;
-	sf::Sprite										mTitle;
 	sf::Sprite										mBackground;
 	sf::View										mView;
 	

@@ -4,6 +4,7 @@
 #include "GameState_Options_Fullscreen.h"
 #include "GameState_Options_Vsync.h"
 #include "GameState_Highscore.h"
+#include "GameState_GameBuild.h"
 #include <iostream>
 
 
@@ -51,6 +52,12 @@ void Button::triggerAction()
 		case button::Action::play:
 		{
 			//ADD CODE HERE
+			break;
+		}
+
+		case button::Action::buildPlay:
+		{
+			game->pushState(new GameState_GameBuild());
 			break;
 		}
 

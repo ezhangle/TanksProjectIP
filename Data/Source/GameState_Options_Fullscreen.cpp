@@ -4,7 +4,6 @@ GameState_Options_Fullscreen::GameState_Options_Fullscreen()
 	: game(Game::get())
 	, mBackground(game->mTextures.get(Texture::background_Options))
 	, mSelector(game->mTextures.get(Texture::button_Selector), sf::Vector2f(45.0f, game->mWindow.getSize().y - 200.0f), 50.0f, mButtonVector)
-	, mTitle(game->mTextures.get(Texture::title_Options))
 {
 	mView.setSize(game->mWindow.getSize().x, game->mWindow.getSize().y);
 	mBackground.setScale(game->mWindow.getSize().x / 1920.0f, game->mWindow.getSize().y / 1080.0f);

@@ -237,16 +237,15 @@ button_Selector,
 button_Back,
 button_Yes,
 button_No,
+button_Add,
 
 //backgrounds
 background_MainMenu,
 background_Options,
 
-//titles
-title_MainMenu,
-title_Options,
-title_Options_Resolution,
-title_Options_Fullscreen,
+//borders
+border_Full,
+border_Half,
 };
 
 
@@ -254,3 +253,6 @@ enum class Font
 {
 	VanillaExtractRegular,
 };
+
+
+

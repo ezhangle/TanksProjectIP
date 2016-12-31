@@ -22,6 +22,7 @@ public:
 private:
 	sf::View										mView;
 	Game*											game;
+
 private:
 
 

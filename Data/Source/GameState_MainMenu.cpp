@@ -22,7 +22,7 @@ GameState_MainMenu::GameState_MainMenu()
 
 void GameState_MainMenu::buildGUI()
 {
-	Button buttonPlay(sf::Vector2f(100.0f, game->mWindow.getSize().y - 250.0f), button::Action::play, game->mTextures.get(Texture::button_Play));
+	Button buttonPlay(sf::Vector2f(100.0f, game->mWindow.getSize().y - 250.0f), button::Action::buildPlay, game->mTextures.get(Texture::button_Play));
 	//Button buttonTankType(sf::Vector2f(100.0f, game->mWindow.getSize().y - 250.0f), button::Action::tankType, game->mTextures.get(Texture::button_TankType));
 	Button buttonOptions(sf::Vector2f(100.0f, game->mWindow.getSize().y - 200.0f), button::Action::options, game->mTextures.get(Texture::button_Options));
 	Button buttonHighscore(sf::Vector2f(100.0f, game->mWindow.getSize().y - 150.0f), button::Action::highscore, game->mTextures.get(Texture::button_Highscore));

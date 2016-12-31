@@ -3,7 +3,6 @@
 GameState_Options::GameState_Options()
 	: game(Game::get())
 	, mBackground(game->mTextures.get(Texture::background_Options))
-	, mTitle(game->mTextures.get(Texture::title_Options))
 	, mSelector(game->mTextures.get(Texture::button_Selector), sf::Vector2f(45.0f, game->mWindow.getSize().y - 250.0f), 50.0f, mButtonVector)
 {
 	mView.setSize(game->mWindow.getSize().x, game->mWindow.getSize().y);

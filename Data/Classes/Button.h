@@ -20,6 +20,7 @@ namespace button
 		options_fullscreen,
 		options_vsync,
 		back,
+		buildPlay,
 	};
 }
 
