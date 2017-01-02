@@ -23,6 +23,9 @@ public:
 	void										draw(sf::RenderWindow* window);
 	void										insertObject(std::string& obj, std::ifstream& stream);
 public:
+	int											mWidth;
+	int											mHeight;
+
 	std::vector<std::list<Entity*>>				mEntities;
 	std::list<Animation*>						mEffects;
 	sf::Sprite									mBackground;
