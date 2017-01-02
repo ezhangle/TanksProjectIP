@@ -25,8 +25,7 @@ public:
 	void						calculateRandomPath();
 	void						calculatePathMap();
 	void						calculateRotation();
-
-	virtual void				assignNewPoint();
+	void						assignNewPoint();
 	void						findNewTarget();
 
 	void						draw(sf::RenderWindow* window);
@@ -41,7 +40,7 @@ public:
 
 	Tank*						mTarget;
 	float						mTileLength;
-	static int					**mPathFindMap;
+	int							**mPathFindMap;
 	int							mWidth;
 	int							mHeight;
 };

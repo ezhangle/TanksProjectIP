@@ -8,7 +8,6 @@
 #include "AI_Easy.h"
 #include "AI_Medium.h"
 #include "AI_Hard.h"
-#include "PU_AttackSpeed.h"
 
 #include <fstream>
 #include <vector>
@@ -17,12 +16,6 @@
 Map::Map(std::string& path){
 	mEntities.resize(NUMBER);
 	loadFromFile(path);
-
-	
-	mEntities[1].insert(mEntities[1].begin(), new PU_AttackSpeed(new sf::Vector2f(800.f, 100.f), new sf::Sprite(Game::get()->mTextures.get(Texture::pu_fast_attacks))));
-	mEntities[1].insert(mEntities[1].begin(), new PU_AttackSpeed(new sf::Vector2f(100.f, 200.f), new sf::Sprite(Game::get()->mTextures.get(Texture::pu_fast_attacks))));
-	mEntities[1].insert(mEntities[1].begin(), new PU_AttackSpeed(new sf::Vector2f(500.f, 200.f), new sf::Sprite(Game::get()->mTextures.get(Texture::pu_fast_attacks))));
-	mEntities[1].insert(mEntities[1].begin(), new PU_AttackSpeed(new sf::Vector2f(600.f, 700.f), new sf::Sprite(Game::get()->mTextures.get(Texture::pu_fast_attacks))));
 }
 
 void Map::loadFromFile(std::string& path) {
@@ -32,11 +25,6 @@ void Map::loadFromFile(std::string& path) {
 	in >> bground;
 
 	mBackground.setTexture(Game::get()->mTextures.get((Texture)bground));
-	sf::Vector2f scale;
-	scale.x = Game::get()->mWidth / mBackground.getLocalBounds().width;
-	scale.y = Game::get()->mHeight / mBackground.getLocalBounds().height;
-
-	mBackground.setScale(scale);
 
 	std::string obj;
 	size_t		noObjects;
@@ -163,10 +151,10 @@ void Map::insertPlayerOne(const std::string& tankType, sf::Vector2f* position, s
 	keys[(int)Tank::Command::LEFT] = sf::Keyboard::A;
 	keys[(int)Tank::Command::RIGHT] = sf::Keyboard::D;
 
-	keys[(int)Tank::Command::ROT_LEFT] = sf::Keyboard::B;
-	keys[(int)Tank::Command::ROT_RIGHT] = sf::Keyboard::M;
+	keys[(int)Tank::Command::ROT_LEFT] = sf::Keyboard::C;
+	keys[(int)Tank::Command::ROT_RIGHT] = sf::Keyboard::V;
 
-	keys[(int)Tank::Command::SHOOT] = sf::Keyboard::N;
+	keys[(int)Tank::Command::SHOOT] = sf::Keyboard::B;
 
 	Texture baseTexture, topTexture;
 	getTankTextureIds(tankType, baseTexture, topTexture);

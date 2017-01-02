@@ -51,10 +51,8 @@ public:
 	sf::Clock										mClock;
 
 	static Game* get() {
-		if (instance == nullptr) {
-			instance = new Game(1600, 832);
-		}
-			
+		if (instance == nullptr)
+			instance = new Game(1280, 640);
 		return instance;
 	}
 

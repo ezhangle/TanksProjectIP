@@ -3,7 +3,6 @@
 #include "Tank.h"
 #include "Player.h"
 #include "AI.h"
-#include "Obstacle.h"
 #include <iostream>
 
 Projectile::Projectile(sf::Sprite* sprite, sf::Vector2f* position, sf::Vector2f* velocity, float damage, Tank* parent):
@@ -47,10 +46,10 @@ bool Projectile::checkCollision() {
 			if ((*it2) != this)
 			{
 				if (SAT.collision(mSprite, (*it2)->getCollisionSprite())) {
+					collideSolid = true;
 
 					if (Tank* proj = dynamic_cast<Tank*>((*it2))) {
 						if (mParent->mTeam != proj->mTeam) {
-							collideSolid = true;
 							proj->mHealth -= mDamage;
 							if (proj->mHealth <= 0.f) {
 					
@@ -64,10 +63,12 @@ bool Projectile::checkCollision() {
 								}
 							}
 						}
+						else
+							collideSolid = false;
 					}
 
-					if (Obstacle* obs = dynamic_cast<Obstacle*>((*it2))) {
-						collideSolid = true;
+					if (Projectile* proj = dynamic_cast<Projectile*>((*it2))) {
+						collideSolid = false;
 					}
 					
 				}
