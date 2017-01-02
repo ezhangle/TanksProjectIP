@@ -4,6 +4,7 @@
 #include "Map.h"
 #include "Projectile.h"
 #include "Animation.h"
+#include "PowerUp.h"
 
 #include <cmath>
 Tank::Tank(sf::Sprite* base, sf::Sprite* top, sf::Vector2f* pos, sf::Vector2f* vel, float health, float damage, size_t team):
@@ -22,7 +23,7 @@ mTeam(team)
 	base->setPosition(pos->x, pos->y);
 	top->setPosition(base->getPosition());
 
-	mHitCooldown = 0.4f;
+	mHitCooldown = 0.6f;
 	mHitCooldownClock.restart();
 
 	mAcceleration = 0.f;
@@ -144,22 +145,29 @@ void Tank::shoot() {
 }
 
 bool Tank::checkCollision() {
-	bool collideSolid = false;
+	bool collideSolid;
 
 	Map* map = Game::get()->mMap;
 
 	sf::Vector2f tempScale;
 	tempScale.x = tempScale.y = 0.5f;
-
 	mBase->setScale(tempScale);
+
+	collideSolid = false;
 	for (auto it1 = map->mEntities.begin(); it1 != map->mEntities.end(); ++it1) {
 		for (auto it2 = (*it1).begin(); it2 != (*it1).end(); ++it2) {
 			if ((*it2) != this)
 			{
 				if (SAT.collision(mBase, (*it2)->getCollisionSprite())) {
-					collideSolid = true;
+
 					if (Tank* tank = dynamic_cast<Tank*>(*it2)) {
-						collideSolid = false;
+						collideSolid = true;
+					}
+					if (PowerUp* pu = dynamic_cast<PowerUp*>(*it2)) {
+						pu->onTrigger(this);
+					}
+					if (Obstacle* obs = dynamic_cast<Obstacle*>(*it2)) {
+						collideSolid = true;
 					}
 				}
 			}
@@ -167,7 +175,6 @@ bool Tank::checkCollision() {
 	}
 
 	tempScale.x = tempScale.y = 1.f;
-
 	mBase->setScale(tempScale);
 
 	return collideSolid;

@@ -7,10 +7,11 @@
 #include <iostream>
 #include <queue>
 
+int** AI::mPathFindMap = nullptr;
+
 AI::AI(sf::Sprite* base, sf::Sprite* top, sf::Vector2f* pos, sf::Vector2f* vel, float health, float damage, size_t team):
 Tank(base, top, pos, vel, health, damage, team),
 mTileLength(64.f),
-mPathFindMap(nullptr),
 mTarget(nullptr){
 
 	std::srand(std::time(NULL));

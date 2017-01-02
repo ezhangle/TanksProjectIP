@@ -1,9 +1,51 @@
 #include "AI_Medium.h"
 #include "VectorUtility.h"
+#include "Game.h"
+#include "PowerUp.h"
 
 AI_Medium::AI_Medium(sf::Sprite* base, sf::Sprite* top, sf::Vector2f* pos, sf::Vector2f* vel, float health, float damage, size_t team) :
 	AI(base, top, pos, vel, health, damage, team) {
 
+}
+
+void AI_Medium::assignNewPoint() {
+	if (!mCurrentPath.empty()) {
+		mNextPoint = mCurrentPath.top();
+		mCurrentPath.pop();
+
+		calculateRotation();
+	}
+	else {
+		calculatePathMap();
+		
+		auto it1 = Game::get()->mMap->mEntities[1].begin();
+		auto it2 = Game::get()->mMap->mEntities[1].end();
+		bool foundPU = false;
+
+		for (; it1 != it2; ++it1) {
+			PowerUp* pu = dynamic_cast<PowerUp*>((*it1));
+
+			if (pu->mIsActive == false) {
+				sf::Vector2f targetPoint;
+				targetPoint.x = (int)((pu->mSprite->getPosition().y + pu->mSprite->getLocalBounds().height / 2.f) / mTileLength);
+				targetPoint.y = (int)((pu->mSprite->getPosition().x + pu->mSprite->getLocalBounds().width / 2.f )/ mTileLength);
+
+
+				calculatePath(targetPoint);
+				foundPU = true;
+
+				break;	
+			}
+		}
+		
+		if(foundPU == false)
+			calculateRandomPath();
+
+		setPosition(mCurrentPath.top());
+		mCurrentPath.pop();
+
+		assignNewPoint();
+	}
 }
 
 void AI_Medium::update(sf::Time dt) {

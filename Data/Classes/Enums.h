@@ -4,37 +4,41 @@ enum class Texture {
 	//backgrounds
 	green_bg,
 
+	//start_pu
+	pu_damage,
+	pu_fast_attacks,
+	pu_health,
+	pu_missile,
+	pu_repair,
+	pu_speed,
+	//end_pu
+
 	//start_tanks
 	tank1_body,
 	tank1_gun,
-
 	tank1b_body,
 	tank1b_gun,
-
 	tank2_body,
 	tank2_gun,
-
 	tank2b_body,
 	tank2b_gun,
-
 	tank3_body,
 	tank3_gun,
-
 	tank3b_body,
 	tank3b_gun,
-
 	tank3c_body,
 	tank3c_gun,
-
 	tank3d_body,
 	tank3d_gun,
 	//end_tanks
 
+	//start_obstacles
 	barrel,
 	box,
 	box_2x1,
 	box_2x2,
 	box_small,
+	//end_obstacles
 
 	expl_01_0000,
 	expl_01_0001,

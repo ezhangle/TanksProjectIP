@@ -6,7 +6,7 @@ Game *Game::instance = nullptr;
 Game::Game(unsigned int w, unsigned int h)
 	: mWidth(w),
 	mHeight(h),
-	mWindow(sf::VideoMode(w, h), "Tanks")
+	mWindow(sf::VideoMode(w,h), "Tanks")
 {
 	instance = this;
 	loadTextures();
@@ -40,16 +40,18 @@ Map* Game::getMap() {
 
 void Game::update(sf::Time deltaTime)
 {
-	/*
-	GameState *currentState = getActiveState();
-	if (currentState != nullptr)
-	{
-		currentState->handleInput();
-		currentState->update(deltaTime);
-		mWindow.clear(sf::Color::Blue);
-		currentState->draw(deltaTime);
-		mWindow.display();
-	}*/
+	sf::Vector2u newSize(mWindow.getSize());
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::PageUp)) {
+		newSize.x += (int)mWidth / 100;
+		newSize.y += (int)mHeight / 100;
+	}
+	else if(sf::Keyboard::isKeyPressed(sf::Keyboard::PageDown)){	
+		newSize.x -= (int)mWidth / 100;
+		newSize.y -= (int)mHeight / 100;
+	}
+
+	if(newSize.x > 100 && newSize.y > 100)
+		mWindow.setSize(newSize);
 
 	mMap->update(deltaTime);
 }
