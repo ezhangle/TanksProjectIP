@@ -1,0 +1,8 @@
+0
+
+player1 192 192
+ai1 500 300
+
+static_obstacle 321 412 box
+static_obstacle 600 150 box_2x2
+static_obstacle 1000 300 box_2x1
