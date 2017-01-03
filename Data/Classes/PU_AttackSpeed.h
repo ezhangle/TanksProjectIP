@@ -9,6 +9,7 @@ public:
 	virtual void update(sf::Time dt);
 	virtual void onTrigger(Tank* target);
 	virtual void onDurationEnd();
+	virtual void checkForDuplicate();
 
 public:
 	float	mAttackSpeedMultiplier;

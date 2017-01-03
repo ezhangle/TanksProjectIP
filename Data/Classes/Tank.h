@@ -2,8 +2,11 @@
 #include "Entity.h"
 #include "Map.h"
 #include "Collision.h"
+#include "PowerUp.h"
 #include <SFML\Graphics.hpp>
 #include <SFML\System\Time.hpp>
+
+class PowerUp;
 
 class Tank: public Entity {
 public:
@@ -45,6 +48,7 @@ public:
 
 	sf::Clock				mHitCooldownClock;
 	float					mHitCooldown;
+	std::list<PowerUp*>		mPowerUpList;
 	Collision				SAT;
 	
 	const float				mMaxHealth;

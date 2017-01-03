@@ -23,18 +23,23 @@ public:
 	void										draw(sf::RenderWindow* window);
 	void										insertObject(std::string& obj, std::ifstream& stream);
 public:
+	int											**mObstacleMap;
+	float										mTileLength;
 	int											mWidth;
 	int											mHeight;
 
 	std::vector<std::list<Entity*>>				mEntities;
 	std::list<Animation*>						mEffects;
 	sf::Sprite									mBackground;
+	sf::Clock									mPowerUpRespawnClock;
 
 private:
+	void										initObstacleMap();
 	void										insertPlayerOne(const std::string& tankType, sf::Vector2f* position, sf::Vector2f* velocity, float health, float damage, size_t team);
 	void										insertPlayerTwo(const std::string& tankType, sf::Vector2f* position, sf::Vector2f* velocity, float health, float damage, size_t team);
 	void										insertStaticObject(const std::string& textureString, sf::Vector2f* pos);
 	void										insertAI(const std::string& difficulty, const std::string& tankType, sf::Vector2f* position, sf::Vector2f* velocity, float health, float damage, size_t team);
+	void										insertRandomPowerUp(sf::Vector2f* position);
 
 	void										getTankTextureIds(const std::string& textureString, Texture& baseTexture, Texture& topTexture);
 	void										getStaticObjectTextureId(const std::string& textureString, Texture& texture);

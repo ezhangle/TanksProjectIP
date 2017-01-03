@@ -1,4 +1,6 @@
 #include "PowerUp.h"
+#include "PU_AttackSpeed.h"
+#include "PU_Speed.h"
 
 PowerUp::PowerUp(sf::Vector2f* position, sf::Sprite* sprite) :
 	Entity(position, sprite), 
@@ -14,6 +16,7 @@ PowerUp::PowerUp(sf::Vector2f* position, sf::Sprite* sprite) :
 }
 
 void PowerUp::update(sf::Time dt) {
+
 	float axisOffset = mFloatSpeed*dt.asSeconds();
 	if (mFloatUpwards) {
 		if (axisOffset + mSprite->getPosition().y > mFloatMaximum)
@@ -33,7 +36,6 @@ void PowerUp::update(sf::Time dt) {
 	if (mDurationClock != nullptr) {
 		if (mDurationClock->getElapsedTime().asSeconds() > mDuration) {
 			onDurationEnd();
-			mDelete = true;
 		}
 	}
 }
@@ -45,4 +47,17 @@ void PowerUp::onTrigger(Tank* target) {
 
 	mDurationClock = new sf::Clock;
 	mDurationClock->restart();
+}
+
+void PowerUp::onDurationEnd()
+{
+	mIsActive = false;
+	mDelete = true;
+
+	auto it = mTarget->mPowerUpList.begin();
+
+	for (; it != mTarget->mPowerUpList.end(); ++it) {
+		if ((*it) == this)
+			mTarget->mPowerUpList.erase(it);
+	}
 }

@@ -18,25 +18,31 @@ void AI_Medium::assignNewPoint() {
 	else {
 		calculatePathMap();
 		
-		auto it1 = Game::get()->mMap->mEntities[1].begin();
-		auto it2 = Game::get()->mMap->mEntities[1].end();
+		int noPowerUps = Game::get()->mMap->mEntities[1].size();
 		bool foundPU = false;
 
-		for (; it1 != it2; ++it1) {
-			PowerUp* pu = dynamic_cast<PowerUp*>((*it1));
+		if (noPowerUps > 0) {
+			int puTarget = rand() % noPowerUps;
 
+			auto it = Game::get()->mMap->mEntities[1].begin();
+
+			for (int i = 0; i < puTarget; ++i) {
+				++it;
+			}
+
+			PowerUp* pu = dynamic_cast<PowerUp*>((*it));
 			if (pu->mIsActive == false) {
 				sf::Vector2f targetPoint;
 				targetPoint.x = (int)((pu->mSprite->getPosition().y + pu->mSprite->getLocalBounds().height / 2.f) / mTileLength);
-				targetPoint.y = (int)((pu->mSprite->getPosition().x + pu->mSprite->getLocalBounds().width / 2.f )/ mTileLength);
+				targetPoint.y = (int)((pu->mSprite->getPosition().x + pu->mSprite->getLocalBounds().width / 2.f) / mTileLength);
 
 
 				calculatePath(targetPoint);
 				foundPU = true;
-
-				break;	
 			}
+
 		}
+		
 		
 		if(foundPU == false)
 			calculateRandomPath();

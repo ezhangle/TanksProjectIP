@@ -36,12 +36,12 @@ public:
 
 	std::stack<sf::Vector2f>	mCurrentPath;
 	sf::Vector2f				mNextPoint;
-
 	sf::Vector2f				mLastPoint;
 
 	Tank*						mTarget;
-	float						mTileLength;
+
 	static int					**mPathFindMap;
+	float						mTileLength;
 	int							mWidth;
 	int							mHeight;
 };

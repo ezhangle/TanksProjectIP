@@ -40,6 +40,23 @@ enum class Texture {
 	box_small,
 	//end_obstacles
 
+	rocket_1_0000,
+	rocket_1_0001,
+	rocket_1_0002,
+	rocket_1_0003,
+	rocket_1_0004,
+	rocket_1_0005,
+	rocket_1_0006,
+	rocket_1_0007,
+	rocket_1_0008,
+	rocket_1_0009,
+	rocket_1_0010,
+	rocket_1_0011,
+	rocket_1_0012,
+	rocket_1_0013,
+	rocket_1_0014,
+	rocket_1_0015,
+
 	expl_01_0000,
 	expl_01_0001,
 	expl_01_0002,

@@ -4,7 +4,6 @@
 #include "Map.h"
 #include "Projectile.h"
 #include "Animation.h"
-#include "PowerUp.h"
 
 #include <cmath>
 Tank::Tank(sf::Sprite* base, sf::Sprite* top, sf::Vector2f* pos, sf::Vector2f* vel, float health, float damage, size_t team):
@@ -34,6 +33,7 @@ mTeam(team)
 
 	mHpBarTop.setPosition(mBase->getPosition().x - mHpBarTop.getLocalBounds().width / 2.f, mBase->getPosition().y - 50.f);
 	mHpBarBase.setPosition(mBase->getPosition().x - mHpBarBase.getLocalBounds().width / 2.f, mBase->getPosition().y - 50.f);
+
 
 	mMovingState = 0;
 	mLastPoint = mBase->getPosition();
@@ -66,7 +66,7 @@ void Tank::update(sf::Time dt) {
 	}
 	else {
 		sf::Vector2f newScale;
-		newScale.x = (mHealth / mMaxHealth);
+		newScale.x = mHealth / mMaxHealth;
 		newScale.y = 1.f;
 		mHpBarTop.setScale(newScale);
 	}
@@ -134,8 +134,8 @@ void Tank::shoot() {
 		news->setOrigin(news->getLocalBounds().width / 2.f, news->getLocalBounds().height / 2.f);
 		news->setPosition(mTop->getPosition());
 
-		sf::Vector2f* pos = new sf::Vector2f(sin(mTop->getRotation()*3.14f / 180.f)*mTop->getLocalBounds().width + mTop->getPosition().x,
-			-cos(mTop->getRotation()*3.14f / 180.f)*mTop->getLocalBounds().height + mTop->getPosition().y);
+		sf::Vector2f* pos = new sf::Vector2f(sin(mTop->getRotation()*3.14f / 180.f)*mTop->getLocalBounds().width / 2.f + mTop->getPosition().x,
+			-cos(mTop->getRotation()*3.14f / 180.f)*mTop->getLocalBounds().height / 2.f + mTop->getPosition().y);
 
 		Map* m = Game::get()->mMap;
 		m->mEntities[2].insert(m->mEntities[2].end(), new Projectile(news, pos, new sf::Vector2f(500.f, 500.f), mDamage, this));
@@ -160,9 +160,6 @@ bool Tank::checkCollision() {
 			{
 				if (SAT.collision(mBase, (*it2)->getCollisionSprite())) {
 
-					if (Tank* tank = dynamic_cast<Tank*>(*it2)) {
-						collideSolid = true;
-					}
 					if (PowerUp* pu = dynamic_cast<PowerUp*>(*it2)) {
 						pu->onTrigger(this);
 					}

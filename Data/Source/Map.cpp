@@ -9,20 +9,21 @@
 #include "AI_Medium.h"
 #include "AI_Hard.h"
 #include "PU_AttackSpeed.h"
+#include "PU_Speed.h"
 
 #include <fstream>
 #include <vector>
+#include <cstdlib>
 #include <iostream>
 
-Map::Map(std::string& path){
+Map::Map(std::string& path):
+mTileLength(64.f){
 	mEntities.resize(NUMBER);
-	loadFromFile(path);
+	mWidth = Game::get()->mWidth / mTileLength;
+	mHeight = Game::get()->mHeight / mTileLength;
+	mPowerUpRespawnClock.restart();
 
-	
-	mEntities[1].insert(mEntities[1].begin(), new PU_AttackSpeed(new sf::Vector2f(800.f, 100.f), new sf::Sprite(Game::get()->mTextures.get(Texture::pu_fast_attacks))));
-	mEntities[1].insert(mEntities[1].begin(), new PU_AttackSpeed(new sf::Vector2f(100.f, 200.f), new sf::Sprite(Game::get()->mTextures.get(Texture::pu_fast_attacks))));
-	mEntities[1].insert(mEntities[1].begin(), new PU_AttackSpeed(new sf::Vector2f(500.f, 200.f), new sf::Sprite(Game::get()->mTextures.get(Texture::pu_fast_attacks))));
-	mEntities[1].insert(mEntities[1].begin(), new PU_AttackSpeed(new sf::Vector2f(600.f, 700.f), new sf::Sprite(Game::get()->mTextures.get(Texture::pu_fast_attacks))));
+	loadFromFile(path);
 }
 
 void Map::loadFromFile(std::string& path) {
@@ -48,6 +49,8 @@ void Map::loadFromFile(std::string& path) {
 		insertObject(obj, in);
 	}
 	in.close();
+
+	initObstacleMap();
 }
 
 void Map::insertObject(std::string& obj, std::ifstream& stream) {
@@ -110,6 +113,25 @@ void Map::insertObject(std::string& obj, std::ifstream& stream) {
 
 void Map::update(sf::Time dt) {
 
+	if (mEntities[1].size() < 3) {
+		if (mPowerUpRespawnClock.getElapsedTime().asSeconds() > 5.f) {
+			sf::Vector2f* position = new sf::Vector2f;
+
+			do {
+				position->y = rand() % mHeight;
+				position->x = rand() % mWidth;
+			} while (mObstacleMap[(int)position->y][(int)position->x] == -1);
+
+			position->y *= mTileLength;
+			position->x *= mTileLength;
+
+			insertRandomPowerUp(position);
+			mPowerUpRespawnClock.restart();
+		}
+
+	}
+
+	//update entities & effects
 	for (auto it1 = mEntities.begin(); it1 != mEntities.end(); ++it1) {
 		for (auto it2 = (*it1).begin(); it2 != (*it1).end(); ++it2) {
 			(*it2)->update(dt);
@@ -120,6 +142,7 @@ void Map::update(sf::Time dt) {
 		(*it)->update(dt);
 	}
 
+	//delete flagged entities & effects
 	for (auto it1 = mEntities.begin(); it1 != mEntities.end(); ++it1) {
 		for (auto it2 = (*it1).begin(); it2 != (*it1).end(); ++it2) {
 			if ((*it2)->mDelete == true) {
@@ -304,4 +327,57 @@ void Map::insertAI(const std::string& difficulty, const std::string& tankType, s
 			team));
 	}
 	
+}
+
+void Map::insertRandomPowerUp(sf::Vector2f* position)
+{
+	int randomIndex = rand() % 2;
+
+	switch (randomIndex) {
+	case 0:
+		mEntities[1].insert(mEntities[1].begin(), new PU_Speed(position, new sf::Sprite(Game::get()->mTextures.get(Texture::pu_speed))));
+		break;
+	case 1:
+		mEntities[1].insert(mEntities[1].begin(), new PU_AttackSpeed(position, new sf::Sprite(Game::get()->mTextures.get(Texture::pu_fast_attacks))));
+		break;
+	default:
+		break;
+	}
+}
+
+void Map::initObstacleMap() {
+
+	mObstacleMap = new int*[mHeight];
+	for (int i = 0; i < mHeight; ++i) {
+		mObstacleMap[i] = new int[mWidth]();
+	}
+
+	auto it1 = mEntities[0].begin();
+	auto it2 = mEntities[0].end();
+	for (; it1 != it2; ++it1) {
+
+		sf::FloatRect bounds = (*it1)->mSprite->getGlobalBounds();
+
+		int left = (int)(bounds.left / mTileLength);
+		int top = (int)(bounds.top / mTileLength);
+		int leftPlus = (int)((bounds.left + bounds.width) / mTileLength);
+		int topPlus = (int)((bounds.top + bounds.height) / mTileLength);
+
+		for (int i = top; i <= topPlus; ++i) {
+			for (int j = left; j <= leftPlus; ++j) {
+				mObstacleMap[i][j] = -1;
+			}
+		}
+
+	}
+
+	float edgeX, edgeY;
+	for (int i = 0; i < mHeight; ++i) {
+		for (int j = 0; j < mWidth; ++j) {
+			edgeY = i * mTileLength;
+			edgeX = j * mTileLength;
+			if (edgeX < 64.f || edgeY < 64.f || edgeX >= Game::get()->mWidth - 64.f || edgeY >= Game::get()->mHeight - 64.f)
+				mObstacleMap[i][j] = -1;
+		}
+	}
 }

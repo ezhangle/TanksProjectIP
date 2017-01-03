@@ -3,7 +3,6 @@
 #include "Map.h"
 #include "Obstacle.h"
 #include <cstdlib>
-#include <ctime>
 #include <iostream>
 #include <queue>
 
@@ -14,7 +13,6 @@ Tank(base, top, pos, vel, health, damage, team),
 mTileLength(64.f),
 mTarget(nullptr){
 
-	std::srand(std::time(NULL));
 	mWidth = Game::get()->mWidth / mTileLength;
 	mHeight = Game::get()->mHeight / mTileLength;
 
