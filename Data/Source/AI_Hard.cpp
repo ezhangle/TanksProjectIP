@@ -1,9 +1,56 @@
 #include "AI_Hard.h"
 #include "VectorUtility.h"
-#include <iostream>
+#include "Game.h"
 
 AI_Hard::AI_Hard(sf::Sprite* base, sf::Sprite* top, sf::Vector2f* pos, sf::Vector2f* vel, float health, float damage, size_t team) :
 	AI(base, top, pos, vel, health, damage, team) {
+}
+
+void AI_Hard::assignNewPoint() {
+	if (!mCurrentPath.empty()) {
+		mNextPoint = mCurrentPath.top();
+		mCurrentPath.pop();
+
+		calculateRotation();
+		mDistToNextPoint = Vector2f::distance(mNextPoint, mBase->getPosition());
+	}
+	else {
+		calculatePathMap();
+
+		int noPowerUps = Game::get()->mMap->mEntities[1].size();
+		bool foundPU = false;
+
+		if (noPowerUps > 0) {
+			int puTarget = rand() % noPowerUps;
+
+			auto it = Game::get()->mMap->mEntities[1].begin();
+
+			for (int i = 0; i < puTarget; ++i) {
+				++it;
+			}
+
+			PowerUp* pu = dynamic_cast<PowerUp*>((*it));
+			if (pu->mIsActive == false) {
+				sf::Vector2f targetPoint;
+				targetPoint.x = (int)((pu->mSprite->getPosition().y + pu->mSprite->getLocalBounds().height / 2.f) / mTileLength);
+				targetPoint.y = (int)((pu->mSprite->getPosition().x + pu->mSprite->getLocalBounds().width / 2.f) / mTileLength);
+
+
+				calculatePath(targetPoint);
+				foundPU = true;
+			}
+
+		}
+
+
+		if (foundPU == false)
+			calculateRandomPath();
+
+		setPosition(mCurrentPath.top());
+		mCurrentPath.pop();
+
+		assignNewPoint();
+	}
 }
 
 void AI_Hard::update(sf::Time dt) {
@@ -13,9 +60,7 @@ void AI_Hard::update(sf::Time dt) {
 		assignNewPoint();
 	}
 		
-
-	float distToNext = Vector2f::distance(mNextPoint, mBase->getPosition());
-	if (distToNext < 5.f) {
+	if (mDistToNextPoint < 5.f) {
 		setPosition(mNextPoint);
 		assignNewPoint();
 	}
@@ -31,6 +76,8 @@ void AI_Hard::update(sf::Time dt) {
 
 				assignNewPoint();
 			}
+			else
+				mDistToNextPoint -= (mVelocity->x + mAcceleration)*dt.asSeconds();
 		}
 		else {
 
@@ -134,8 +181,10 @@ void AI_Hard::update(sf::Time dt) {
 
 
 		}
-		else
-			shoot();
+		else {
+			if (isProjectilePathClear())
+				shoot();
+		}
 	}
 
 	AI::update(dt);

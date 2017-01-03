@@ -37,6 +37,12 @@
     <Filter Include="Source Files\Entities">
       <UniqueIdentifier>{b937c52f-bb02-47fa-b951-e9308ed932e8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Entities\PU">
+      <UniqueIdentifier>{c43d214d-f720-46d7-8e65-28ee8ca3854f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Entities\PU">
+      <UniqueIdentifier>{0b35c1f1-8759-4241-bbdc-9e474e5532a6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Data\Source\Game.cpp">
@@ -97,10 +103,13 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Data\Source\PU_AttackSpeed.cpp">
-      <Filter>Source Files\Entities</Filter>
+      <Filter>Source Files\Entities\PU</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Data\Source\PowerUp.cpp">
-      <Filter>Source Files\Entities</Filter>
+      <Filter>Source Files\Entities\PU</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Data\Source\PU_Speed.cpp">
+      <Filter>Source Files\Entities\PU</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -167,11 +176,14 @@
     <ClInclude Include="..\..\Data\Classes\VectorUtility.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Data\Classes\PowerUp.h">
-      <Filter>Header Files\Entities</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\Data\Classes\PU_AttackSpeed.h">
-      <Filter>Header Files\Entities</Filter>
+      <Filter>Header Files\Entities\PU</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Data\Classes\PowerUp.h">
+      <Filter>Header Files\Entities\PU</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Data\Classes\PU_Speed.h">
+      <Filter>Header Files\Entities\PU</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

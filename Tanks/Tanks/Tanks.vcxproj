@@ -138,6 +138,7 @@
     <ClCompile Include="..\..\Data\Source\PowerUp.cpp" />
     <ClCompile Include="..\..\Data\Source\Projectile.cpp" />
     <ClCompile Include="..\..\Data\Source\PU_AttackSpeed.cpp" />
+    <ClCompile Include="..\..\Data\Source\PU_Speed.cpp" />
     <ClCompile Include="..\..\Data\Source\Tank.cpp" />
     <ClCompile Include="..\..\Data\Source\Obstacle.cpp" />
     <ClCompile Include="..\..\Data\Source\VectorUtility.cpp" />
@@ -162,6 +163,7 @@
     <ClInclude Include="..\..\Data\Classes\PowerUp.h" />
     <ClInclude Include="..\..\Data\Classes\Projectile.h" />
     <ClInclude Include="..\..\Data\Classes\PU_AttackSpeed.h" />
+    <ClInclude Include="..\..\Data\Classes\PU_Speed.h" />
     <ClInclude Include="..\..\Data\Classes\ResourceHolder.h" />
     <ClInclude Include="..\..\Data\Classes\Tank.h" />
     <ClInclude Include="..\..\Data\Classes\Obstacle.h" />

@@ -12,9 +12,7 @@ void AI_Easy::update(sf::Time dt) {
 		assignNewPoint();
 	}
 
-
-	float distToNext = Vector2f::distance(mNextPoint, mBase->getPosition());
-	if (distToNext < 5.f) {
+	if (mDistToNextPoint < 5.f) {
 		setPosition(mNextPoint);
 		assignNewPoint();
 	}
@@ -30,6 +28,8 @@ void AI_Easy::update(sf::Time dt) {
 
 				assignNewPoint();
 			}
+			else
+				mDistToNextPoint -= (mVelocity->x + mAcceleration)*dt.asSeconds();
 		}
 		else {
 
@@ -94,8 +94,10 @@ void AI_Easy::update(sf::Time dt) {
 
 
 		}
-		else
-			shoot();
+		else {
+			if (isProjectilePathClear())
+				shoot();
+		}
 	}
 
 	AI::update(dt);

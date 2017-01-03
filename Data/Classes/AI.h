@@ -20,16 +20,15 @@ public:
 								~AI();
 
 	virtual void				update(sf::Time dt);
+	virtual void				assignNewPoint();
+
 	void						initMap();
 	void						calculatePath(sf::Vector2f& toInsert);
 	void						calculateRandomPath();
 	void						calculatePathMap();
 	void						calculateRotation();
-
-	virtual void				assignNewPoint();
 	void						findNewTarget();
-
-	void						draw(sf::RenderWindow* window);
+	bool						isProjectilePathClear();
 
 public:
 	float						mRotationAngle;
@@ -37,10 +36,11 @@ public:
 	std::stack<sf::Vector2f>	mCurrentPath;
 	sf::Vector2f				mNextPoint;
 	sf::Vector2f				mLastPoint;
+	float						mDistToNextPoint;
 
 	Tank*						mTarget;
 
-	static int					**mPathFindMap;
+	int							**mPathFindMap;
 	float						mTileLength;
 	int							mWidth;
 	int							mHeight;

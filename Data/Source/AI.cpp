@@ -2,11 +2,9 @@
 #include "Game.h"
 #include "Map.h"
 #include "Obstacle.h"
+#include "VectorUtility.h"
 #include <cstdlib>
-#include <iostream>
 #include <queue>
-
-int** AI::mPathFindMap = nullptr;
 
 AI::AI(sf::Sprite* base, sf::Sprite* top, sf::Vector2f* pos, sf::Vector2f* vel, float health, float damage, size_t team):
 Tank(base, top, pos, vel, health, damage, team),
@@ -50,6 +48,8 @@ void AI::initMap() {
 
 	findNewTarget();
 
+	
+
 	float edgeX, edgeY;
 	for (int i = 0; i < mHeight; ++i) {
 		for (int j = 0; j < mWidth; ++j) {
@@ -59,7 +59,6 @@ void AI::initMap() {
 				mPathFindMap[i][j] = -1;
 		}
 	}
-
 }
 
 void AI::calculateRotation() {
@@ -80,6 +79,7 @@ void AI::assignNewPoint() {
 		mCurrentPath.pop();
 
 		calculateRotation();
+		mDistToNextPoint = Vector2f::distance(mNextPoint, mBase->getPosition());
 	}
 	else {
 		calculatePathMap();
@@ -95,11 +95,6 @@ void AI::assignNewPoint() {
 void AI::update(sf::Time dt) {
 
 	Tank::update(dt);
-}
-
-void AI::draw(sf::RenderWindow* window) {
-
-	Tank::draw(window);
 }
 
 void AI::calculatePathMap() {
@@ -199,6 +194,38 @@ void AI::findNewTarget() {
 				mTarget = enemy;
 		}
 	}
+}
+
+bool AI::isProjectilePathClear() {
+
+	float xRot = sin(mTop->getRotation()*3.14f / 180.f);
+	float yRot = -cos(mTop->getRotation()*3.14f / 180.f);
+	float increment = 10.f;
+
+	sf::Vector2f currentPos = mTop->getPosition();
+
+	float boundWidth = Game::get()->mWidth - 64.f;
+	float boundHeight = Game::get()->mHeight - 64.f;
+
+	while (currentPos.x > 64.f && currentPos.x < boundWidth && currentPos.y > 64.f && currentPos.y < boundHeight) {
+
+		auto it1 = Game::get()->mMap->mEntities[0].begin();
+		auto it2 = Game::get()->mMap->mEntities[0].end();
+
+		for (; it1 != it2; ++it1) {
+			sf::FloatRect obstacleBound = (*it1)->mSprite->getGlobalBounds();
+
+			if (currentPos.x > obstacleBound.left && currentPos.x < (obstacleBound.left + obstacleBound.width) &&
+				currentPos.y > obstacleBound.top && currentPos.y < (obstacleBound.top + obstacleBound.height))
+				return false;
+		}
+
+		currentPos.x += xRot*increment;
+		currentPos.y += yRot*increment;
+	}
+
+	return true;
+
 }
 
 AI::~AI(){

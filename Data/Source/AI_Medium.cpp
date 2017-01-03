@@ -14,6 +14,7 @@ void AI_Medium::assignNewPoint() {
 		mCurrentPath.pop();
 
 		calculateRotation();
+		mDistToNextPoint = Vector2f::distance(mNextPoint, mBase->getPosition());
 	}
 	else {
 		calculatePathMap();
@@ -59,9 +60,7 @@ void AI_Medium::update(sf::Time dt) {
 		assignNewPoint();
 	}
 
-
-	float distToNext = Vector2f::distance(mNextPoint, mBase->getPosition());
-	if (distToNext < 5.f) {
+	if (mDistToNextPoint < 5.f) {
 		setPosition(mNextPoint);
 		assignNewPoint();
 	}
@@ -77,6 +76,8 @@ void AI_Medium::update(sf::Time dt) {
 
 				assignNewPoint();
 			}
+			else
+				mDistToNextPoint -= (mVelocity->x + mAcceleration)*dt.asSeconds();
 		}
 		else {
 
@@ -141,8 +142,10 @@ void AI_Medium::update(sf::Time dt) {
 
 
 		}
-		else
-			shoot();
+		else {
+			if (isProjectilePathClear())
+				shoot();
+		}
 	}
 
 	AI::update(dt);

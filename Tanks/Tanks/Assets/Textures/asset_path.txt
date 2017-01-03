@@ -30,6 +30,23 @@ Assets/Textures/Misc/box_2x1.png
 Assets/Textures/Misc/box_2x2.png
 Assets/Textures/Misc/box_small.png
 
+Assets/Textures/Effects/rocket_flame/rocket_1_0000.png
+Assets/Textures/Effects/rocket_flame/rocket_1_0001.png
+Assets/Textures/Effects/rocket_flame/rocket_1_0002.png
+Assets/Textures/Effects/rocket_flame/rocket_1_0003.png
+Assets/Textures/Effects/rocket_flame/rocket_1_0004.png
+Assets/Textures/Effects/rocket_flame/rocket_1_0005.png
+Assets/Textures/Effects/rocket_flame/rocket_1_0006.png
+Assets/Textures/Effects/rocket_flame/rocket_1_0007.png
+Assets/Textures/Effects/rocket_flame/rocket_1_0008.png
+Assets/Textures/Effects/rocket_flame/rocket_1_0009.png
+Assets/Textures/Effects/rocket_flame/rocket_1_0010.png
+Assets/Textures/Effects/rocket_flame/rocket_1_0011.png
+Assets/Textures/Effects/rocket_flame/rocket_1_0012.png
+Assets/Textures/Effects/rocket_flame/rocket_1_0013.png
+Assets/Textures/Effects/rocket_flame/rocket_1_0014.png
+Assets/Textures/Effects/rocket_flame/rocket_1_0015.png
+
 Assets/Textures/Effects/explosion/expl_01_0000.png
 Assets/Textures/Effects/explosion/expl_01_0001.png
 Assets/Textures/Effects/explosion/expl_01_0002.png
