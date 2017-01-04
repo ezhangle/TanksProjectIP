@@ -11,13 +11,20 @@ class AddButton
 public:
 	enum class Action
 	{
+		addEntity,
 		addPlayer1,
 		addPlayer2,
-		addAI,
+		addAI_easy,
+		addAI_medium,
+		addAI_hard,
+		back,
 	};
 
 public:
 	AddButton(sf::Vector2f initialPosition, std::string text, size_t characterSize, Action action, std::vector<Tank> &tanks);
+	AddButton(sf::Vector2f initialPosition, Action action, std::vector<Tank> &tanks);
+
+	void											triggerAction();
 
 private:
 	Action											mAction;

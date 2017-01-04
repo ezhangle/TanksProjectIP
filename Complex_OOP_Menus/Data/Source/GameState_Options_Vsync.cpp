@@ -91,7 +91,21 @@ void GameState_Options_Vsync::handleEvents()
 
 void GameState_Options_Vsync::handleRealTimeInput()
 {
+	for each (VSyncButton button in mButtons)
+	{
+		if (button.isSpriteClicked())
+		{
+			button.triggerAction();
+			sf::Clock wait;
+			sf::Time timer = sf::Time::Zero;
+			timer = sf::seconds(0.15f);
+			while (wait.getElapsedTime() < timer)
+			{
 
+			}
+			wait.restart();
+		}
+	}
 }
 
 void GameState_Options_Vsync::rePositionButtons(sf::Vector2u & currentPosition, sf::Vector2u & newPosition)

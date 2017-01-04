@@ -3,7 +3,7 @@
 #include "GameState.h"
 #include "Tank.h"
 #include "Map.h"
-#include "TextButton.h"
+#include "AddButton.h"
 
 
 class GameState_GameBuild
@@ -21,6 +21,7 @@ public:
 	void											handleEvents();
 	void											handleRealTimeInput();
 	void											rePositionButtons(sf::Vector2u &currentPosition, sf::Vector2u &newPosition);
+	void											addEntity(size_t team);
 
 
 private:
@@ -40,7 +41,7 @@ private:
 
 	std::vector<Tank>								mTeamOne;
 	std::vector<Tank>								mTeamTwo;
-	std::vector<TextButton>							mButtons;
+	std::vector<AddButton>							mButtons;
 	std::vector<Map>								mMap;
 
 

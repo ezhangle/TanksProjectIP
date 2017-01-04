@@ -97,7 +97,17 @@ void GameState_Options::handleRealTimeInput()
 	for each (TextButton button in mButtons)
 	{
 		if (button.isSpriteClicked())
+		{
 			button.triggerAction();
+			sf::Clock wait;
+			sf::Time timer = sf::Time::Zero;
+			timer = sf::seconds(0.15f);
+			while (wait.getElapsedTime() < timer)
+			{
+
+			}
+			wait.restart();
+		}
 	}
 }
 

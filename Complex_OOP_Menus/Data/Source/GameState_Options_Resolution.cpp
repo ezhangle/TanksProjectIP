@@ -100,7 +100,21 @@ void GameState_Options_Resolution::handleEvents()
 
 void GameState_Options_Resolution::handleRealTimeInput()
 {
+	for each (ResolutionButton button in mButtons)
+	{
+		if (button.isSpriteClicked())
+		{
+			button.triggerAction();
+			sf::Clock wait;
+			sf::Time timer = sf::Time::Zero;
+			timer = sf::seconds(0.15f);
+			while (wait.getElapsedTime() < timer)
+			{
 
+			}
+			wait.restart();
+		}
+	}
 }
 
 void GameState_Options_Resolution::rePositionButtons(sf::Vector2u & currentPosition, sf::Vector2u & newPosition)
