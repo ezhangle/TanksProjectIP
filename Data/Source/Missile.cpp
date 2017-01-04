@@ -31,17 +31,17 @@ void Missile::update(sf::Time dt)
 
 	float currentRotation = mSprite->getRotation();
 	
-	if (currentRotation >= 270.f) {
+	if (currentRotation > 180.f) {
 		if (currentRotation > angle)
-			rotateMissile(dt.asSeconds());
-		else
 			rotateMissile(-dt.asSeconds());
+		else
+			rotateMissile(dt.asSeconds());
 	}
 	else {
 		if (currentRotation > angle)
-			rotateMissile(-dt.asSeconds());
-		else
 			rotateMissile(dt.asSeconds());
+		else
+			rotateMissile(-dt.asSeconds());
 	}
 }
 
