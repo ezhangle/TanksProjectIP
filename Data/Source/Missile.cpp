@@ -7,7 +7,8 @@
 
 Missile::Missile(Tank * parent)
 	:Projectile(new sf::Sprite(Game::get()->mTextures.get(Texture::missile)), parent),
-	mTarget(nullptr)
+	mTarget(nullptr),
+	mAcceleration(0.f)
 {
 	mSprite->setRotation(parent->mTop->getRotation());
 	mSprite->setOrigin(mSprite->getLocalBounds().width / 2.f, mSprite->getLocalBounds().height / 2.f);
@@ -23,26 +24,31 @@ Missile::Missile(Tank * parent)
 void Missile::update(sf::Time dt)
 {
 	Projectile::update(dt);
-
-	sf::Vector2f targetPos(mTarget->mBase->getPosition());
-	sf::Vector2f missilePos(mSprite->getPosition());
-
-	float angle = 180.f - atan2(targetPos.x - missilePos.x, targetPos.y - missilePos.y) * 180.f / 3.14f;
-
-	float currentRotation = mSprite->getRotation();
 	
-	if (currentRotation > 180.f) {
-		if (currentRotation > angle)
-			rotateMissile(-dt.asSeconds());
-		else
-			rotateMissile(dt.asSeconds());
+	if (mTarget != nullptr) {
+		mAcceleration += 50.f * dt.asSeconds();
+
+		sf::Vector2f targetPos(mTarget->mBase->getPosition());
+		sf::Vector2f missilePos(mSprite->getPosition());
+
+		float angle = 180.f - atan2(targetPos.x - missilePos.x, targetPos.y - missilePos.y) * 180.f / 3.14f;
+
+		float currentRotation = mSprite->getRotation();
+
+		if (abs(currentRotation - angle) < 180.f) {
+			if (currentRotation < angle)
+				rotateMissile(dt.asSeconds());
+			else
+				rotateMissile(-dt.asSeconds());
+		}
+		else {
+			if (currentRotation < angle)
+				rotateMissile(-dt.asSeconds());
+			else
+				rotateMissile(dt.asSeconds());
+		}
 	}
-	else {
-		if (currentRotation > angle)
-			rotateMissile(dt.asSeconds());
-		else
-			rotateMissile(-dt.asSeconds());
-	}
+	
 }
 
 void Missile::setTarget()
@@ -58,6 +64,6 @@ void Missile::setTarget()
 
 void Missile::rotateMissile(float deltaAsSeconds)
 {
-	mSprite->rotate(deltaAsSeconds * 200.f);
+	mSprite->rotate(deltaAsSeconds * (200.f + mAcceleration));
 }
 

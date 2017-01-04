@@ -29,10 +29,10 @@ mTileLength(64.f){
 void Map::loadFromFile(std::string& path) {
 	std::ifstream in(path);
 
-	int bground;
-	in >> bground;
+	int backgroundSpriteIndex;
+	in >> backgroundSpriteIndex;
 
-	mBackground.setTexture(Game::get()->mTextures.get((Texture)bground));
+	mBackground.setTexture(Game::get()->mTextures.get((Texture)backgroundSpriteIndex));
 	sf::Vector2f scale;
 	scale.x = Game::get()->mWidth / mBackground.getLocalBounds().width;
 	scale.y = Game::get()->mHeight / mBackground.getLocalBounds().height;

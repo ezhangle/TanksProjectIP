@@ -35,8 +35,7 @@ public:
 	static const sf::Time							timePerFrame;
 
 public:
-													Game(unsigned int w, unsigned int h, bool VSync);
-													Game(unsigned int w, unsigned int h, bool vSync, bool fullscreen);
+													Game(unsigned int w, unsigned int h, bool vSync = 0, bool fullscreen = 1);
 													~Game();
 	void											run();
 
@@ -60,27 +59,7 @@ public:
 	static Game* get() {
 		if (instance == nullptr)
 		{
-			std::ifstream resolutionCFG("Assets/Config/resolutionCFG.txt");
-			std::ifstream vsyncCFG("Assets/Config/vsyncCFG.txt");
-			std::ifstream fullscreenCFG("Assets/Config/fullscreenCFG.txt");
-			int w, h;
-			bool bVsync, fullscreen;
-			resolutionCFG >> w >> h;
-			vsyncCFG >> bVsync;
-			fullscreenCFG >> fullscreen;
-			resolutionCFG.close();
-			vsyncCFG.close();
-			fullscreenCFG.close();
-
-			if (!fullscreen)
-			{
-				instance = new Game(w, h, bVsync);
-			}
-
-			else
-			{
-				instance = new Game(w, h, bVsync, 1);
-			}
+			instance = new Game(1600, 832);
 		}
 
 		return instance;

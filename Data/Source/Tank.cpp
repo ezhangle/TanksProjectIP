@@ -136,7 +136,7 @@ bool Tank::MoveX(float inc) {
 void Tank::shoot() {
 	if (mHitCooldownClock.getElapsedTime().asSeconds() > mHitCooldown) {
 		Map* m = Game::get()->mMap;
-		m->mEntities[2].insert(m->mEntities[2].end(), new Missile(this));
+		m->mEntities[2].insert(m->mEntities[2].end(), new BasicBullet(this));
 
 		mHitCooldownClock.restart();
 	}
