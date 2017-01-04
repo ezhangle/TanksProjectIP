@@ -7,7 +7,8 @@
 
 Missile::Missile(Tank * parent)
 	:Projectile(new sf::Sprite(Game::get()->mTextures.get(Texture::missile)), parent),
-	mTarget(nullptr)
+	mTarget(nullptr),
+	mAcceleration(0.f)
 {
 	mSprite->setRotation(parent->mTop->getRotation());
 	mSprite->setOrigin(mSprite->getLocalBounds().width / 2.f, mSprite->getLocalBounds().height / 2.f);
@@ -23,6 +24,7 @@ Missile::Missile(Tank * parent)
 void Missile::update(sf::Time dt)
 {
 	Projectile::update(dt);
+	mAcceleration += 1.f;
 
 	if (mTarget != nullptr) {
 		sf::Vector2f targetPos(mTarget->mBase->getPosition());
@@ -60,6 +62,6 @@ void Missile::setTarget()
 
 void Missile::rotateMissile(float deltaAsSeconds)
 {
-	mSprite->rotate(deltaAsSeconds * 200.f);
+	mSprite->rotate(deltaAsSeconds * (150.f + mAcceleration));
 }
 

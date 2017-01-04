@@ -13,4 +13,5 @@ public:
 	void			rotateMissile(float deltaAsSeconds);
 public:
 	Tank*			mTarget;
+	float			mAcceleration;
 };
