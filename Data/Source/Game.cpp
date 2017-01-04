@@ -1,15 +1,58 @@
 #include "Game.h"
+#include "GameState_MainMenu.h"
+#include <iostream>
 
 const sf::Time Game::timePerFrame = sf::seconds(1.f / 60.f);
+Game *Game::instance = nullptr;
 
-
-Game::Game(unsigned int w, unsigned int h)
+Game::Game(unsigned int w, unsigned int h, bool Vsync)
 	: mWidth(w),
 	mHeight(h),
-	mWindow(sf::VideoMode(w, h), "Tanks")
+	mWindow(sf::VideoMode(1600, 832), "Thunder Tanks", sf::Style::Titlebar)
 {
+	mWindow.setVerticalSyncEnabled(Vsync);
+	
+	
+	instance = this;
 	loadTextures();
-	loadWorld();
+	mBackground.setTexture(mTextures.get(Texture::background_MainMenu));
+
+	sf::Vector2f mWindowPosition = sf::Vector2f(mWindow.getSize());
+	mView.setSize(mWindowPosition);
+	mView.setCenter(mWindowPosition * 0.5f);
+	mWindow.setView(mView);
+	mBackground.setScale(mWindow.getSize().x / 1920.0f, mWindow.getSize().y / 1080.0f);
+
+	changeState(new GameState_MainMenu());
+	std::string path("Assets/Maps/map1.tmap");
+	mMap = new Map(path);
+	
+	mClock.restart();
+}
+
+Game::Game(unsigned int w, unsigned int h, bool vSync, bool fullscreen)
+	: mWidth(w),
+	mHeight(h),
+	mWindow(sf::VideoMode(1600, 832), "Thunder Tanks", sf::Style::Fullscreen)
+{
+	mWindow.setVerticalSyncEnabled(vSync);
+
+
+	instance = this;
+	loadTextures();
+	mBackground.setTexture(mTextures.get(Texture::background_MainMenu));
+
+	sf::Vector2f mWindowPosition = sf::Vector2f(mWindow.getSize());
+	mView.setSize(mWindowPosition);
+	mView.setCenter(mWindowPosition * 0.5f);
+	mWindow.setView(mView);
+	mBackground.setScale(mWindow.getSize().x / 1920.0f, mWindow.getSize().y / 1080.0f);
+
+	changeState(new GameState_MainMenu());
+	std::string path("Assets/Maps/map1.tmap");
+	mMap = new Map(path);
+
+	mClock.restart();
 }
 
 Game::~Game()
@@ -18,40 +61,44 @@ Game::~Game()
 }
 
 void Game::loadTextures() {
-	mTextures.load(Texture::TERRAIN_GR_01, "Assets/Textures/TERRAIN_GR_01.png");
+	std::ifstream in("Assets/Textures/asset_path.txt");
+	std::string path;
+	int i = 0;
 
-	mTextures.load(Texture::ROCK_01, "Assets/Textures/ROCK_01.png");
+	while (!in.eof()) {
+		in >> path;
+		mTextures.load(static_cast<Texture>(i++), path);
+	}
+	in.close();
 
-	mTextures.load(Texture::TANK1_BODY, "Assets/Textures/TANK1_BODY.png");
-	mTextures.load(Texture::TANK1_GUN, "Assets/Textures/TANK1_GUN.png");
+	mFonts.load(Font::VanillaExtractRegular, "Assets/Fonts/VanillaExtractRegular.ttf");
 }
 
-void Game::loadWorld() {
-	mWorld.loadWorld("Assets/Maps/graph.txt", &mTextures);
+Map* Game::getMap() {
+	return mMap;
 }
-
-//GAME FRAMEWORK LOGIC
 
 void Game::update(sf::Time deltaTime)
-{
-	//HANDLE STATES
-
+{	
 	GameState *currentState = getActiveState();
 	if (currentState != nullptr)
 	{
-		currentState->handleInput();
 		currentState->update(deltaTime);
-		mWindow.clear(sf::Color::Blue);
-		currentState->draw(deltaTime);
-		mWindow.display();
 	}
 
-	mWorld.mMaps[0]->updateTiles(deltaTime);
+
+	//mMap->update(deltaTime);
 }
 
 void Game::render()
 {
-	mWorld.mMaps[0]->drawTiles(&mWindow);
+	//mMap->draw(&mWindow);
+	GameState *currentState = getActiveState();
+	if (currentState != nullptr)
+	{
+		mWindow.clear(sf::Color::Blue);
+		currentState->draw();
+	}
 	mWindow.display();
 }
 
@@ -64,7 +111,48 @@ void Game::processEvents()
 		switch (eventToBeHandled.type)
 		{
 			case sf::Event::Closed:
+			{
 				mWindow.close();
+				break;
+			}
+
+			case sf::Event::KeyPressed:
+			{
+				switch (eventToBeHandled.key.code)
+				{
+					case sf::Keyboard::PageDown:
+					{
+						sf::Vector2u currentSize(mWindow.getSize());
+						sf::Vector2u newSize(mWindow.getSize());
+
+						newSize.x += (int)mWidth / 100;
+						newSize.y += (int)mHeight / 100;
+
+						getActiveState()->rePositionButtons(currentSize, newSize);
+
+						break;
+					}
+
+					case sf::Keyboard::PageUp:
+					{
+						sf::Vector2u currentSize(mWindow.getSize());
+						sf::Vector2u newSize(mWindow.getSize());
+
+						newSize.x -= (int)mWidth / 100;
+						newSize.y -= (int)mHeight / 100;
+
+						getActiveState()->rePositionButtons(currentSize, newSize);
+
+						break;
+					}
+
+					default:break;
+				}
+
+				break;
+			}
+			
+			default:break;
 		}
 	}
 }
@@ -76,6 +164,7 @@ void Game::handleInput()
 
 void Game::run()
 {
+	
 	sf::Clock gameClock;
 	sf::Time timeSinceLastUpdate = sf::Time::Zero;
 
@@ -86,15 +175,11 @@ void Game::run()
 		while (timeSinceLastUpdate > timePerFrame)
 		{
 			timeSinceLastUpdate -= timePerFrame;
-			handleInput();
 			update(timePerFrame);
 		}
-
 		render();
 	}
 }
-
-//GAMESTATE LOGIC
 
 void Game::pushState(GameState *state)
 {
@@ -103,24 +188,27 @@ void Game::pushState(GameState *state)
 
 void Game::popState()
 {
-	delete this->stateStack.top();
-	this->stateStack.pop();
+	//delete stateStack.top();
+	stateStack.pop();
+}
+
+void Game::deleteTopState()
+{
+	delete stateStack.top();
+	stateStack.pop();
 }
 
 void Game::changeState(GameState *state)
 {
-	//IF THE STACK IS NOT EMPTY, REMOVE THE CURRENT STATE
-	if (!this->stateStack.empty())
+	if (!stateStack.empty())
 		popState();
 	pushState(state);
 }
 
 GameState* Game::getActiveState()
 {
-	//IF THE STATESTACK IS EMPTY, RETURN NULLPTR - THIS MEANS THERE ARE NO GAMESTATES
-	if (this->stateStack.empty())
+	if (stateStack.empty())
 		return nullptr;
 
-	//ELSE, GET THE TOP OF THE STACK AND RETURN
-	return this->stateStack.top();
+	return stateStack.top();
 }

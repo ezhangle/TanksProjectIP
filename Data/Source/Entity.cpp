@@ -1,25 +1,27 @@
 #include "Entity.h"
-
-sf::Vector2f Entity::getPos() const {
-	return mSprite->getPosition();
-}
-
-void Entity::setPos(sf::Vector2f* pos) {
-	mSprite->setPosition(*pos);
-}
+#include "Game.h"
 
 void Entity::draw(sf::RenderWindow* window) {
 	window->draw(*mSprite);
+	mDelete = false;
 }
 
-Entity::Entity(sf::Vector2f* pos, sf::Sprite* sprite, Map* map)
-: mSprite(sprite),
-mCurrentMap(map){
-	setPos(pos);
+sf::Sprite*	Entity::getCollisionSprite() {
+	return mSprite;
 }
 
-Entity::Entity(Map* map)
-:mCurrentMap(map){
+Entity::Entity(sf::Vector2f* pos, sf::Sprite* sprite)
+: mSprite(sprite)
+{
+	mSprite->setPosition(*pos);
+}
+
+Entity::Entity(sf::Sprite* sprite)
+	: mSprite(sprite)
+{
 
 }
 
+Entity::~Entity() {
+	delete mSprite;
+}

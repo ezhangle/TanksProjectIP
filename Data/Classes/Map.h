@@ -1,29 +1,46 @@
 #pragma once
-#define TILE_WIDTH 64
-#define TILE_HEIGHT 64
-#include "Tile.h"
+#include <SFML/Graphics.hpp>
+#include <list>
+#include <vector>
+#include <string>
+#include "Entity.h"
 #include "ResourceHolder.h"
 #include "Enums.h"
-#include <SFML/System/Time.hpp>
-#include <SFML/Graphics/RenderWindow.hpp>
-#include <string>
-
-class Tile;
+#include "Animation.h"
 
 class Map {
-public:
-											Map(ResourceHolder<sf::Texture, Texture>* res);
-											Map(std::string& path, ResourceHolder<sf::Texture, Texture>* res);
-	void									loadFromFile(std::string& path);
+	enum {
+		OBSTACLE,
+		POWERUP,
+		TANK,
 
-	void									generateTerrain();
-	void									insertObject(int x, int y, std::string& id);
-	void									updateTiles(sf::Time dt);
-	void									drawTiles(sf::RenderWindow* window);
-
+		NUMBER
+	};
 public:
-	int										mRows;
-	int										mColumns;
-	Tile**									mTiles;
-	ResourceHolder<sf::Texture, Texture>*	mTextures;
+												Map(std::string& path);
+	void										loadFromFile(std::string& path);
+	void										update(sf::Time dt);
+	void										draw(sf::RenderWindow* window);
+	void										insertObject(std::string& obj, std::ifstream& stream);
+public:
+	int											**mObstacleMap;
+	float										mTileLength;
+	int											mWidth;
+	int											mHeight;
+
+	std::vector<std::list<Entity*>>				mEntities;
+	std::list<Animation*>						mEffects;
+	sf::Sprite									mBackground;
+	sf::Clock									mPowerUpRespawnClock;
+
+private:
+	void										initObstacleMap();
+	void										insertPlayerOne(const std::string& tankType, sf::Vector2f* position, sf::Vector2f* velocity, float health, float damage, size_t team);
+	void										insertPlayerTwo(const std::string& tankType, sf::Vector2f* position, sf::Vector2f* velocity, float health, float damage, size_t team);
+	void										insertStaticObject(const std::string& textureString, sf::Vector2f* pos);
+	void										insertAI(const std::string& difficulty, const std::string& tankType, sf::Vector2f* position, sf::Vector2f* velocity, float health, float damage, size_t team);
+	void										insertRandomPowerUp(sf::Vector2f* position);
+
+	void										getTankTextureIds(const std::string& textureString, Texture& baseTexture, Texture& topTexture);
+	void										getStaticObjectTextureId(const std::string& textureString, Texture& texture);
 };

@@ -1,14 +1,13 @@
 #ifndef GAME_H
 #define GAME_H
 
-//CUSTOM CLASSES AND OTHER HELPERS
 #include "GameState.h"
 #include "ResourceHolder.h"
 #include "Enums.h"
-#include "World.h"
+#include "Map.h"
 
 
-//SFML LIBRARIES
+
 #include <SFML\System\NonCopyable.hpp>
 #include <SFML\System\Time.hpp>
 #include <SFML\System\Clock.hpp>
@@ -16,12 +15,11 @@
 #include <SFML\Window\Event.hpp>
 
 
-//STL LIBRARIES
 #include <stack>
 #include <string>
+#include <fstream>
 
 
-//DECLARE GAMESTATE TO LET THE GAME CLASS KNOW ABOUT GAMESTATE
 class GameState;
 
 
@@ -29,16 +27,16 @@ class Game
 	: private sf::NonCopyable
 
 {
-
+	static Game										*instance;
 public:
 
 	std::stack<GameState*>							stateStack;
 	sf::RenderWindow								mWindow;
 	static const sf::Time							timePerFrame;
-	sf::Sprite										mBackground;
 
 public:
-													Game(unsigned int w, unsigned int h);
+													Game(unsigned int w, unsigned int h, bool VSync);
+													Game(unsigned int w, unsigned int h, bool vSync, bool fullscreen);
 													~Game();
 	void											run();
 
@@ -46,21 +44,55 @@ public:
 	void											popState();
 	void											changeState(GameState *state);
 	GameState*										getActiveState();
+	void											deleteTopState();
 
-private:
+public:
 	ResourceHolder<sf::Texture, Texture>			mTextures;
+	ResourceHolder<sf::Font, Font>					mFonts;
 	unsigned int									mWidth;
 	unsigned int									mHeight;
-	World											mWorld;
+	Map*											mMap;
+	sf::Clock										mClock;
+
+	sf::View										mView;
+	sf::Sprite										mBackground;
+
+	static Game* get() {
+		if (instance == nullptr)
+		{
+			std::ifstream resolutionCFG("Assets/Config/resolutionCFG.txt");
+			std::ifstream vsyncCFG("Assets/Config/vsyncCFG.txt");
+			std::ifstream fullscreenCFG("Assets/Config/fullscreenCFG.txt");
+			int w, h;
+			bool bVsync, fullscreen;
+			resolutionCFG >> w >> h;
+			vsyncCFG >> bVsync;
+			fullscreenCFG >> fullscreen;
+			resolutionCFG.close();
+			vsyncCFG.close();
+			fullscreenCFG.close();
+
+			if (!fullscreen)
+			{
+				instance = new Game(w, h, bVsync);
+			}
+
+			else
+			{
+				instance = new Game(w, h, bVsync, 1);
+			}
+		}
+
+		return instance;
+	}
 
 private:
 	void											loadTextures();
-	void											loadWorld();
 	void											processEvents();
-	void											handleRealTimeInput();
 	void											update(sf::Time deltaTime);
 	void											handleInput();
 	void											render();
+	Map*											getMap();
 										
 };
 
