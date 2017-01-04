@@ -1,51 +1,42 @@
 #include "GameState_MainMenu.h"
 
-#include <iostream>
 
 
 GameState_MainMenu::GameState_MainMenu()
 	: game(Game::get())
-	, mBackground(game->mTextures.get(Texture::background_MainMenu))
-	, mSelector(game->mTextures.get(Texture::button_Selector), sf::Vector2f(45.0f, game->mWindow.getSize().y - 250.0f), 50.0f, mButtonVector)
+	, mSelector(game->mTextures.get(Texture::button_Selector), sf::Vector2f(20.0f, game->mWindow.getSize().y - 270.0f), 50.0f, mButtons)
 {
-	mView.setSize(game->mWindow.getSize().x, game->mWindow.getSize().y);
-	mBackground.setScale(game->mWindow.getSize().x / 1920.0f, game->mWindow.getSize().y / 1080.0f);
-	sf::Vector2f mWindowPosition = sf::Vector2f(game->mWindow.getSize());
-	mView.setSize(mWindowPosition);
-	mView.setCenter(mWindowPosition * 0.5f);
-	game->mWindow.setView(mView);
 	buildGUI();
-	mSelector.mNumberOfButtons = mButtonVector.size();
-	mSelector.mButtonVector = mButtonVector;
-	mSelector.mSelectedButton = &mButtonVector[0];
+	mSelector.mNumberOfButtons = mButtons.size();
+	mSelector.mButtons = mButtons;
+	mSelector.mSelectedButton = &mButtons[0];
 };
 
 void GameState_MainMenu::buildGUI()
 {
-	Button buttonPlay(sf::Vector2f(100.0f, game->mWindow.getSize().y - 250.0f), button::Action::play, game->mTextures.get(Texture::button_Play));
-	//Button buttonTankType(sf::Vector2f(100.0f, game->mWindow.getSize().y - 250.0f), button::Action::tankType, game->mTextures.get(Texture::button_TankType));
-	Button buttonOptions(sf::Vector2f(100.0f, game->mWindow.getSize().y - 200.0f), button::Action::options, game->mTextures.get(Texture::button_Options));
-	Button buttonHighscore(sf::Vector2f(100.0f, game->mWindow.getSize().y - 150.0f), button::Action::highscore, game->mTextures.get(Texture::button_Highscore));
-	Button buttonExit(sf::Vector2f(100.0f, game->mWindow.getSize().y - 100.0f), button::Action::exit, game->mTextures.get(Texture::button_Exit));
-	mButtonVector.push_back(buttonPlay);
-	//mButtonVector.push_back(buttonTankType);
-	mButtonVector.push_back(buttonOptions);
-	mButtonVector.push_back(buttonHighscore);
-	mButtonVector.push_back(buttonExit);
+	TextButton playButton(sf::Vector2f(75.0f, game->mWindow.getSize().y - 250.0f), "Play", 20, TextButton::Action::buildGamePlay);
+	TextButton optionsButton(sf::Vector2f(75.0f, game->mWindow.getSize().y - 200.0f), "Options", 20, TextButton::Action::buildOptions);
+	TextButton scoreboardButton(sf::Vector2f(75.0f, game->mWindow.getSize().y - 150.0f), "Scoreboard", 20, TextButton::Action::buildScoreboard);
+	TextButton exitButton(sf::Vector2f(75.0f, game->mWindow.getSize().y - 100.0f), "Exit Game", 20, TextButton::Action::exit);
+
+	mButtons.push_back(playButton);
+	mButtons.push_back(optionsButton);
+	mButtons.push_back(scoreboardButton);
+	mButtons.push_back(exitButton);
 }
 
 void GameState_MainMenu::update(const sf::Time deltaTime)
-{	
+{
 	handleInput();
 }
 
 void GameState_MainMenu::draw()
 {
-	game->mWindow.draw(mBackground);
-	mSelector.draw();
-	for each (Button btn in mButtonVector)
+	game->mWindow.draw(game->mBackground);
+	game->mWindow.draw(mSelector.mSprite);
+	for each (TextButton button in mButtons)
 	{
-		game->mWindow.draw(btn.mButtonSprite);
+		game->mWindow.draw(button.getText());
 	}
 }
 
@@ -87,13 +78,13 @@ void GameState_MainMenu::handleEvents()
 
 					case sf::Keyboard::Down:
 					{
-						mSelector.move(Selector::Movement::down);
+						mSelector.move(Movement::down);
 						break;
 					}
 
 					case sf::Keyboard::Up:
 					{
-						mSelector.move(Selector::Movement::up);
+						mSelector.move(Movement::up);
 						break;
 					}
 				}
@@ -107,9 +98,28 @@ void GameState_MainMenu::handleEvents()
 
 void GameState_MainMenu::handleRealTimeInput()
 {
-	for each (Button button in mButtonVector)
+	for each (TextButton button in mButtons)
 	{
 		if (button.isSpriteClicked())
+		{
 			button.triggerAction();
+			sf::Clock wait;
+			sf::Time timer = sf::Time::Zero;
+			timer = sf::seconds(0.15f);
+			while (wait.getElapsedTime() < timer)
+			{
+
+			}
+			wait.restart();
+		}
+	}
+}
+
+void GameState_MainMenu::rePositionButtons(sf::Vector2u & currentSize, sf::Vector2u & newSize)
+{
+	for each (TextButton button in mButtons)
+	{
+		sf::Text text = button.getText();
+		text.move(0, currentSize.y - newSize.y);
 	}
 }

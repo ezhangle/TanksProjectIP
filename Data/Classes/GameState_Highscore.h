@@ -24,6 +24,7 @@ public:
 	void											handleInput();
 	void											handleEvents();
 	void											handleRealTimeInput();
+	void											rePositionButtons(sf::Vector2u &currentPosition, sf::Vector2u &newPosition);
 
 
 private:
@@ -32,12 +33,10 @@ private:
 
 	std::vector<highscore_Record>					mHighscoreVector;
 
-	sf::Sprite										mBackground;
 	sf::Text										mTitle;
 	sf::Text										mHelperText;
 
 	unsigned int									mNumberOfScores;
-	sf::View										mView;
 
 private:
 

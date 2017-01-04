@@ -5,7 +5,7 @@
 
 //CUSTOM CLASSES AND OTHER HELPERS
 #include "GameState.h"
-#include "Button.h"
+#include "TextButton.h"
 #include "Selector.h"
 
 
@@ -32,14 +32,13 @@ public:
 	void											handleInput();
 	void											handleEvents();
 	void											handleRealTimeInput();
+	void											rePositionButtons(sf::Vector2u &currentPosition, sf::Vector2u &newPosition);
 			
 
 private:
-	sf::View										mView;
 	Game*											game;
-	sf::Sprite										mBackground;
-	std::vector<Button>								mButtonVector;
-	Selector										mSelector;
+	std::vector<TextButton>							mButtons;
+	Selector<TextButton>							mSelector;
 
 
 private:

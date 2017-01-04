@@ -5,29 +5,53 @@
 const sf::Time Game::timePerFrame = sf::seconds(1.f / 60.f);
 Game *Game::instance = nullptr;
 
-Game::Game(unsigned int w, unsigned int h, bool bFullScreen)
+Game::Game(unsigned int w, unsigned int h, bool Vsync)
 	: mWidth(w),
 	mHeight(h),
-	mWindow(sf::VideoMode(w, h), "Thunder Tanks", sf::Style::Titlebar)
+	mWindow(sf::VideoMode(1600, 832), "Thunder Tanks", sf::Style::Titlebar)
 {
-	if (bFullScreen)
-	{
-		mWindow.close();
-		mWindow.create(sf::VideoMode(w, h), "Thunder Tanks", sf::Style::Fullscreen);
-	}
-	if (!bFullScreen)
-		mWindow.setPosition(sf::Vector2i(0, 0));
+	mWindow.setVerticalSyncEnabled(Vsync);
 	
-	
-
 	
 	instance = this;
 	loadTextures();
+	mBackground.setTexture(mTextures.get(Texture::background_MainMenu));
+
+	sf::Vector2f mWindowPosition = sf::Vector2f(mWindow.getSize());
+	mView.setSize(mWindowPosition);
+	mView.setCenter(mWindowPosition * 0.5f);
+	mWindow.setView(mView);
+	mBackground.setScale(mWindow.getSize().x / 1920.0f, mWindow.getSize().y / 1080.0f);
 
 	changeState(new GameState_MainMenu());
 	std::string path("Assets/Maps/map1.tmap");
 	mMap = new Map(path);
 	
+	mClock.restart();
+}
+
+Game::Game(unsigned int w, unsigned int h, bool vSync, bool fullscreen)
+	: mWidth(w),
+	mHeight(h),
+	mWindow(sf::VideoMode(1600, 832), "Thunder Tanks", sf::Style::Fullscreen)
+{
+	mWindow.setVerticalSyncEnabled(vSync);
+
+
+	instance = this;
+	loadTextures();
+	mBackground.setTexture(mTextures.get(Texture::background_MainMenu));
+
+	sf::Vector2f mWindowPosition = sf::Vector2f(mWindow.getSize());
+	mView.setSize(mWindowPosition);
+	mView.setCenter(mWindowPosition * 0.5f);
+	mWindow.setView(mView);
+	mBackground.setScale(mWindow.getSize().x / 1920.0f, mWindow.getSize().y / 1080.0f);
+
+	changeState(new GameState_MainMenu());
+	std::string path("Assets/Maps/map1.tmap");
+	mMap = new Map(path);
+
 	mClock.restart();
 }
 
@@ -55,12 +79,13 @@ Map* Game::getMap() {
 }
 
 void Game::update(sf::Time deltaTime)
-{
+{	
 	GameState *currentState = getActiveState();
 	if (currentState != nullptr)
 	{
 		currentState->update(deltaTime);
 	}
+
 
 	//mMap->update(deltaTime);
 }
@@ -86,7 +111,48 @@ void Game::processEvents()
 		switch (eventToBeHandled.type)
 		{
 			case sf::Event::Closed:
+			{
 				mWindow.close();
+				break;
+			}
+
+			case sf::Event::KeyPressed:
+			{
+				switch (eventToBeHandled.key.code)
+				{
+					case sf::Keyboard::PageDown:
+					{
+						sf::Vector2u currentSize(mWindow.getSize());
+						sf::Vector2u newSize(mWindow.getSize());
+
+						newSize.x += (int)mWidth / 100;
+						newSize.y += (int)mHeight / 100;
+
+						getActiveState()->rePositionButtons(currentSize, newSize);
+
+						break;
+					}
+
+					case sf::Keyboard::PageUp:
+					{
+						sf::Vector2u currentSize(mWindow.getSize());
+						sf::Vector2u newSize(mWindow.getSize());
+
+						newSize.x -= (int)mWidth / 100;
+						newSize.y -= (int)mHeight / 100;
+
+						getActiveState()->rePositionButtons(currentSize, newSize);
+
+						break;
+					}
+
+					default:break;
+				}
+
+				break;
+			}
+			
+			default:break;
 		}
 	}
 }

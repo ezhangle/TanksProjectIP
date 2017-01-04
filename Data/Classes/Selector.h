@@ -1,33 +1,25 @@
 #pragma once
 
 #include <SFML/Graphics/Sprite.hpp>
-#include "Button.h"
-#include "Game.h"
+#include "Enums.h"
+#include <vector>
 
+template <typename buttonType>
 class Selector
 {
 public:
-	enum Movement
-	{
-		up,
-		down,
-	};
-
-	Button*											mSelectedButton;
-	std::vector<Button>&							mButtonVector;
+	buttonType*										mSelectedButton;
+	std::vector<buttonType>&						mButtons;
 	size_t											mNumberOfButtons;
+	sf::Sprite										mSprite;
 
 public:
-													Selector(sf::Texture &texture, sf::Vector2f startLocation, float moveDistance, std::vector<Button> &vector);
-													~Selector();
-	void											draw();
-	void											move(enum Movement direction);
+													Selector(sf::Texture &texture, sf::Vector2f startLocation, float moveDistance, std::vector<buttonType> &vector);
+	void											move(Movement direction);
 
 private:
-	sf::Sprite										mSprite;
 	size_t											mIndex;
 	float											mMoveDistance;
-	Game*											game;
 
 private:
 

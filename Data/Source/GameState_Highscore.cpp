@@ -2,7 +2,6 @@
 
 GameState_Highscore::GameState_Highscore()
 	: game(Game::get())
-	, mBackground(game->mTextures.get(Texture::background_MainMenu))
 	, mHelperText("Press Escape to go back", game->mFonts.get(Font::VanillaExtractRegular), 30)
 	, mTitle("Top Scores : ", game->mFonts.get(Font::VanillaExtractRegular))
 	, mHighscoreVector()
@@ -33,13 +32,6 @@ GameState_Highscore::GameState_Highscore()
 
 
 	highscoreCFG.close();
-
-	mView.setSize(game->mWindow.getSize().x, game->mWindow.getSize().y);
-	mBackground.setScale(game->mWindow.getSize().x / 1920.0f, game->mWindow.getSize().y / 1080.0f);
-	sf::Vector2f mWindowPosition = sf::Vector2f(game->mWindow.getSize());
-	mView.setSize(mWindowPosition);
-	mView.setCenter(mWindowPosition * 0.5f);
-	game->mWindow.setView(mView);
 }
 
 GameState_Highscore::~GameState_Highscore()
@@ -55,7 +47,7 @@ void GameState_Highscore::buildGUI()
 void GameState_Highscore::draw()
 {
 	game->mWindow.draw(mHelperText);
-	game->mWindow.draw(mBackground);
+	game->mWindow.draw(game->mBackground);
 	for (int i = 0; i < mNumberOfScores; i++)
 	{
 		game->mWindow.draw(mHighscoreVector[i].name);
@@ -103,4 +95,8 @@ void GameState_Highscore::handleEvents()
 void GameState_Highscore::handleRealTimeInput()
 {
 
+}
+
+void GameState_Highscore::rePositionButtons(sf::Vector2u & currentPosition, sf::Vector2u & newPosition)
+{
 }

@@ -6,7 +6,7 @@ void Entity::draw(sf::RenderWindow* window) {
 	mDelete = false;
 }
 
-sf::Sprite*	Entity::getSprite() {
+sf::Sprite*	Entity::getCollisionSprite() {
 	return mSprite;
 }
 
@@ -14,6 +14,12 @@ Entity::Entity(sf::Vector2f* pos, sf::Sprite* sprite)
 : mSprite(sprite)
 {
 	mSprite->setPosition(*pos);
+}
+
+Entity::Entity(sf::Sprite* sprite)
+	: mSprite(sprite)
+{
+
 }
 
 Entity::~Entity() {

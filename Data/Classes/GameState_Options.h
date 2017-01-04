@@ -1,6 +1,6 @@
 #pragma once
 #include "GameState.h"
-#include "Button.h"
+#include "TextButton.h"
 #include "Selector.h"
 #include "Game.h"
 
@@ -20,14 +20,13 @@ public:
 	void											handleInput();
 	void											handleEvents();
 	void											handleRealTimeInput();
+	void											rePositionButtons(sf::Vector2u &currentPosition, sf::Vector2u &newPosition);
 
 private:
 	Game*											game;
-	std::vector<Button>								mButtonVector;
-	Selector										mSelector;
-	sf::Sprite										mTitle;
-	sf::Sprite										mBackground;
-	sf::View										mView;
+	std::vector<TextButton>							mButtons;
+	sf::Text										mRestartRequired;
+	Selector<TextButton>							mSelector;
 
 private:
 

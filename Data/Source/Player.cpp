@@ -2,12 +2,13 @@
 #include "Game.h"
 #include "Animation.h"
 #include "Projectile.h"
+#include <iostream>
 #include <cmath>
 
-Player::Player(sf::Sprite* base, sf::Sprite* top, sf::Vector2f* pos, sf::Vector2f* vel, float health, float damage, std::vector<sf::Keyboard::Key> keys):
-Tank(base, top, pos, vel, health, damage),
+Player::Player(sf::Sprite* base, sf::Sprite* top, sf::Vector2f* pos, sf::Vector2f* vel, float health, float damage, std::vector<sf::Keyboard::Key> keys, size_t team):
+Tank(base, top, pos, vel, health, damage, team),
 mKeys(keys){
-
+	
 }
 
 void Player::handleInput(sf::Time dt) {
@@ -45,5 +46,4 @@ void Player::update(sf::Time dt) {
 
 	handleInput(dt);
 	Tank::update(dt);
-	
 }

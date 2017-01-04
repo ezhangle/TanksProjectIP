@@ -1,8 +1,10 @@
 #pragma once
 #include "GameState.h"
-#include "Button.h"
+#include "FullscreenButton.h"
 #include "Selector.h"
 #include "Game.h"
+
+
 
 class GameState_Options_Fullscreen
 	: public GameState
@@ -20,15 +22,14 @@ public:
 	void											handleInput();
 	void											handleEvents();
 	void											handleRealTimeInput();
+	void											rePositionButtons(sf::Vector2u &currentPosition, sf::Vector2u &newPosition);
 
 
 private:
 	Game*											game;
-	std::vector<Button>								mButtonVector;
-	Selector										mSelector;
-	sf::Sprite										mTitle;
-	sf::Sprite										mBackground;
-	sf::View										mView;
+	std::vector<FullscreenButton>					mButtons;
+	Selector<FullscreenButton>						mSelector;
+
 
 private:
 

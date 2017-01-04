@@ -2,20 +2,14 @@
 
 GameState_Options::GameState_Options()
 	: game(Game::get())
-	, mBackground(game->mTextures.get(Texture::background_Options))
-	, mTitle(game->mTextures.get(Texture::title_Options))
-	, mSelector(game->mTextures.get(Texture::button_Selector), sf::Vector2f(45.0f, game->mWindow.getSize().y - 250.0f), 50.0f, mButtonVector)
+	, mSelector(game->mTextures.get(Texture::button_Selector), sf::Vector2f(20.0f, game->mWindow.getSize().y - 220.0f), 50.0f, mButtons)
+	, mRestartRequired("Important: In order to apply any changed settings, a game restart is required", game->mFonts.get(Font::VanillaExtractRegular), 20)
 {
-	mView.setSize(game->mWindow.getSize().x, game->mWindow.getSize().y);
-	mBackground.setScale(game->mWindow.getSize().x / 1920.0f, game->mWindow.getSize().y / 1080.0f);
-	sf::Vector2f mWindowPosition = sf::Vector2f(game->mWindow.getSize());
-	mView.setSize(mWindowPosition);
-	mView.setCenter(mWindowPosition * 0.5f);
-	game->mWindow.setView(mView);
 	buildGUI();
-	mSelector.mNumberOfButtons = mButtonVector.size();
-	mSelector.mButtonVector = mButtonVector;
-	mSelector.mSelectedButton = &mButtonVector[0];
+	mRestartRequired.setPosition(75.0f, 50.0f);
+	mSelector.mNumberOfButtons = mButtons.size();
+	mSelector.mButtons = mButtons;
+	mSelector.mSelectedButton = &mButtons[0];
 }
 
 GameState_Options::~GameState_Options()
@@ -25,23 +19,23 @@ GameState_Options::~GameState_Options()
 
 void GameState_Options::buildGUI()
 {
-	Button resolution(sf::Vector2f(100.0f, game->mWindow.getSize().y - 250.0f), button::Action::options_resolution, game->mTextures.get(Texture::button_Options_Resolution));
-	Button fullscreen(sf::Vector2f(100.0f, game->mWindow.getSize().y - 200.0f), button::Action::options_fullscreen, game->mTextures.get(Texture::button_Options_Fullscreen));
-	Button vsync(sf::Vector2f(100.0f, game->mWindow.getSize().y - 150.0f), button::Action::options_vsync, game->mTextures.get(Texture::button_Options_Vsync));
-	Button back(sf::Vector2f(100.0f, game->mWindow.getSize().y - 100.0f), button::Action::back, game->mTextures.get(Texture::button_Back));
-	mButtonVector.push_back(resolution);
-	mButtonVector.push_back(fullscreen);
-	mButtonVector.push_back(vsync);
-	mButtonVector.push_back(back);
+	TextButton fullscrenButton(sf::Vector2f(75.0f, game->mWindow.getSize().y - 200.0f), "Fullscreen", 20, TextButton::Action::buildOptions_Fullscreen);
+	TextButton vsyncButton(sf::Vector2f(75.0f, game->mWindow.getSize().y - 150.0f), "V-Sync", 20, TextButton::Action::buildOptions_VSync);
+	TextButton backButton(sf::Vector2f(75.0f, game->mWindow.getSize().y - 100.0f), "Back", 20, TextButton::Action::back);
+	
+	mButtons.push_back(fullscrenButton);
+	mButtons.push_back(vsyncButton);
+	mButtons.push_back(backButton);
 }
 
 void GameState_Options::draw()
 {
-	game->mWindow.draw(mBackground);
-	mSelector.draw();
-	for each (Button button in mButtonVector)
+	game->mWindow.draw(game->mBackground);
+	game->mWindow.draw(mSelector.mSprite);
+	game->mWindow.draw(mRestartRequired);
+	for each (TextButton button in mButtons)
 	{
-		game->mWindow.draw(button.mButtonSprite);
+		game->mWindow.draw(button.getText());
 	}
 }
 
@@ -77,29 +71,19 @@ void GameState_Options::handleEvents()
 				{
 					case sf::Keyboard::Return:
 					{
-						if (mSelector.mSelectedButton == &mButtonVector[0])
-						{
-							game->mWindow.setVerticalSyncEnabled(true);
-						}
-						
-						if (mSelector.mSelectedButton == &mButtonVector[1])
-						{
-							game->mWindow.setVerticalSyncEnabled(false);
-						}
-
 						mSelector.mSelectedButton->triggerAction();
 						break;
 					}
 
 					case sf::Keyboard::Down:
 					{
-						mSelector.move(Selector::Movement::down);
+						mSelector.move(Movement::down);
 						break;
 					}
 
 					case sf::Keyboard::Up:
 					{
-						mSelector.move(Selector::Movement::up);
+						mSelector.move(Movement::up);
 						break;
 					}
 				}
@@ -110,5 +94,23 @@ void GameState_Options::handleEvents()
 
 void GameState_Options::handleRealTimeInput()
 {
+	for each (TextButton button in mButtons)
+	{
+		if (button.isSpriteClicked())
+		{
+			button.triggerAction();
+			sf::Clock wait;
+			sf::Time timer = sf::Time::Zero;
+			timer = sf::seconds(0.15f);
+			while (wait.getElapsedTime() < timer)
+			{
 
+			}
+			wait.restart();
+		}
+	}
+}
+
+void GameState_Options::rePositionButtons(sf::Vector2u & currentPosition, sf::Vector2u & newPosition)
+{
 }

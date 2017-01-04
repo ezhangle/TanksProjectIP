@@ -1,8 +1,11 @@
 #pragma once
 #include "GameState.h"
 #include "Game.h"
-#include "Button.h"
+#include "VSyncButton.h"
 #include "Selector.h"
+
+
+
 
 class GameState_Options_Vsync
 	: public GameState
@@ -19,15 +22,14 @@ public:
 	void											draw();
 	void											handleInput();
 	void											handleEvents();
-	void											handleRealTimeInput();												
+	void											handleRealTimeInput();
+	void											rePositionButtons(sf::Vector2u &currentPosition, sf::Vector2u &newPosition);
 
 private:
 	Game*											game;
-	std::vector<Button>								mButtonVector;
-	Selector										mSelector;
-	sf::Sprite										mTitle;
-	sf::Sprite										mBackground;
-	sf::View										mView;
+	std::vector<VSyncButton>						mButtons;
+	Selector<VSyncButton>							mSelector;
+
 	
 private:
 
