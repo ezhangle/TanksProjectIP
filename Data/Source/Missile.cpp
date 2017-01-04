@@ -24,24 +24,26 @@ void Missile::update(sf::Time dt)
 {
 	Projectile::update(dt);
 
-	sf::Vector2f targetPos(mTarget->mBase->getPosition());
-	sf::Vector2f missilePos(mSprite->getPosition());
+	if (mTarget != nullptr) {
+		sf::Vector2f targetPos(mTarget->mBase->getPosition());
+		sf::Vector2f missilePos(mSprite->getPosition());
 
-	float angle = 180.f - atan2(targetPos.x - missilePos.x, targetPos.y - missilePos.y) * 180.f / 3.14f;
+		float angle = 180.f - atan2(targetPos.x - missilePos.x, targetPos.y - missilePos.y) * 180.f / 3.14f;
 
-	float currentRotation = mSprite->getRotation();
-	
-	if (currentRotation > 180.f) {
-		if (currentRotation > angle)
-			rotateMissile(-dt.asSeconds());
-		else
-			rotateMissile(dt.asSeconds());
-	}
-	else {
-		if (currentRotation > angle)
-			rotateMissile(dt.asSeconds());
-		else
-			rotateMissile(-dt.asSeconds());
+		float currentRotation = mSprite->getRotation();
+
+		if (abs(currentRotation - angle) < 180.f) {
+			if (currentRotation < angle)
+				rotateMissile(dt.asSeconds());
+			else
+				rotateMissile(-dt.asSeconds());
+		}
+		else {
+			if (currentRotation < angle)
+				rotateMissile(-dt.asSeconds());
+			else
+				rotateMissile(dt.asSeconds());
+		}
 	}
 }
 
