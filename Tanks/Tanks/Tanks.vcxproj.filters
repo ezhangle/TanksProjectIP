@@ -43,6 +43,18 @@
     <Filter Include="Source Files\Entities\PU">
       <UniqueIdentifier>{0b35c1f1-8759-4241-bbdc-9e474e5532a6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Entities\Projectiles">
+      <UniqueIdentifier>{fdaf733b-2013-4958-97d1-853fb4f35f3a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Entities\Projectiles">
+      <UniqueIdentifier>{fc30c8e2-be8d-4c99-a684-d8043da27796}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Entities\AI">
+      <UniqueIdentifier>{fd130420-cd73-488d-8635-220fb0eabdde}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Entities\AI">
+      <UniqueIdentifier>{e490aef5-5da6-40d2-b9ba-19d434412be5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Data\Source\Game.cpp">
@@ -75,29 +87,14 @@
     <ClCompile Include="..\..\Data\Source\Player.cpp">
       <Filter>Source Files\Entities</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Data\Source\Projectile.cpp">
-      <Filter>Source Files\Entities</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\Data\Source\Tank.cpp">
       <Filter>Source Files\Entities</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Data\Source\Obstacle.cpp">
       <Filter>Source Files\Entities</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Data\Source\AI.cpp">
-      <Filter>Source Files\Entities</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\Data\Source\Button.cpp">
       <Filter>Source Files\GameStates</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Data\Source\AI_Easy.cpp">
-      <Filter>Source Files\Entities</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Data\Source\AI_Medium.cpp">
-      <Filter>Source Files\Entities</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Data\Source\AI_Hard.cpp">
-      <Filter>Source Files\Entities</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Data\Source\VectorUtility.cpp">
       <Filter>Source Files</Filter>
@@ -110,6 +107,27 @@
     </ClCompile>
     <ClCompile Include="..\..\Data\Source\PU_Speed.cpp">
       <Filter>Source Files\Entities\PU</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Data\Source\Projectile.cpp">
+      <Filter>Source Files\Entities\Projectiles</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Data\Source\AI_Easy.cpp">
+      <Filter>Source Files\Entities\AI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Data\Source\AI.cpp">
+      <Filter>Source Files\Entities\AI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Data\Source\AI_Hard.cpp">
+      <Filter>Source Files\Entities\AI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Data\Source\AI_Medium.cpp">
+      <Filter>Source Files\Entities\AI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Data\Source\basic_bullet.cpp">
+      <Filter>Source Files\Entities\Projectiles</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Data\Source\Missile.cpp">
+      <Filter>Source Files\Entities\Projectiles</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -149,29 +167,14 @@
     <ClInclude Include="..\..\Data\Classes\Player.h">
       <Filter>Header Files\Entities</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Data\Classes\Projectile.h">
-      <Filter>Header Files\Entities</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\Data\Classes\Tank.h">
       <Filter>Header Files\Entities</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Data\Classes\Obstacle.h">
       <Filter>Header Files\Entities</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Data\Classes\AI.h">
-      <Filter>Header Files\Entities</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\Data\Classes\Button.h">
       <Filter>Header Files\GameStates</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Data\Classes\AI_Easy.h">
-      <Filter>Header Files\Entities</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Data\Classes\AI_Medium.h">
-      <Filter>Header Files\Entities</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Data\Classes\AI_Hard.h">
-      <Filter>Header Files\Entities</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Data\Classes\VectorUtility.h">
       <Filter>Header Files</Filter>
@@ -184,6 +187,27 @@
     </ClInclude>
     <ClInclude Include="..\..\Data\Classes\PU_Speed.h">
       <Filter>Header Files\Entities\PU</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Data\Classes\Projectile.h">
+      <Filter>Header Files\Entities\Projectiles</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Data\Classes\AI.h">
+      <Filter>Header Files\Entities\AI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Data\Classes\AI_Easy.h">
+      <Filter>Header Files\Entities\AI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Data\Classes\AI_Medium.h">
+      <Filter>Header Files\Entities\AI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Data\Classes\AI_Hard.h">
+      <Filter>Header Files\Entities\AI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Data\Classes\basic_bullet.h">
+      <Filter>Header Files\Entities\Projectiles</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Data\Classes\Missile.h">
+      <Filter>Header Files\Entities\Projectiles</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

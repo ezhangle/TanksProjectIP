@@ -106,12 +106,12 @@ void AI_Hard::update(sf::Time dt) {
 		if (mTarget->mMovingState > 0) {
 			sf::Vector2f closingVelocity;
 			if (mTarget->mMovingState == 1) {
-				closingVelocity.x = (mTarget->mVelocity->x + mTarget->mAcceleration) - 500.f;
-				closingVelocity.y = (mTarget->mVelocity->y + mTarget->mAcceleration) - 500.f;
+				closingVelocity.x = (mTarget->mVelocity->x + mTarget->mAcceleration) - mTarget->mProjectileSpeed->x;
+				closingVelocity.y = (mTarget->mVelocity->y + mTarget->mAcceleration) - mTarget->mProjectileSpeed->y;
 			}
 			else {
-				closingVelocity.x = (mTarget->mVelocity->x)*0.5f - 500.f;
-				closingVelocity.y = (mTarget->mVelocity->y)*0.5f - 500.f;
+				closingVelocity.x = (mTarget->mVelocity->x)*0.5f - mTarget->mProjectileSpeed->x;
+				closingVelocity.y = (mTarget->mVelocity->y)*0.5f - mTarget->mProjectileSpeed->y;
 			}
 
 			sf::Vector2f closingRange(mTarget->mBase->getPosition());

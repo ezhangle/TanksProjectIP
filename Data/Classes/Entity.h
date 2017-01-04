@@ -4,6 +4,7 @@
 class Entity {
 public:
 	Entity(sf::Vector2f* pos, sf::Sprite* sprite);
+	Entity(sf::Sprite* sprite);
 	Entity() {};
 	~Entity();
 	

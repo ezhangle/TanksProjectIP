@@ -219,6 +219,7 @@ enum class Texture {
 	expl_10_0031,
 
 	bullet_orange,
+	missile,
 
 	hp_base,
 	hp_top,

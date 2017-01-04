@@ -19,6 +19,7 @@ public:
 	};
 public:
 							Tank(sf::Sprite* base, sf::Sprite* top, sf::Vector2f* pos, sf::Vector2f* vel, float health, float damage, size_t team);
+							~Tank();
 	void					update(sf::Time dt);
 	void					draw(sf::RenderWindow* window);
 
@@ -34,14 +35,18 @@ public:
 
 public:
 	size_t					mTeam;
+	Collision				SAT;
+
 	sf::Sprite*				mTop;
 	sf::Sprite*				mBase;
 	sf::Sprite				mHpBarBase;
 	sf::Sprite				mHpBarTop;
 
 	sf::Vector2f*			mVelocity;
+	sf::Vector2f*			mProjectileSpeed;
 	float					mAcceleration;
 	float					mMaxAcceleration;
+
 	sf::Clock				mMovingStateClock;
 	size_t					mMovingState;
 	sf::Vector2f			mLastPoint;
@@ -49,7 +54,6 @@ public:
 	sf::Clock				mHitCooldownClock;
 	float					mHitCooldown;
 	std::list<PowerUp*>		mPowerUpList;
-	Collision				SAT;
 	
 	const float				mMaxHealth;
 	float					mHealth;

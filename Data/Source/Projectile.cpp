@@ -6,12 +6,13 @@
 #include "Obstacle.h"
 #include <iostream>
 
-Projectile::Projectile(sf::Sprite* sprite, sf::Vector2f* position, sf::Vector2f* velocity, float damage, Tank* parent):
-Entity(position, sprite),
-mVelocity(velocity),
-mDamage(damage),
+Projectile::Projectile(sf::Sprite* sprite, Tank* parent):
+Entity(sprite),
+mVelocity(parent->mProjectileSpeed),
+mDamage(parent->mDamage),
 mParent(parent){
 
+	mSprite->setRotation(mParent->mTop->getRotation());
 }
 
 void Projectile::update(sf::Time dt) {

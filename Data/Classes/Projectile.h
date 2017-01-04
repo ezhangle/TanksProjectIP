@@ -7,7 +7,7 @@
 
 class Projectile : public Entity {
 public:
-	Projectile(sf::Sprite* sprite, sf::Vector2f* position, sf::Vector2f* velocity, float damage, Tank* parent);
+	Projectile(sf::Sprite* sprite, Tank* parent);
 	~Projectile();
 
 	virtual void update(sf::Time dt);

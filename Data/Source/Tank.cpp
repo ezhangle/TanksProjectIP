@@ -2,7 +2,8 @@
 #include "Game.h"
 #include "Obstacle.h"
 #include "Map.h"
-#include "Projectile.h"
+#include "basic_bullet.h"
+#include "Missile.h"
 #include "Animation.h"
 
 #include <cmath>
@@ -14,7 +15,8 @@ mVelocity(vel),
 mHealth(health),
 mMaxHealth(health),
 mDamage(damage),
-mTeam(team)
+mTeam(team),
+mProjectileSpeed(new sf::Vector2f(500.f, 500.f))
 {
 	sf::Vector2f topPos = top->getPosition();
 	top->setOrigin((float)top->getTexture()->getSize().x / 2, (float)top->getTexture()->getSize().y / 2);
@@ -38,6 +40,11 @@ mTeam(team)
 	mMovingState = 0;
 	mLastPoint = mBase->getPosition();
 	mMovingStateClock.restart();
+}
+
+Tank::~Tank()
+{
+	delete mTop, mBase, mVelocity, mProjectileSpeed;
 }
 
 void Tank::draw(sf::RenderWindow* window) {
@@ -128,17 +135,8 @@ bool Tank::MoveX(float inc) {
 
 void Tank::shoot() {
 	if (mHitCooldownClock.getElapsedTime().asSeconds() > mHitCooldown) {
-		sf::Sprite* news = new sf::Sprite(Game::get()->mTextures.get(Texture::bullet_orange));
-
-		news->setRotation(mTop->getRotation());
-		news->setOrigin(news->getLocalBounds().width / 2.f, news->getLocalBounds().height / 2.f);
-		news->setPosition(mTop->getPosition());
-
-		sf::Vector2f* pos = new sf::Vector2f(sin(mTop->getRotation()*3.14f / 180.f)*mTop->getLocalBounds().width / 2.f + mTop->getPosition().x,
-			-cos(mTop->getRotation()*3.14f / 180.f)*mTop->getLocalBounds().height / 2.f + mTop->getPosition().y);
-
 		Map* m = Game::get()->mMap;
-		m->mEntities[2].insert(m->mEntities[2].end(), new Projectile(news, pos, new sf::Vector2f(500.f, 500.f), mDamage, this));
+		m->mEntities[2].insert(m->mEntities[2].end(), new Missile(this));
 
 		mHitCooldownClock.restart();
 	}

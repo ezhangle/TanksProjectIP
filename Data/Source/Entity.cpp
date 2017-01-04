@@ -16,6 +16,12 @@ Entity::Entity(sf::Vector2f* pos, sf::Sprite* sprite)
 	mSprite->setPosition(*pos);
 }
 
+Entity::Entity(sf::Sprite* sprite)
+	: mSprite(sprite)
+{
+
+}
+
 Entity::~Entity() {
 	delete mSprite;
 }

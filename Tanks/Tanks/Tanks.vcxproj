@@ -125,6 +125,7 @@
     <ClCompile Include="..\..\Data\Source\AI_Hard.cpp" />
     <ClCompile Include="..\..\Data\Source\AI_Medium.cpp" />
     <ClCompile Include="..\..\Data\Source\Animation.cpp" />
+    <ClCompile Include="..\..\Data\Source\basic_bullet.cpp" />
     <ClCompile Include="..\..\Data\Source\Button.cpp" />
     <ClCompile Include="..\..\Data\Source\Collision.cpp" />
     <ClCompile Include="..\..\Data\Source\Entity.cpp" />
@@ -134,6 +135,7 @@
     <ClCompile Include="..\..\Data\Source\GameState_Start.cpp" />
     <ClCompile Include="..\..\Data\Source\Main.cpp" />
     <ClCompile Include="..\..\Data\Source\Map.cpp" />
+    <ClCompile Include="..\..\Data\Source\Missile.cpp" />
     <ClCompile Include="..\..\Data\Source\Player.cpp" />
     <ClCompile Include="..\..\Data\Source\PowerUp.cpp" />
     <ClCompile Include="..\..\Data\Source\Projectile.cpp" />
@@ -149,6 +151,7 @@
     <ClInclude Include="..\..\Data\Classes\AI_Hard.h" />
     <ClInclude Include="..\..\Data\Classes\AI_Medium.h" />
     <ClInclude Include="..\..\Data\Classes\Animation.h" />
+    <ClInclude Include="..\..\Data\Classes\basic_bullet.h" />
     <ClInclude Include="..\..\Data\Classes\Button.h" />
     <ClInclude Include="..\..\Data\Classes\Collision.h" />
     <ClInclude Include="..\..\Data\Classes\Entity.h" />
@@ -159,6 +162,7 @@
     <ClInclude Include="..\..\Data\Classes\GameState_MainMenu.h" />
     <ClInclude Include="..\..\Data\Classes\GameState_Start.h" />
     <ClInclude Include="..\..\Data\Classes\Map.h" />
+    <ClInclude Include="..\..\Data\Classes\Missile.h" />
     <ClInclude Include="..\..\Data\Classes\Player.h" />
     <ClInclude Include="..\..\Data\Classes\PowerUp.h" />
     <ClInclude Include="..\..\Data\Classes\Projectile.h" />

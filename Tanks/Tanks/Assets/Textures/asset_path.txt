@@ -208,6 +208,7 @@ Assets/Textures/Effects/explosion/expl_10_0030.png
 Assets/Textures/Effects/explosion/expl_10_0031.png
 
 Assets/Textures/Effects/bullets/bullet_orange.png
+Assets/Textures/Effects/bullets/missile.png
 
 Assets/Textures/GUI/hp_base.png
 Assets/Textures/GUI/hp_top.png
