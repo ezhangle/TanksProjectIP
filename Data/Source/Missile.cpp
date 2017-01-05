@@ -24,7 +24,7 @@ Missile::Missile(Tank * parent)
 void Missile::update(sf::Time dt)
 {
 	Projectile::update(dt);
-	
+
 	if (mTarget != nullptr) {
 		mAcceleration += 50.f * dt.asSeconds();
 

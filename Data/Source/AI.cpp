@@ -11,8 +11,8 @@ Tank(base, top, pos, vel, health, damage, team),
 mTileLength(64.f),
 mTarget(nullptr){
 
-	mWidth = Game::get()->mWidth / mTileLength;
-	mHeight = Game::get()->mHeight / mTileLength;
+	mWidth = (int)(Game::get()->mWidth / mTileLength);
+	mHeight = (int)(Game::get()->mHeight / mTileLength);
 
 	mNextPoint.x = -1.f;
 	mNextPoint.y = -1.f;
@@ -112,8 +112,8 @@ void AI::calculatePathMap() {
 	std::queue<LeePoint> que;
 	LeePoint startPoint;
 	LeePoint currentPoint;
-	startPoint.x = mBase->getPosition().y / mTileLength;
-	startPoint.y = mBase->getPosition().x / mTileLength;
+	startPoint.x = (int)(mBase->getPosition().y / mTileLength);
+	startPoint.y = (int)(mBase->getPosition().x / mTileLength);
 	if(mPathFindMap[startPoint.x][startPoint.y] != -1)
 		mPathFindMap[startPoint.x][startPoint.y] = 1;
 
@@ -146,8 +146,8 @@ void AI::calculateRandomPath() {
 	sf::Vector2f toInsert;
 
 	do {
-		startPoint.x = rand() % mHeight;
-		startPoint.y = rand() % mWidth;
+		startPoint.x = (float)(rand() % mHeight);
+		startPoint.y = (float)(rand() % mWidth);
 	} while (mPathFindMap[(int)(startPoint.x)][(int)(startPoint.y)] <= 0);
 
 	calculatePath(startPoint);

@@ -4,6 +4,9 @@
 #include "Map.h"
 #include "basic_bullet.h"
 #include "Missile.h"
+#include "LaserBall.h"
+#include "AI.h"
+
 #include "Animation.h"
 
 #include <cmath>
@@ -70,10 +73,29 @@ void Tank::update(sf::Time dt) {
 	}
 
 	if (mHealth <= 0) {
+		auto it1 = Game::get()->mMap->mEntities[2].begin();
+		auto it2 = Game::get()->mMap->mEntities[2].end();
+
+		//disable all kind of targeting on this entity
+		for (; it1 != it2; ++it1) {
+			if (AI* target = dynamic_cast<AI*>((*it1))) {
+				target->mTarget = nullptr;
+			}
+			if (Missile* target = dynamic_cast<Missile*>((*it1))) {
+				target->mTarget = nullptr;
+			}
+		}
+
+		//end all power up objects
+		for (auto it = mPowerUpList.begin(); it != mPowerUpList.end(); ++it) {
+			(*it)->onDurationEnd();
+		}
+
 		Game::get()->mMap->mEffects.insert(Game::get()->mMap->mEffects.begin(), new Animation(new sf::Vector2f(mBase->getPosition()), Texture::expl_10_0000, Texture::expl_10_0031, 50, false));
 		mDelete = true;
 	}
 	else {
+		//handle hp bar
 		sf::Vector2f newScale;
 		newScale.x = mHealth / mMaxHealth;
 		newScale.y = 1.f;
@@ -140,11 +162,22 @@ void Tank::shoot() {
 		Projectile* projectile = nullptr;
 		Map* map = Game::get()->mMap;
 		
-		if (mProjectileType == ProjectileType::Basic)
+		if (mProjectileType == ProjectileType::Basic) {
+			mProjectileSpeed->x = 500.f;
+			mProjectileSpeed->y = 500.f;
 			projectile = new BasicBullet(this);
-		if (mProjectileType == ProjectileType::Missile)
+		}
+		if (mProjectileType == ProjectileType::Missile) {
+			mProjectileSpeed->x = 300.f;
+			mProjectileSpeed->y = 300.f;
 			projectile = new Missile(this);
-
+		}	
+		if (mProjectileType == ProjectileType::LaserBall) {
+			mProjectileSpeed->x = 200.f;
+			mProjectileSpeed->y = 200.f;
+			projectile = new LaserBall(this);
+		}
+			
 		if(mIsProjectileHollow)
 			projectile->setHollow();
 		map->mEntities[2].insert(map->mEntities[2].end(), projectile);

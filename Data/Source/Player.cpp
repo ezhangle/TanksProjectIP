@@ -2,7 +2,7 @@
 #include "Game.h"
 #include "Animation.h"
 #include "Projectile.h"
-#include <iostream>
+#include "PU_AttackSpeed.h"
 #include <cmath>
 
 Player::Player(sf::Sprite* base, sf::Sprite* top, sf::Vector2f* pos, sf::Vector2f* vel, float health, float damage, std::vector<sf::Keyboard::Key> keys, size_t team):
@@ -12,6 +12,15 @@ mKeys(keys){
 }
 
 void Player::handleInput(sf::Time dt) {
+
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num1))
+		mProjectileType = ProjectileType::Basic;
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num2))
+		mProjectileType = ProjectileType::Missile;
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num3))
+		mProjectileType = ProjectileType::LaserBall;
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num6))
+		mHitCooldown = 0.1f;
 
 	if (sf::Keyboard::isKeyPressed(mKeys[(int)Command::SHOOT]))
 		shoot();
