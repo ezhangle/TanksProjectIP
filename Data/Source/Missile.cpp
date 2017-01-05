@@ -67,3 +67,8 @@ void Missile::rotateMissile(float deltaAsSeconds)
 	mSprite->rotate(deltaAsSeconds * (200.f + mAcceleration));
 }
 
+void Missile::spawnOnHitAnimation()
+{
+	Game::get()->mMap->mEffects.insert(Game::get()->mMap->mEffects.begin(), new Animation(new sf::Vector2f(mSprite->getPosition()), Texture::expl_06_0000, Texture::expl_06_0031, 20, false));
+}
+

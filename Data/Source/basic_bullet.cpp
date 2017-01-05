@@ -17,3 +17,8 @@ Projectile(new sf::Sprite(Game::get()->mTextures.get(Texture::bullet_orange)), p
 
 	
 }
+
+void BasicBullet::spawnOnHitAnimation()
+{
+	Game::get()->mMap->mEffects.insert(Game::get()->mMap->mEffects.begin(), new Animation(new sf::Vector2f(mSprite->getPosition()), Texture::expl_01_0000, Texture::expl_01_0023, 20, false));
+}

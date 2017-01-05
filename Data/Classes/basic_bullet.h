@@ -7,4 +7,5 @@ class BasicBullet : public Projectile {
 
 public:
 	BasicBullet(Tank* parent);
+	virtual void spawnOnHitAnimation();
 };

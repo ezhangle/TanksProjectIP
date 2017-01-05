@@ -13,10 +13,13 @@ public:
 	virtual void update(sf::Time dt);
 	bool		 outOfBounds();
 	bool		 checkCollision();
+	virtual void spawnOnHitAnimation() = 0;
+	void		 setHollow();
 public:
 	Tank*			mParent;
 	sf::Vector2f*	mVelocity;
 	float			mDamage;
 	Collision		SAT;
 	
+	bool			mHollow;
 };

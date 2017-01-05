@@ -10,6 +10,7 @@
 #include "AI_Hard.h"
 #include "PU_AttackSpeed.h"
 #include "PU_Speed.h"
+#include "PU_HollowProj.h"
 
 #include <fstream>
 #include <vector>
@@ -114,7 +115,7 @@ void Map::insertObject(std::string& obj, std::ifstream& stream) {
 void Map::update(sf::Time dt) {
 
 	if (mEntities[1].size() < 3) {
-		if (mPowerUpRespawnClock.getElapsedTime().asSeconds() > 5.f) {
+		if (mPowerUpRespawnClock.getElapsedTime().asSeconds() > 0.f) {
 			sf::Vector2f* position = new sf::Vector2f;
 
 			do {
@@ -331,15 +332,17 @@ void Map::insertAI(const std::string& difficulty, const std::string& tankType, s
 
 void Map::insertRandomPowerUp(sf::Vector2f* position)
 {
-	int randomIndex = rand() % 2;
+	int randomIndex = rand() % 3;
 
 	switch (randomIndex) {
 	case 0:
-		mEntities[1].insert(mEntities[1].begin(), new PU_Speed(position, new sf::Sprite(Game::get()->mTextures.get(Texture::pu_speed))));
+		mEntities[1].insert(mEntities[1].begin(), new PU_Speed(position));
 		break;
 	case 1:
-		mEntities[1].insert(mEntities[1].begin(), new PU_AttackSpeed(position, new sf::Sprite(Game::get()->mTextures.get(Texture::pu_fast_attacks))));
+		mEntities[1].insert(mEntities[1].begin(), new PU_AttackSpeed(position));
 		break;
+	case 2:
+		mEntities[1].insert(mEntities[1].begin(), new PU_HollowProj(position));
 	default:
 		break;
 	}

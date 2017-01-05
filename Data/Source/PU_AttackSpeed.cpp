@@ -1,7 +1,9 @@
 #include "PU_AttackSpeed.h"
+#include "Game.h"
+#include "Enums.h"
 
-PU_AttackSpeed::PU_AttackSpeed(sf::Vector2f* position, sf::Sprite* sprite) :
-	PowerUp(position, sprite),
+PU_AttackSpeed::PU_AttackSpeed(sf::Vector2f* position) :
+	PowerUp(position, new sf::Sprite(Game::get()->mTextures.get(Texture::pu_fast_attacks))),
 	mAttackSpeedMultiplier(5.f){
 
 }

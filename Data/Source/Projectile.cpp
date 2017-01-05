@@ -10,7 +10,8 @@ Projectile::Projectile(sf::Sprite* sprite, Tank* parent):
 Entity(sprite),
 mVelocity(parent->mProjectileSpeed),
 mDamage(parent->mDamage),
-mParent(parent){
+mParent(parent),
+mHollow(false){
 
 	mSprite->setRotation(mParent->mTop->getRotation());
 }
@@ -50,11 +51,13 @@ bool Projectile::checkCollision() {
 				if (SAT.collision(mSprite, (*it2)->getCollisionSprite())) {
 
 					if (Tank* proj = dynamic_cast<Tank*>((*it2))) {
+
 						if (mParent->mTeam != proj->mTeam) {
 							collideSolid = true;
 							proj->mHealth -= mDamage;
 							if (proj->mHealth <= 0.f) {
 					
+								//assign new target to AI's
 								for (auto itAi = Game::get()->mMap->mEntities[2].begin(); itAi != Game::get()->mMap->mEntities[2].end(); ++itAi) {
 									if (AI* ai = dynamic_cast<AI*>((*itAi))) {
 										if (ai->mTarget == proj) {
@@ -68,7 +71,8 @@ bool Projectile::checkCollision() {
 					}
 
 					if (Obstacle* obs = dynamic_cast<Obstacle*>((*it2))) {
-						collideSolid = true;
+						if(!mHollow)
+							collideSolid = true;
 					}
 					
 				}
@@ -76,11 +80,17 @@ bool Projectile::checkCollision() {
 		}
 	}
 
-	if(collideSolid == true)
-		Game::get()->mMap->mEffects.insert(Game::get()->mMap->mEffects.begin(), new Animation(new sf::Vector2f(mSprite->getPosition()), Texture::expl_01_0000, Texture::expl_01_0023, 20, false));
+	if (collideSolid == true)
+		spawnOnHitAnimation();
 
 	return collideSolid;
 
+}
+
+void Projectile::setHollow()
+{
+	mHollow = true;
+	mSprite->setColor(sf::Color(255, 255, 255, 128));
 }
 
 

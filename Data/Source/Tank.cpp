@@ -16,6 +16,8 @@ mHealth(health),
 mMaxHealth(health),
 mDamage(damage),
 mTeam(team),
+mIsProjectileHollow(false),
+mProjectileType(ProjectileType::Basic),
 mProjectileSpeed(new sf::Vector2f(500.f, 500.f))
 {
 	sf::Vector2f topPos = top->getPosition();
@@ -135,8 +137,17 @@ bool Tank::MoveX(float inc) {
 
 void Tank::shoot() {
 	if (mHitCooldownClock.getElapsedTime().asSeconds() > mHitCooldown) {
-		Map* m = Game::get()->mMap;
-		m->mEntities[2].insert(m->mEntities[2].end(), new BasicBullet(this));
+		Projectile* projectile = nullptr;
+		Map* map = Game::get()->mMap;
+		
+		if (mProjectileType == ProjectileType::Basic)
+			projectile = new BasicBullet(this);
+		if (mProjectileType == ProjectileType::Missile)
+			projectile = new Missile(this);
+
+		if(mIsProjectileHollow)
+			projectile->setHollow();
+		map->mEntities[2].insert(map->mEntities[2].end(), projectile);
 
 		mHitCooldownClock.restart();
 	}

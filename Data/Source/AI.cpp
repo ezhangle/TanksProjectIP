@@ -198,6 +198,9 @@ void AI::findNewTarget() {
 
 bool AI::isProjectilePathClear() {
 
+	if (mIsProjectileHollow)
+		return true;
+
 	float xRot = sin(mTop->getRotation()*3.14f / 180.f);
 	float yRot = -cos(mTop->getRotation()*3.14f / 180.f);
 	float increment = 10.f;

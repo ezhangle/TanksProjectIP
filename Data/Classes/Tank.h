@@ -17,6 +17,10 @@ public:
 
 		NUMBER,
 	};
+	enum class ProjectileType {
+		Basic,
+		Missile
+	};
 public:
 							Tank(sf::Sprite* base, sf::Sprite* top, sf::Vector2f* pos, sf::Vector2f* vel, float health, float damage, size_t team);
 							~Tank();
@@ -58,5 +62,8 @@ public:
 	const float				mMaxHealth;
 	float					mHealth;
 	float					mDamage;
+
+	bool					mIsProjectileHollow;
+	ProjectileType			mProjectileType;
 
 };
