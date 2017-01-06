@@ -29,6 +29,13 @@ void Animation::update(sf::Time dt) {
 		if (mFrameClock < 0) {
 			mFrameClock = mFrameDuration;
 			mCurrentFrame++;
+
+			if (mCurrentFrame == mNumberOfFrames - 1) {
+				if (bRepeated == true)
+					mCurrentFrame = 0;
+				else
+					bFinished = true;
+			}
 		}
 	}
 }
@@ -37,13 +44,6 @@ void Animation::draw(sf::RenderWindow* window) {
 
 	if (bFinished == false) {
 		window->draw(*mSprites[mCurrentFrame]);
-
-		if (mCurrentFrame == mNumberOfFrames - 1) {
-			if (bRepeated == true)
-				mCurrentFrame = 0;
-			else
-				bFinished = true;
-		}
 	}
 	
 }

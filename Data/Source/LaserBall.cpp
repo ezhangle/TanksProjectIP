@@ -3,8 +3,8 @@
 #include "VectorUtility.h"
 
 LaserBall::LaserBall(Tank* parent):
-	Projectile(new sf::Sprite(Game::get()->mTextures.get(Texture::bullet_orange_0000)), parent),
-	mLaserRange(180.f)
+	Projectile(new sf::Sprite(Game::get()->mTextures.get(Texture::bullet_laser_ball)), parent),
+	mLaserRange(100.f)
 {
 	mSprite->setRotation(parent->mTop->getRotation());
 	mSprite->setOrigin(mSprite->getLocalBounds().width / 2.f, mSprite->getLocalBounds().height / 2.f);
@@ -13,7 +13,6 @@ LaserBall::LaserBall(Tank* parent):
 		-cos(parent->mTop->getRotation()*3.14f / 180.f)*parent->mTop->getLocalBounds().height / 2.f + parent->mTop->getPosition().y);
 
 	mSprite->setPosition(pos);
-	mSprite->scale(sf::Vector2f(1.2f, 1.2f));
 }
 
 void LaserBall::update(sf::Time dt)
@@ -34,11 +33,21 @@ void LaserBall::update(sf::Time dt)
 		if (Tank* enemy = dynamic_cast<Tank*>(*it1)) {
 			if (enemy->mTeam != mParent->mTeam) {
 				float distance = Vector2f::distance(mSprite->getPosition(), enemy->mBase->getPosition());
-				if ( distance < mLaserRange) {
+				if (distance < mLaserRange) {
 					laser[1].position = enemy->mBase->getPosition();
 					mLasers.insert(mLasers.begin(), laser);
 
 					enemy->mHealth -= (mDamage / 2.f) * dt.asSeconds();
+
+					sf::Vector2f ballScale(mSprite->getScale());
+
+					if (ballScale.x < 2.f) {
+						ballScale.x += 0.01f;
+						ballScale.y += 0.01f;
+
+						mLaserRange += 1.f;
+						mSprite->setScale(ballScale);
+					}			
 				}	
 			}
 		}

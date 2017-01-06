@@ -54,10 +54,13 @@ void PowerUp::onDurationEnd()
 	mIsActive = false;
 	mDelete = true;
 
-	auto it = mTarget->mPowerUpList.begin();
+	if (mTarget != nullptr) {
+		auto it = mTarget->mPowerUpList.begin();
 
-	for (; it != mTarget->mPowerUpList.end(); ++it) {
-		if ((*it) == this)
-			mTarget->mPowerUpList.erase(it);
+		for (; it != mTarget->mPowerUpList.end(); ++it) {
+			if ((*it) == this)
+				mTarget->mPowerUpList.erase(it);
+		}
 	}
+	
 }

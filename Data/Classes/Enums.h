@@ -7,7 +7,7 @@ enum class Texture {
 	//start_pu
 	pu_damage,
 	pu_fast_attacks,
-	pu_health,
+	pu_ally,
 	pu_missile,
 	pu_repair,
 	pu_speed,
@@ -219,11 +219,7 @@ enum class Texture {
 	expl_10_0031,
 
 	bullet_orange,
-	bullet_orange_0000,
-	bullet_orange_0001,
-	bullet_orange_0002,
-	bullet_orange_0003,
-	bullet_orange_0004,
+	bullet_laser_ball,
 	missile,
 
 	hp_base,

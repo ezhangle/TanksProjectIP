@@ -8,9 +8,12 @@
 #include "AI_Easy.h"
 #include "AI_Medium.h"
 #include "AI_Hard.h"
+
 #include "PU_AttackSpeed.h"
 #include "PU_Speed.h"
 #include "PU_HollowProj.h"
+#include "PU_Repair.h"
+#include "PU_Ally.h"
 
 #include <fstream>
 #include <vector>
@@ -114,6 +117,7 @@ void Map::insertObject(std::string& obj, std::ifstream& stream) {
 
 void Map::update(sf::Time dt) {
 
+		
 	if (mEntities[1].size() < 3) {
 		if (mPowerUpRespawnClock.getElapsedTime().asSeconds() > 1.f) {
 			sf::Vector2f* position = new sf::Vector2f;
@@ -332,7 +336,7 @@ void Map::insertAI(const std::string& difficulty, const std::string& tankType, s
 
 void Map::insertRandomPowerUp(sf::Vector2f* position)
 {
-	int randomIndex = rand() % 3;
+	int randomIndex = 4;
 
 	switch (randomIndex) {
 	case 0:
@@ -343,6 +347,10 @@ void Map::insertRandomPowerUp(sf::Vector2f* position)
 		break;
 	case 2:
 		mEntities[1].insert(mEntities[1].begin(), new PU_HollowProj(position));
+	case 3:
+		mEntities[1].insert(mEntities[1].begin(), new PU_Repair(position));
+	case 4:
+		mEntities[1].insert(mEntities[1].begin(), new PU_Ally(position));
 	default:
 		break;
 	}

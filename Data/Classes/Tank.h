@@ -20,7 +20,9 @@ public:
 	enum class ProjectileType {
 		Basic,
 		Missile,
-		LaserBall
+		LaserBall,
+
+		NUMBER
 	};
 public:
 							Tank(sf::Sprite* base, sf::Sprite* top, sf::Vector2f* pos, sf::Vector2f* vel, float health, float damage, size_t team);
