@@ -10,6 +10,7 @@ GameState_MainMenu::GameState_MainMenu()
 	mSelector.mNumberOfButtons = mButtons.size();
 	mSelector.mButtons = mButtons;
 	mSelector.mSelectedButton = &mButtons[0];
+	mSelector.mSelectedButton->getText().setFillColor(sf::Color::Red);
 };
 
 void GameState_MainMenu::buildGUI()
@@ -33,7 +34,7 @@ void GameState_MainMenu::update(const sf::Time deltaTime)
 void GameState_MainMenu::draw()
 {
 	game->mWindow.draw(game->mBackground);
-	game->mWindow.draw(mSelector.mSprite);
+	//game->mWindow.draw(mSelector.mSprite);
 	for each (TextButton button in mButtons)
 	{
 		game->mWindow.draw(button.getText());
@@ -44,6 +45,7 @@ void GameState_MainMenu::handleInput()
 {
 	handleEvents();
 	handleRealTimeInput();
+	
 }
 
 void GameState_MainMenu::handleEvents()
@@ -59,6 +61,27 @@ void GameState_MainMenu::handleEvents()
 				break;
 			}
 
+			case sf::Event::MouseButtonPressed:
+			{
+				switch (eventToBeHandled.mouseButton.button)
+				{
+					case sf::Mouse::Left:
+					{
+						if (mSelector.mSelectedButton->isSpriteSelected())
+						{
+							mSelector.mSelectedButton->triggerAction();
+							sf::Clock timer;
+							while (timer.getElapsedTime() < sf::seconds(0.15f))
+							{
+
+							}
+						}
+					}
+
+					default:break;
+				}
+
+			}
 
 			case sf::Event::KeyPressed:
 			{
@@ -78,13 +101,17 @@ void GameState_MainMenu::handleEvents()
 
 					case sf::Keyboard::Down:
 					{
+						mSelector.mSelectedButton->getText().setFillColor(sf::Color::White);
 						mSelector.move(Movement::down);
+						mSelector.mSelectedButton->getText().setFillColor(sf::Color::Red);
 						break;
 					}
 
 					case sf::Keyboard::Up:
 					{
+						mSelector.mSelectedButton->getText().setFillColor(sf::Color::White);
 						mSelector.move(Movement::up);
+						mSelector.mSelectedButton->getText().setFillColor(sf::Color::Red);
 						break;
 					}
 				}
@@ -98,28 +125,19 @@ void GameState_MainMenu::handleEvents()
 
 void GameState_MainMenu::handleRealTimeInput()
 {
-	for each (TextButton button in mButtons)
+	for (unsigned int i = 0; i < mButtons.size(); i++)
 	{
-		if (button.isSpriteClicked())
-		{
-			button.triggerAction();
-			sf::Clock wait;
-			sf::Time timer = sf::Time::Zero;
-			timer = sf::seconds(0.15f);
-			while (wait.getElapsedTime() < timer)
+		if (mButtons[i].isSpriteSelected())
+			if (mButtons[i].getText().getFillColor() == sf::Color::White)
 			{
-
+				mSelector.mSelectedButton->getText().setFillColor(sf::Color::White);
+				mButtons[i].getText().setFillColor(sf::Color::Red);
+				mSelector.mSelectedButton = &mButtons[i];
 			}
-			wait.restart();
-		}
 	}
 }
 
 void GameState_MainMenu::rePositionButtons(sf::Vector2u & currentSize, sf::Vector2u & newSize)
 {
-	for each (TextButton button in mButtons)
-	{
-		sf::Text text = button.getText();
-		text.move(0, currentSize.y - newSize.y);
-	}
+	
 }

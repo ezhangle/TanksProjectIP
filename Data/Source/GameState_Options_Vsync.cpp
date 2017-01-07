@@ -8,6 +8,7 @@ GameState_Options_Vsync::GameState_Options_Vsync()
 	mSelector.mNumberOfButtons = mButtons.size();
 	mSelector.mButtons = mButtons;
 	mSelector.mSelectedButton = &mButtons[0];
+	mSelector.mSelectedButton->getText().setFillColor(sf::Color::Red);
 }
 
 GameState_Options_Vsync::~GameState_Options_Vsync()
@@ -34,7 +35,7 @@ void GameState_Options_Vsync::update(sf::Time deltaTime)
 void GameState_Options_Vsync::draw()
 {
 	game->mWindow.draw(game->mBackground);
-	game->mWindow.draw(mSelector.mSprite);
+	//game->mWindow.draw(mSelector.mSprite);
 	for each (VSyncButton button in mButtons)
 	{
 		game->mWindow.draw(button.getText());
@@ -55,56 +56,79 @@ void GameState_Options_Vsync::handleEvents()
 	{
 		switch (eventToBeHandled.type)
 		{
-		case sf::Event::Closed:
-		{
-			game->mWindow.close();
-			break;
-		}
-
-
-		case sf::Event::KeyPressed:
-		{
-			switch (eventToBeHandled.key.code)
+			case sf::Event::Closed:
 			{
-			case sf::Keyboard::Return:
-			{
-				mSelector.mSelectedButton->triggerAction();
+				game->mWindow.close();
 				break;
 			}
 
-			case sf::Keyboard::Down:
+			case sf::Event::MouseButtonPressed:
 			{
-				mSelector.move(Movement::down);
-				break;
+				switch (eventToBeHandled.mouseButton.button)
+				{
+					case sf::Mouse::Left:
+					{
+						if (mSelector.mSelectedButton->isSpriteSelected())
+						{
+							mSelector.mSelectedButton->triggerAction();
+							sf::Clock timer;
+							while (timer.getElapsedTime() < sf::seconds(0.15f))
+							{
+
+							}
+						}
+
+						break;
+					}
+
+				default:break;
+				}
+
 			}
 
-			case sf::Keyboard::Up:
+
+			case sf::Event::KeyPressed:
 			{
-				mSelector.move(Movement::up);
-				break;
+				switch (eventToBeHandled.key.code)
+				{
+					case sf::Keyboard::Return:
+					{
+						mSelector.mSelectedButton->triggerAction();
+						break;
+					}
+
+					case sf::Keyboard::Down:
+					{
+						mSelector.mSelectedButton->getText().setFillColor(sf::Color::White);
+						mSelector.move(Movement::down);
+						mSelector.mSelectedButton->getText().setFillColor(sf::Color::Red);
+						break;
+					}
+
+					case sf::Keyboard::Up:
+					{
+						mSelector.mSelectedButton->getText().setFillColor(sf::Color::White);
+						mSelector.move(Movement::up);
+						mSelector.mSelectedButton->getText().setFillColor(sf::Color::Red);
+						break;
+					}
+				}
 			}
-			}
-		}
 		}
 	}
 }
 
 void GameState_Options_Vsync::handleRealTimeInput()
 {
-	for each (VSyncButton button in mButtons)
+	for (unsigned int i = 0; i < mButtons.size(); i++)
 	{
-		if (button.isSpriteClicked())
-		{
-			button.triggerAction();
-			sf::Clock wait;
-			sf::Time timer = sf::Time::Zero;
-			timer = sf::seconds(0.15f);
-			while (wait.getElapsedTime() < timer)
+		if (mButtons[i].getText().getFillColor() == sf::Color::White)
+			if (mButtons[i].isSpriteSelected())
 			{
-
+				mSelector.mSelectedButton->getText().setFillColor(sf::Color::White);
+				mButtons[i].getText().setFillColor(sf::Color::Red);
+				mSelector.mSelectedButton = &mButtons[i];
 			}
-			wait.restart();
-		}
 	}
 }
 

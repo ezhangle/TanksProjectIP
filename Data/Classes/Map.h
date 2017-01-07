@@ -17,8 +17,8 @@ class Map {
 		NUMBER
 	};
 public:
-												Map(std::string& path);
-	void										loadFromFile(std::string& path);
+												Map(std::string& objectsPath, std::string& charactersPath);
+	void										loadFromFile(std::string& objectsPath, std::string& charactersPath);
 	void										update(sf::Time dt);
 	void										draw(sf::RenderWindow* window);
 	void										insertObject(std::string& obj, std::ifstream& stream);
@@ -33,7 +33,7 @@ public:
 	sf::Sprite									mBackground;
 	sf::Clock									mPowerUpRespawnClock;
 
-private:
+public:
 	void										initObstacleMap();
 	void										insertPlayerOne(const std::string& tankType, sf::Vector2f* position, sf::Vector2f* velocity, float health, float damage, size_t team);
 	void										insertPlayerTwo(const std::string& tankType, sf::Vector2f* position, sf::Vector2f* velocity, float health, float damage, size_t team);

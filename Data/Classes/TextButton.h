@@ -42,6 +42,8 @@ public:
 	void											update(sf::Time deltaTime);
 	void											triggerAction();
 	bool											isSpriteClicked();
+	bool											isSpriteSelected();
+	sf::Text&										getTextAdress();
 
 private:
 	sf::Text										mText;

@@ -8,6 +8,7 @@ GameState_Options_Fullscreen::GameState_Options_Fullscreen()
 	mSelector.mNumberOfButtons = mButtons.size();
 	mSelector.mButtons = mButtons;
 	mSelector.mSelectedButton = &mButtons[0];
+	mSelector.mSelectedButton->getText().setFillColor(sf::Color::Red);
 };
 
 GameState_Options_Fullscreen::~GameState_Options_Fullscreen()
@@ -35,7 +36,7 @@ void GameState_Options_Fullscreen::update(sf::Time deltaTime)
 void GameState_Options_Fullscreen::draw()
 {
 	game->mWindow.draw(game->mBackground);
-	game->mWindow.draw(mSelector.mSprite);
+	//game->mWindow.draw(mSelector.mSprite);
 	for each (TextButton button in mButtons)
 	{
 		game->mWindow.draw(button.getText());
@@ -55,6 +56,31 @@ void GameState_Options_Fullscreen::handleEvents()
 	{
 		switch (eventToBeHandled.type)
 		{
+
+			case sf::Event::MouseButtonPressed:
+			{
+				switch (eventToBeHandled.mouseButton.button)
+				{
+				case sf::Mouse::Left:
+				{
+					if (mSelector.mSelectedButton->isSpriteSelected())
+					{
+						mSelector.mSelectedButton->triggerAction();
+						sf::Clock timer;
+						while (timer.getElapsedTime() < sf::seconds(0.15f))
+						{
+
+						}
+					}
+
+					break;
+				}
+
+				default:break;
+				}
+
+			}
+
 			case sf::Event::KeyPressed:
 			{
 				switch (eventToBeHandled.key.code)
@@ -68,13 +94,17 @@ void GameState_Options_Fullscreen::handleEvents()
 
 					case sf::Keyboard::Down:
 					{
+						mSelector.mSelectedButton->getText().setFillColor(sf::Color::White);
 						mSelector.move(Movement::down);
+						mSelector.mSelectedButton->getText().setFillColor(sf::Color::Red);
 						break;
 					}
 
 					case sf::Keyboard::Up:
 					{
+						mSelector.mSelectedButton->getText().setFillColor(sf::Color::White);
 						mSelector.move(Movement::up);
+						mSelector.mSelectedButton->getText().setFillColor(sf::Color::Red);
 						break;
 					}
 
@@ -92,20 +122,15 @@ void GameState_Options_Fullscreen::handleEvents()
 
 void GameState_Options_Fullscreen::handleRealTimeInput()
 {
-	for each (FullscreenButton button in mButtons)
+	for(unsigned int i = 0; i < mButtons.size(); i++)
 	{
-		if (button.isSpriteClicked())
-		{
-			button.triggerAction();
-			sf::Clock wait;
-			sf::Time timer = sf::Time::Zero;
-			timer = sf::seconds(0.15f);
-			while (wait.getElapsedTime() < timer)
+		if (mButtons[i].getText().getFillColor() == sf::Color::White)
+			if (mButtons[i].isSpriteSelected())
 			{
-
+				mSelector.mSelectedButton->getText().setFillColor(sf::Color::White);
+				mButtons[i].getText().setFillColor(sf::Color::Red);
+				mSelector.mSelectedButton = &mButtons[i];
 			}
-			wait.restart();
-		}
 	}
 }
 

@@ -4,6 +4,8 @@
 #include "FullscreenButton.h"
 #include "ResolutionButton.h"
 #include "VSyncButton.h"
+#include "AddButton.h"
+#include "Team_Record.h"
 
 
 template <typename buttonType>
@@ -62,6 +64,27 @@ Selector<FullscreenButton>::Selector(sf::Texture &texture, sf::Vector2f startLoc
 	mNumberOfButtons = vector.size();
 }
 
+Selector<AddButton>::Selector(sf::Texture &texture, sf::Vector2f startLocation, float moveDistance, std::vector<AddButton> &vector)
+	: mSprite(texture)
+	, mIndex(0)
+	, mSelectedButton(&vector[0])
+	, mMoveDistance(moveDistance)
+	, mButtons(vector)
+{
+	mSprite.setPosition(startLocation);
+	mNumberOfButtons = vector.size();
+}
+
+Selector<teamRecord>::Selector(sf::Texture &texture, sf::Vector2f startLocation, float moveDistance, std::vector<teamRecord> &vector)
+	: mSprite(texture)
+	, mIndex(0)
+	, mSelectedButton(&vector[0])
+	, mMoveDistance(moveDistance)
+	, mButtons(vector)
+{
+	mSprite.setPosition(startLocation);
+	mNumberOfButtons = vector.size();
+}
 
 
 template <typename buttonType>

@@ -16,21 +16,22 @@
 #include <cstdlib>
 #include <iostream>
 
-Map::Map(std::string& path):
+Map::Map(std::string& objectsPath, std::string& charactersPath):
 mTileLength(64.f){
 	mEntities.resize(NUMBER);
 	mWidth = Game::get()->mWidth / mTileLength;
 	mHeight = Game::get()->mHeight / mTileLength;
 	mPowerUpRespawnClock.restart();
 
-	loadFromFile(path);
+	loadFromFile(objectsPath, charactersPath);
 }
 
-void Map::loadFromFile(std::string& path) {
-	std::ifstream in(path);
+void Map::loadFromFile(std::string& objectsPath, std::string& charactersPath) {
+	std::ifstream objectsIN(objectsPath);
+	std::ifstream charactersIN(charactersPath);
 
 	int bground;
-	in >> bground;
+	objectsIN >> bground;
 
 	mBackground.setTexture(Game::get()->mTextures.get((Texture)bground));
 	sf::Vector2f scale;
@@ -42,13 +43,26 @@ void Map::loadFromFile(std::string& path) {
 	std::string obj;
 	size_t		noObjects;
 
-	in >> noObjects;
+	objectsIN >> noObjects;
 
 	for (size_t i = 0; i < noObjects; ++i) {
-		in >> obj;
-		insertObject(obj, in);
+		objectsIN >> obj;
+		insertObject(obj, objectsIN);
 	}
-	in.close();
+
+	std::string			characterType;
+	size_t				nrCharaters;
+
+	charactersIN >> nrCharaters;
+
+	for (size_t i = 0; i < nrCharaters; i++)
+	{
+		charactersIN >> characterType;
+		insertObject(characterType, charactersIN);
+	}
+
+	objectsIN.close();
+	charactersIN.close();
 
 	initObstacleMap();
 }
@@ -58,6 +72,7 @@ void Map::insertObject(std::string& obj, std::ifstream& stream) {
 	sf::Vector2f*		position, *velocity;
 	std::string			tankType;
 	float				health, damage;
+
 
 	if (obj == "player1") {
 		

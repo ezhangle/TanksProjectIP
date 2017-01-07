@@ -8,10 +8,10 @@ Game *Game::instance = nullptr;
 Game::Game(unsigned int w, unsigned int h, bool Vsync)
 	: mWidth(w),
 	mHeight(h),
-	mWindow(sf::VideoMode(1600, 832), "Thunder Tanks", sf::Style::Titlebar)
+	mWindow(sf::VideoMode(1600, 832), "Thunder Tanks", sf::Style::None)
 {
 	mWindow.setVerticalSyncEnabled(Vsync);
-	
+	mWindow.setKeyRepeatEnabled(false);
 	
 	instance = this;
 	loadTextures();
@@ -23,9 +23,11 @@ Game::Game(unsigned int w, unsigned int h, bool Vsync)
 	mWindow.setView(mView);
 	mBackground.setScale(mWindow.getSize().x / 1920.0f, mWindow.getSize().y / 1080.0f);
 
+
 	changeState(new GameState_MainMenu());
-	std::string path("Assets/Maps/map1.tmap");
-	mMap = new Map(path);
+	/*std::string mapObjectsPath("Assets/Maps/map1_Objects.tmap");
+	std::string mapCharactersPath("Assets/Maps/map1_Characters.tmap");
+	mMap = new Map(mapObjectsPath, mapCharactersPath);*/
 	
 	mClock.restart();
 }
@@ -49,8 +51,9 @@ Game::Game(unsigned int w, unsigned int h, bool vSync, bool fullscreen)
 	mBackground.setScale(mWindow.getSize().x / 1920.0f, mWindow.getSize().y / 1080.0f);
 
 	changeState(new GameState_MainMenu());
-	std::string path("Assets/Maps/map1.tmap");
-	mMap = new Map(path);
+	/*std::string mapObjectsPath("Assets/Maps/map1_Objects.tmap");
+	std::string mapCharactersPath("Assets/Maps/map1_Characters.tmap");
+	mMap = new Map(mapObjectsPath, mapCharactersPath);*/
 
 	mClock.restart();
 }
@@ -96,9 +99,10 @@ void Game::render()
 	GameState *currentState = getActiveState();
 	if (currentState != nullptr)
 	{
-		mWindow.clear(sf::Color::Blue);
+		mWindow.clear();
 		currentState->draw();
 	}
+
 	mWindow.display();
 }
 
@@ -120,32 +124,6 @@ void Game::processEvents()
 			{
 				switch (eventToBeHandled.key.code)
 				{
-					case sf::Keyboard::PageDown:
-					{
-						sf::Vector2u currentSize(mWindow.getSize());
-						sf::Vector2u newSize(mWindow.getSize());
-
-						newSize.x += (int)mWidth / 100;
-						newSize.y += (int)mHeight / 100;
-
-						getActiveState()->rePositionButtons(currentSize, newSize);
-
-						break;
-					}
-
-					case sf::Keyboard::PageUp:
-					{
-						sf::Vector2u currentSize(mWindow.getSize());
-						sf::Vector2u newSize(mWindow.getSize());
-
-						newSize.x -= (int)mWidth / 100;
-						newSize.y -= (int)mHeight / 100;
-
-						getActiveState()->rePositionButtons(currentSize, newSize);
-
-						break;
-					}
-
 					default:break;
 				}
 

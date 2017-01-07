@@ -133,7 +133,7 @@ sf::Text& TextButton::getText()
 
 bool TextButton::isSpriteClicked()
 {
-	sf::FloatRect buttonSpriteRect(mText.getPosition().x, mText.getPosition().y, mText.getGlobalBounds().width, mText.getGlobalBounds().height);
+	sf::FloatRect buttonSpriteRect(mText.getGlobalBounds());
 
 	if (buttonSpriteRect.contains(sf::Mouse::getPosition(game->mWindow).x, sf::Mouse::getPosition(game->mWindow).y))
 	{
@@ -144,4 +144,19 @@ bool TextButton::isSpriteClicked()
 	}
 
 	return 0;
+}
+
+bool TextButton::isSpriteSelected()
+{
+	sf::FloatRect buttonSpriteRect(mText.getGlobalBounds());
+
+	if (buttonSpriteRect.contains(sf::Mouse::getPosition(game->mWindow).x, sf::Mouse::getPosition(game->mWindow).y))
+		return 1;
+
+	return 0;
+}
+
+sf::Text& TextButton::getTextAdress()
+{
+	return *&mText;
 }

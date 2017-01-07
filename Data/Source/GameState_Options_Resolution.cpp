@@ -66,6 +66,29 @@ void GameState_Options_Resolution::handleEvents()
 				break;
 			}
 
+			case sf::Event::MouseButtonPressed:
+			{
+				switch (eventToBeHandled.mouseButton.button)
+				{
+					case sf::Mouse::Left:
+					{
+						if (mSelector.mSelectedButton->isSpriteSelected())
+						{
+							mSelector.mSelectedButton->triggerAction();
+							sf::Clock timer;
+							while (timer.getElapsedTime() < sf::seconds(0.15f))
+							{
+
+							}
+						}
+
+						break;
+					}
+
+					default:break;
+				}
+
+			}
 
 			case sf::Event::KeyPressed:
 			{
@@ -100,20 +123,15 @@ void GameState_Options_Resolution::handleEvents()
 
 void GameState_Options_Resolution::handleRealTimeInput()
 {
-	for each (ResolutionButton button in mButtons)
+	for (unsigned int i = 0; i < mButtons.size(); i++)
 	{
-		if (button.isSpriteClicked())
-		{
-			button.triggerAction();
-			sf::Clock wait;
-			sf::Time timer = sf::Time::Zero;
-			timer = sf::seconds(0.15f);
-			while (wait.getElapsedTime() < timer)
+		if (mButtons[i].getText().getFillColor() == sf::Color::White)
+			if (mButtons[i].isSpriteSelected())
 			{
-
+				mSelector.mSelectedButton->getText().setFillColor(sf::Color::White);
+				mButtons[i].getText().setFillColor(sf::Color::Red);
+				mSelector.mSelectedButton = &mButtons[i];
 			}
-			wait.restart();
-		}
 	}
 }
 
