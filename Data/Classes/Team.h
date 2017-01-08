@@ -1,7 +1,7 @@
 #pragma once
 
 #include <vector>
-
+#include <list>
 
 #include "Selector.h"
 #include "Team_Record.h"
@@ -10,6 +10,7 @@ class team
 {
 public:
 	size_t										teamNumber;
+	size_t										numberOfMembers;
 	std::vector<AddButton>						mAddButtons;
 	std::vector<teamRecord>						mTeamMembers;
 
@@ -31,6 +32,7 @@ inline team::team(sf::Vector2f borderPosition, sf::Vector2f removeButtonsPositio
 {
 	mText.setPosition(textPosition);
 	mBorder.setPosition(borderPosition);
+	numberOfMembers = 0;
 
 	//buildGUI
 	AddButton addPlayer1(mBorder.getPosition() + sf::Vector2f(-130.0f, 0.0f), "Player 1", 20, AddButton::Action::addPlayer1);

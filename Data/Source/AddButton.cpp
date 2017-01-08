@@ -60,31 +60,36 @@ void AddButton::triggerAction(team& team)
 	{
 		case Action::addPlayer1:
 		{
-			insertPlayerOne("tank1", sf::Vector2f(100.0f, 100.0f), sf::Vector2f(10.0f, 10.0f), 100.0f, 100.0f, team, team.mAddPosition);
+			if (team.numberOfMembers < 18)
+				insertPlayerOne("tank1", sf::Vector2f(100.0f, 100.0f), sf::Vector2f(10.0f, 10.0f), 100.0f, 100.0f, team, team.mAddPosition);
 			break;
 		}
 
 		case Action::addPlayer2:
 		{
-			insertPlayerTwo("tank1", sf::Vector2f(100.0f, 100.0f), sf::Vector2f(10.0f, 10.0f), 100.0f, 100.0f, team, team.mAddPosition);
+			if (team.numberOfMembers < 18)
+				insertPlayerTwo("tank1", sf::Vector2f(100.0f, 100.0f), sf::Vector2f(10.0f, 10.0f), 100.0f, 100.0f, team, team.mAddPosition);
 			break;
 		}
 
 		case Action::addAI_easy:
 		{
-			insertAI("easy", "tank2", sf::Vector2f(100.0f, 100.0f), sf::Vector2f(10.0f, 10.0f), 100.0f, 100.0f, team, team.mAddPosition);
+			if (team.numberOfMembers < 18)
+				insertAI("easy", "tank2", sf::Vector2f(100.0f, 100.0f), sf::Vector2f(10.0f, 10.0f), 100.0f, 100.0f, team, team.mAddPosition);
 			break;
 		}
 
 		case Action::addAI_medium:
 		{
-			insertAI("medium", "tank2", sf::Vector2f(100.0f, 100.0f), sf::Vector2f(10.0f, 10.0f), 100.0f, 100.0f, team, team.mAddPosition);
+			if (team.numberOfMembers < 18)
+				insertAI("medium", "tank2", sf::Vector2f(100.0f, 100.0f), sf::Vector2f(10.0f, 10.0f), 100.0f, 100.0f, team, team.mAddPosition);
 			break;
 		}
 
 		case Action::addAI_hard:
 		{
-			insertAI("hard", "tank2", sf::Vector2f(100.0f, 100.0f), sf::Vector2f(10.0f, 10.0f), 100.0f, 100.0f, team, team.mAddPosition);
+			if(team.numberOfMembers < 18)
+				insertAI("hard", "tank2", sf::Vector2f(100.0f, 100.0f), sf::Vector2f(10.0f, 10.0f), 100.0f, 100.0f, team, team.mAddPosition);
 			break;
 		}
 
@@ -111,6 +116,7 @@ void AddButton::insertPlayerOne(const std::string& tankType, sf::Vector2f positi
 
 	Texture baseTexture, topTexture;
 	getTextureIDs(tankType, baseTexture, topTexture);
+	team.numberOfMembers++;
 
 	team.mTeamMembers.push_back(teamRecord(new Player(new sf::Sprite(Game::get()->mTextures.get(baseTexture)),
 		new sf::Sprite(Game::get()->mTextures.get(topTexture)),
@@ -149,6 +155,7 @@ void AddButton::insertPlayerTwo(const std::string& tankType, sf::Vector2f positi
 
 	Texture baseTexture, topTexture;
 	getTextureIDs(tankType, baseTexture, topTexture);
+	team.numberOfMembers++;
 
 	team.mTeamMembers.push_back(teamRecord(new Player(new sf::Sprite(Game::get()->mTextures.get(baseTexture)),
 		new sf::Sprite(Game::get()->mTextures.get(topTexture)),
@@ -174,6 +181,7 @@ void AddButton::insertAI(const std::string& difficulty, const std::string& tankT
 {
 	Texture baseTexture, topTexture;
 	getTextureIDs(tankType, baseTexture, topTexture);
+	team.numberOfMembers++;
 
 	if (difficulty == "easy") {
 		team.mTeamMembers.push_back(teamRecord(new AI_Easy(new sf::Sprite(Game::get()->mTextures.get(baseTexture)),

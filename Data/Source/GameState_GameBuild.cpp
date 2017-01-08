@@ -28,8 +28,7 @@ GameState_GameBuild::GameState_GameBuild()
 	player1_team = 0;
 	player2_team = 0;
 
-	//teamOne.mTeamMembers.push_back(teamRecord(nullptr, new RemoveButton(sf::Vector2f(0.0f, 0.0f), "", 0, RemoveButton::Action::none), aux, 0));
-	//teamTwo.mTeamMembers.push_back(teamRecord(nullptr, new RemoveButton(sf::Vector2f(0.0f, 0.0f), "", 0, RemoveButton::Action::none), aux, 0));
+	//teamOne.mTeamMembers.push_back(teamRecord(nullptr, new RemoveButton(sf::Vector2f(100.0f, 100.0f), "Clear", 20, RemoveButton::Action::clear), sf::Text("", Game::get()->mFonts.get(Font::VanillaExtractRegular), 20), 0));
 
 	teamOne.mTeamMembers_Selector.mSelectedButton = nullptr;
 	teamOne.mTeamMembers_Selector.mNumberOfButtons = teamOne.mTeamMembers.size();
@@ -200,7 +199,13 @@ void GameState_GameBuild::handleEvents()
 						if (teamOne.mTeamMembers_Selector.mSelectedButton != nullptr)
 						{
 							if(teamOne.mTeamMembers_Selector.mSelectedButton->mRemoveButton->isSpriteSelected())
-								teamOne.mTeamMembers_Selector.mSelectedButton->mRemoveButton->triggerAction(teamOne, teamOne.mTeamMembers_Selector.mSelectedButton->index);
+								teamOne.mTeamMembers_Selector.mSelectedButton->mRemoveButton->triggerAction(teamOne, teamOne.mTeamMembers_Selector.mSelectedButton->index, player1_team, player2_team);
+						}
+
+						if (teamTwo.mTeamMembers_Selector.mSelectedButton != nullptr)
+						{
+							if (teamTwo.mTeamMembers_Selector.mSelectedButton->mRemoveButton->isSpriteSelected())
+								teamTwo.mTeamMembers_Selector.mSelectedButton->mRemoveButton->triggerAction(teamTwo, teamTwo.mTeamMembers_Selector.mSelectedButton->index, player1_team, player2_team);
 						}
 
 
@@ -217,13 +222,7 @@ void GameState_GameBuild::handleEvents()
 								
 
 
-						sf::Clock timer;
-						while (timer.getElapsedTime() < sf::seconds(0.15f))
-						{
-
-						}
-
-						break;
+						
 					}
 
 
