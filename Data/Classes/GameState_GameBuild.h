@@ -12,12 +12,15 @@
 
 class GameState_GameBuild
 	: public GameState
+	, private sf::NonCopyable
 {
+	static GameState_GameBuild						*instance;
+
 public:
 
 
 public:
-													GameState_GameBuild();
+	GameState_GameBuild();
 	void											buildGUI();
 	void											update(sf::Time deltaTime);
 	void											draw();
@@ -25,7 +28,8 @@ public:
 	void											handleEvents();
 	void											handleRealTimeInput();
 	void											rePositionButtons(sf::Vector2u &currentPosition, sf::Vector2u &newPosition);
-
+	std::string&									getSelectedMapPath();
+	std::vector<Entity*>*							getEntities();
 
 private:
 	Game*											game;
@@ -47,7 +51,7 @@ private:
 
 	size_t											player1_team;
 	size_t											player2_team;
-		
+
 
 	team											teamOne;
 	team											teamTwo;
@@ -56,5 +60,14 @@ private:
 private:
 
 
+public:
+	static GameState_GameBuild* get()
+	{
+		if (instance == nullptr)
+		{
+			instance = new GameState_GameBuild();
+		}
 
+		return instance;
+	}
 };

@@ -17,8 +17,8 @@ class Map {
 		NUMBER
 	};
 public:
-												Map(std::string& objectsPath, std::string& charactersPath);
-	void										loadFromFile(std::string& objectsPath, std::string& charactersPath);
+												Map(std::string& objectsPath, std::vector<Entity*>& entities);
+	void										loadFromFile(std::string& objectsPath);
 	void										update(sf::Time dt);
 	void										draw(sf::RenderWindow* window);
 	void										insertObject(std::string& obj, std::ifstream& stream);

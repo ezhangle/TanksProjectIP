@@ -19,6 +19,10 @@ public:
 		buildOptions_Resolution,
 		buildOptions_Fullscreen,
 		buildOptions_VSync,
+		buildGamePlay_ChangeTanks,
+
+		//FINA-FUCKING-LLY
+		playGame,
 
 		//simple commands
 		back,

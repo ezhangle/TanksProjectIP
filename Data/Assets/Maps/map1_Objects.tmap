@@ -1,14 +1,9 @@
 0
 
-7
+5
 
 static_obstacle box 600 200
 static_obstacle box_2x2 600 510
 static_obstacle box_2x2 900 200
 static_obstacle box_2x1 250 350
 static_obstacle box_small 1200 400
-
-
-player1		tank2b 	500 200 	150 150 	20 	1 1
-
-player2		tank2b 	700 200 	150 150 	20 	1 0
