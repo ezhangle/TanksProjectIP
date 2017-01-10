@@ -7,6 +7,7 @@
 #include "Animation.h"
 
 #include <cmath>
+#include "GameState_Play.h"
 Tank::Tank(sf::Sprite* base, sf::Sprite* top, sf::Vector2f* pos, sf::Vector2f* vel, float health, float damage, size_t team):
 Entity(),
 mBase(base),
@@ -68,7 +69,7 @@ void Tank::update(sf::Time dt) {
 	}
 
 	if (mHealth <= 0) {
-		Game::get()->mMap->mEffects.insert(Game::get()->mMap->mEffects.begin(), new Animation(new sf::Vector2f(mBase->getPosition()), Texture::expl_10_0000, Texture::expl_10_0031, 50, false));
+		GameState_Play::getStatePointer()->mMap->mEffects.insert(GameState_Play::getStatePointer()->mMap->mEffects.begin(), new Animation(new sf::Vector2f(mBase->getPosition()), Texture::expl_10_0000, Texture::expl_10_0031, 50, false));
 		mDelete = true;
 	}
 	else {
@@ -135,7 +136,7 @@ bool Tank::MoveX(float inc) {
 
 void Tank::shoot() {
 	if (mHitCooldownClock.getElapsedTime().asSeconds() > mHitCooldown) {
-		Map* m = Game::get()->mMap;
+		Map* m = GameState_Play::getStatePointer()->mMap;
 		m->mEntities[2].insert(m->mEntities[2].end(), new Missile(this));
 
 		mHitCooldownClock.restart();
@@ -145,7 +146,7 @@ void Tank::shoot() {
 bool Tank::checkCollision() {
 	bool collideSolid;
 
-	Map* map = Game::get()->mMap;
+	Map* map = GameState_Play::getStatePointer()->mMap;
 
 	sf::Vector2f tempScale;
 	tempScale.x = tempScale.y = 0.5f;

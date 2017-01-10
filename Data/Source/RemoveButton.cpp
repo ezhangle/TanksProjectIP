@@ -21,21 +21,43 @@ void RemoveButton::triggerAction(team &team, unsigned int index, size_t& player1
 		case Action::remove:
 
 		{
-			//team.mTeamMembers.erase(std::remove(team.mTeamMembers.begin(), team.mTeamMembers.end(), team.mTeamMembers.at(index)), team.mTeamMembers.end());
+			if (team.numberOfMembers == 0)
+				return;
 
-			player1_team = 0;
-			player2_team = 0;
+			if (team.numberOfMembers == 1)
+			{
+				
+				if ((team.mTeamMembers.begin() + index)->mText.getString() == "Player 1" && player1_team != 0)
+					player1_team = 0;
 
-			for (unsigned int i = index; i < team.mTeamMembers.size(); i++)
+				else if ((team.mTeamMembers.begin() + index)->mText.getString() == "Player 2" && player2_team != 0)
+					player2_team = 0;
+
+				team.mTeamMembers.clear();
+				team.numberOfMembers = 0;
+				team.mAddPosition.y -= 30.0f;
+
+				return;
+			}
+
+
+			if ((team.mTeamMembers.begin() + index)->mText.getString() == "Player 1" && player1_team != 0)
+				player1_team = 0;
+
+			else if ((team.mTeamMembers.begin() + index)->mText.getString() == "Player 2" && player2_team != 0)
+				player2_team = 0;
+
+			team.mTeamMembers.erase(team.mTeamMembers.begin() + index);
+			team.numberOfMembers--;
+			for (unsigned int i = index; i < team.numberOfMembers; i++)
 			{
 				team.mTeamMembers[i].mRemoveButton->getText().move(0.0f, -30.0f);
 				team.mTeamMembers[i].mText.move(0.0f, -30.0f);
+				team.mTeamMembers[i].index--;
 			}
-
+			
+		
 			team.mAddPosition.y -= 30.0f;
-			team.mAddPosition.y = team.mBorder.getPosition().y + 5.0f;
-			team.numberOfMembers = 0;
-			team.mTeamMembers.clear();
 			break;
 		}
 
@@ -44,7 +66,6 @@ void RemoveButton::triggerAction(team &team, unsigned int index, size_t& player1
 			team.mTeamMembers.clear();
 			team.numberOfMembers = 0;
 			team.mAddPosition.y = team.mBorder.getPosition().y + 5.0f;
-			team.mTeamMembers.push_back(teamRecord(nullptr, new RemoveButton(sf::Vector2f(100.0f, 100.0f), "Clear", 20, RemoveButton::Action::clear), sf::Text("", Game::get()->mFonts.get(Font::VanillaExtractRegular), 20), 0));
 			break;
 		}
 

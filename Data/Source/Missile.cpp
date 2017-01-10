@@ -5,6 +5,8 @@
 #include <cmath>
 #include <iostream>
 
+#include "GameState_Play.h"
+
 Missile::Missile(Tank * parent)
 	:Projectile(new sf::Sprite(Game::get()->mTextures.get(Texture::missile)), parent),
 	mTarget(nullptr)
@@ -47,8 +49,8 @@ void Missile::update(sf::Time dt)
 
 void Missile::setTarget()
 {
-	auto it = Game::get()->mMap->mEntities[2].begin();
-	for (; it != Game::get()->mMap->mEntities[2].end(); ++it) {
+	auto it = GameState_Play::getStatePointer()->mMap->mEntities[2].begin();
+	for (; it != GameState_Play::getStatePointer()->mMap->mEntities[2].end(); ++it) {
 		if (Tank* enemy = dynamic_cast<Tank*>(*it)) {
 			if (enemy->mTeam != mParent->mTeam && enemy->mHealth > 0.f)
 				mTarget = enemy;

@@ -1,5 +1,7 @@
 #include "GameState_Play.h"
 
+GameState_Play *GameState_Play::instance = nullptr;
+
 GameState_Play::GameState_Play(std::string& mapObjectsPath, std::vector<Entity*>& entities)
 	: game(Game::get())
 	, mMapObjectsPath(mapObjectsPath)
@@ -8,7 +10,10 @@ GameState_Play::GameState_Play(std::string& mapObjectsPath, std::vector<Entity*>
 	{
 		mEntities.push_back(entity);
 	}
+
 	buildGUI();
+
+	instance = this;
 }
 
 void GameState_Play::buildGUI()

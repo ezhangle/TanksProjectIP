@@ -8,7 +8,7 @@ Game *Game::instance = nullptr;
 Game::Game(unsigned int w, unsigned int h, bool Vsync)
 	: mWidth(w),
 	mHeight(h),
-	mWindow(sf::VideoMode(1600, 832), "Thunder Tanks", sf::Style::None)
+	mWindow(sf::VideoMode(1600, 832), "Thunder Tanks", sf::Style::Default)
 {
 	mWindow.setVerticalSyncEnabled(Vsync);
 	mWindow.setKeyRepeatEnabled(false);

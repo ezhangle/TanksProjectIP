@@ -104,15 +104,15 @@ void AddButton::insertPlayerOne(const std::string& tankType, sf::Vector2f positi
 	std::vector<sf::Keyboard::Key> keys;
 	keys.resize(20);
 
-	keys[(int)Tank::Command::DOWN] = sf::Keyboard::Numpad5;
-	keys[(int)Tank::Command::UP] = sf::Keyboard::Numpad8;
-	keys[(int)Tank::Command::LEFT] = sf::Keyboard::Numpad4;
-	keys[(int)Tank::Command::RIGHT] = sf::Keyboard::Numpad6;
+	keys[(int)Tank::Command::DOWN] = sf::Keyboard::S;
+	keys[(int)Tank::Command::UP] = sf::Keyboard::W;
+	keys[(int)Tank::Command::LEFT] = sf::Keyboard::A;
+	keys[(int)Tank::Command::RIGHT] = sf::Keyboard::D;
 
-	keys[(int)Tank::Command::ROT_LEFT] = sf::Keyboard::Numpad7;
-	keys[(int)Tank::Command::ROT_RIGHT] = sf::Keyboard::Numpad9;
+	keys[(int)Tank::Command::ROT_LEFT] = sf::Keyboard::Q;
+	keys[(int)Tank::Command::ROT_RIGHT] = sf::Keyboard::E;
 
-	keys[(int)Tank::Command::SHOOT] = sf::Keyboard::P;
+	keys[(int)Tank::Command::SHOOT] = sf::Keyboard::Space;
 
 	Texture baseTexture, topTexture;
 	getTextureIDs(tankType, baseTexture, topTexture);
@@ -128,7 +128,7 @@ void AddButton::insertPlayerOne(const std::string& tankType, sf::Vector2f positi
 		team.teamNumber),
 		new RemoveButton(buttonPosition + sf::Vector2f(250.0f, 0.0f), "X", 20, RemoveButton::Action::remove),
 		sf::Text("Player 1", Game::get()->mFonts.get(Font::VanillaExtractRegular), 20),
-		team.mTeamMembers.size()));
+		team.numberOfMembers - 1));
 
 	
 		team.mTeamMembers.back().mRemoveButton->getText().setFillColor(sf::Color(110, 28, 28));
@@ -167,7 +167,7 @@ void AddButton::insertPlayerTwo(const std::string& tankType, sf::Vector2f positi
 		team.teamNumber),
 		new RemoveButton(buttonPosition + sf::Vector2f(250.0f, 0.0f), "X", 20, RemoveButton::Action::remove),
 		sf::Text("Player 2", Game::get()->mFonts.get(Font::VanillaExtractRegular), 20),
-		team.mTeamMembers.size()));
+		team.numberOfMembers - 1));
 
 
 	team.mAddPosition.y += 30.0f;
@@ -193,7 +193,7 @@ void AddButton::insertAI(const std::string& difficulty, const std::string& tankT
 			team.teamNumber),
 			new RemoveButton(buttonPosition + sf::Vector2f(250.0f, 0.0f), "X", 20, RemoveButton::Action::remove),
 			sf::Text("AI(easy)", Game::get()->mFonts.get(Font::VanillaExtractRegular), 20),
-			team.mTeamMembers.size()));
+			team.numberOfMembers - 1));
 
 		team.mAddPosition.y += 30.0f;
 
@@ -218,7 +218,7 @@ void AddButton::insertAI(const std::string& difficulty, const std::string& tankT
 			team.teamNumber),
 			new RemoveButton(buttonPosition + sf::Vector2f(250.0f, 0.0f), "X", 20, RemoveButton::Action::remove),
 			sf::Text("AI(medium)", Game::get()->mFonts.get(Font::VanillaExtractRegular), 20),
-			team.mTeamMembers.size()));
+			team.numberOfMembers - 1));
 
 		team.mAddPosition.y += 30.0f;
 
@@ -243,7 +243,7 @@ void AddButton::insertAI(const std::string& difficulty, const std::string& tankT
 			team.teamNumber),
 			new RemoveButton(buttonPosition + sf::Vector2f(250.0f, 0.0f), "X", 20, RemoveButton::Action::remove),
 			sf::Text("AI(hard)", Game::get()->mFonts.get(Font::VanillaExtractRegular), 20),
-			team.mTeamMembers.size()));
+			team.numberOfMembers - 1));
 
 		team.mAddPosition.y += 30.0f;
 

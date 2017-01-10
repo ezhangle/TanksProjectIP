@@ -5,6 +5,7 @@
 #include "VectorUtility.h"
 #include <cstdlib>
 #include <queue>
+#include "GameState_Play.h"
 
 AI::AI(sf::Sprite* base, sf::Sprite* top, sf::Vector2f* pos, sf::Vector2f* vel, float health, float damage, size_t team):
 Tank(base, top, pos, vel, health, damage, team),
@@ -24,8 +25,8 @@ void AI::initMap() {
 		mPathFindMap[i] = new int[mWidth]();
 	}
 
-	auto it1 = Game::get()->mMap->mEntities[0].begin();
-	auto it2 = Game::get()->mMap->mEntities[0].end();
+	auto it1 = GameState_Play::getStatePointer()->mMap->mEntities[0].begin();
+	auto it2 = GameState_Play::getStatePointer()->mMap->mEntities[0].end();
 	for (; it1 != it2; ++it1) {
 
 		sf::FloatRect bounds = (*it1)->mSprite->getGlobalBounds();
@@ -187,8 +188,8 @@ void AI::calculatePath(sf::Vector2f& startPoint) {
 void AI::findNewTarget() {
 
 	mTarget = nullptr;
-	auto it = Game::get()->mMap->mEntities[2].begin();
-	for (; it != Game::get()->mMap->mEntities[2].end(); ++it) {
+	auto it = GameState_Play::getStatePointer()->mMap->mEntities[2].begin();
+	for (; it != GameState_Play::getStatePointer()->mMap->mEntities[2].end(); ++it) {
 		if (Tank* enemy = dynamic_cast<Tank*>(*it)) {
 			if(enemy->mTeam != mTeam && enemy->mHealth > 0.f)
 				mTarget = enemy;
@@ -209,8 +210,8 @@ bool AI::isProjectilePathClear() {
 
 	while (currentPos.x > 64.f && currentPos.x < boundWidth && currentPos.y > 64.f && currentPos.y < boundHeight) {
 
-		auto it1 = Game::get()->mMap->mEntities[0].begin();
-		auto it2 = Game::get()->mMap->mEntities[0].end();
+		auto it1 = GameState_Play::getStatePointer()->mMap->mEntities[0].begin();
+		auto it2 = GameState_Play::getStatePointer()->mMap->mEntities[0].end();
 
 		for (; it1 != it2; ++it1) {
 			sf::FloatRect obstacleBound = (*it1)->mSprite->getGlobalBounds();

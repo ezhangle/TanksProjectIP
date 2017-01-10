@@ -6,6 +6,7 @@
 #include "GameState_Options_Fullscreen.h"
 #include "GameState_Options_Resolution.h"
 #include "GameState_Options_Vsync.h"
+#include "GameState_Play.h"
 
 TextButton::TextButton(sf::Vector2f initialPosition, Action action)
 	: game(Game::get())
@@ -81,6 +82,12 @@ void TextButton::triggerAction()
 		case Action::buildOptions:
 		{
 			game->pushState(new GameState_Options());
+			break;
+		}
+
+		case Action::playGame:
+		{
+			game->pushState(new GameState_Play(GameState_GameBuild::get()->getSelectedMapPath(), *(GameState_GameBuild::get()->getEntities())));
 			break;
 		}
 

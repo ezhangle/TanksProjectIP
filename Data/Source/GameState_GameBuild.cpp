@@ -2,6 +2,8 @@
 
 #include <algorithm>
 
+GameState_GameBuild *GameState_GameBuild::instance = nullptr;
+
 GameState_GameBuild::GameState_GameBuild()
 	: game(Game::get())
 	, teamOne(sf::Vector2f(150.0f, 100.0f), sf::Vector2f(0.0f, 0.0f), sf::Vector2f(260.0f, 70.0f), 1, "Team 1")
@@ -13,6 +15,9 @@ GameState_GameBuild::GameState_GameBuild()
 	, mMapSelector(mMaps)
 	, mButtonSelector(game->mTextures.get(Texture::button_Selector), sf::Vector2f(20.0f, game->mWindow.getSize().y - 270.0f), 50.0f, mButtons)
 {
+
+	//teamOne.mTeamMembers.resize(100);
+	//teamTwo.mTeamMembers.resize(100);
 	mTextMap.setPosition(1230.0f, 70.0f);
 	mBorderMapSelector.setPosition(1100.0f, 100.0f);
 	mTip1.setPosition(sf::Vector2f(30.0f, game->mWindow.getSize().y - 75.0f));
@@ -28,7 +33,7 @@ GameState_GameBuild::GameState_GameBuild()
 	player1_team = 0;
 	player2_team = 0;
 
-	//teamOne.mTeamMembers.push_back(teamRecord(nullptr, new RemoveButton(sf::Vector2f(100.0f, 100.0f), "Clear", 20, RemoveButton::Action::clear), sf::Text("", Game::get()->mFonts.get(Font::VanillaExtractRegular), 20), 0));
+	
 
 	teamOne.mTeamMembers_Selector.mSelectedButton = nullptr;
 	teamOne.mTeamMembers_Selector.mNumberOfButtons = teamOne.mTeamMembers.size();
@@ -38,11 +43,18 @@ GameState_GameBuild::GameState_GameBuild()
 	teamTwo.mTeamMembers_Selector.mSelectedButton = nullptr;
 	teamTwo.mTeamMembers_Selector.mButtons = teamTwo.mTeamMembers;
 	teamTwo.mTeamMembers_Selector.mNumberOfButtons = teamTwo.mTeamMembers.size();
+
+	instance = this;
 }
 
 void GameState_GameBuild::buildGUI()
 {
-	TextButton back(sf::Vector2f(game->mWindow.getSize().x - 75.0f, game->mWindow.getSize().y - 75.0f), "Back", 20, TextButton::Action::back);
+	TextButton play(sf::Vector2f(game->mWindow.getSize().x - 200.0f, game->mWindow.getSize().y - 110.0f), "Play", 20, TextButton::Action::playGame);
+	TextButton changeTanks(sf::Vector2f(game->mWindow.getSize().x - 200.0f, game->mWindow.getSize().y - 80.0f), "Change Tanks", 20, TextButton::Action::buildGamePlay_ChangeTanks);
+	TextButton back(sf::Vector2f(game->mWindow.getSize().x - 200.0f, game->mWindow.getSize().y - 50.0f), "Back", 20, TextButton::Action::back);
+
+	mButtons.push_back(play);
+	mButtons.push_back(changeTanks);
 	mButtons.push_back(back);
 
 	teamOne.teamNumber = 1;
@@ -332,3 +344,20 @@ void GameState_GameBuild::rePositionButtons(sf::Vector2u & currentPosition, sf::
 {
 }
 
+
+std::string& GameState_GameBuild::getSelectedMapPath()
+{
+	return mMapSelector.mSelectedButton->loadPath_objects;
+}
+
+std::vector<Entity*>* GameState_GameBuild::getEntities()
+{
+	std::vector<Entity*> *vector = new std::vector<Entity*>;
+	for each (teamRecord member in teamOne.mTeamMembers)
+		vector->push_back(member.mEntity);
+
+	for each (teamRecord member in teamTwo.mTeamMembers)
+		vector->push_back(member.mEntity);
+
+	return vector;
+}

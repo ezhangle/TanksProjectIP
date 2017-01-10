@@ -6,6 +6,8 @@
 #include "Obstacle.h"
 #include <iostream>
 
+#include "GameState_Play.h"
+
 Projectile::Projectile(sf::Sprite* sprite, Tank* parent):
 Entity(sprite),
 mVelocity(parent->mProjectileSpeed),
@@ -41,7 +43,7 @@ bool Projectile::checkCollision() {
 	
 	bool collideSolid = false;
 
-	Map* map = Game::get()->mMap;
+	Map* map = GameState_Play::getStatePointer()->mMap;
 
 	for (auto it1 = map->mEntities.begin(); it1 != map->mEntities.end(); ++it1) {
 		for (auto it2 = (*it1).begin(); it2 != (*it1).end(); ++it2) {
@@ -55,7 +57,7 @@ bool Projectile::checkCollision() {
 							proj->mHealth -= mDamage;
 							if (proj->mHealth <= 0.f) {
 					
-								for (auto itAi = Game::get()->mMap->mEntities[2].begin(); itAi != Game::get()->mMap->mEntities[2].end(); ++itAi) {
+								for (auto itAi = GameState_Play::getStatePointer()->mMap->mEntities[2].begin(); itAi != GameState_Play::getStatePointer()->mMap->mEntities[2].end(); ++itAi) {
 									if (AI* ai = dynamic_cast<AI*>((*itAi))) {
 										if (ai->mTarget == proj) {
 											ai->findNewTarget();
@@ -77,7 +79,7 @@ bool Projectile::checkCollision() {
 	}
 
 	if(collideSolid == true)
-		Game::get()->mMap->mEffects.insert(Game::get()->mMap->mEffects.begin(), new Animation(new sf::Vector2f(mSprite->getPosition()), Texture::expl_01_0000, Texture::expl_01_0023, 20, false));
+		GameState_Play::getStatePointer()->mMap->mEffects.insert(GameState_Play::getStatePointer()->mMap->mEffects.begin(), new Animation(new sf::Vector2f(mSprite->getPosition()), Texture::expl_01_0000, Texture::expl_01_0023, 20, false));
 
 	return collideSolid;
 

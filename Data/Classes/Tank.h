@@ -6,6 +6,9 @@
 #include <SFML\Graphics.hpp>
 #include <SFML\System\Time.hpp>
 
+
+class GameState_Play;
+
 class PowerUp;
 
 class Tank: public Entity {

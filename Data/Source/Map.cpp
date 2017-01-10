@@ -16,19 +16,23 @@
 #include <cstdlib>
 #include <iostream>
 
-Map::Map(std::string& objectsPath, std::string& charactersPath):
+Map::Map(std::string& objectsPath, std::vector<Entity*>& entities):
 mTileLength(64.f){
 	mEntities.resize(NUMBER);
 	mWidth = Game::get()->mWidth / mTileLength;
 	mHeight = Game::get()->mHeight / mTileLength;
 	mPowerUpRespawnClock.restart();
 
-	loadFromFile(objectsPath, charactersPath);
+	for each (Entity* entity in entities)
+	{
+		mEntities[2].push_back(entity);
+	}
+
+	loadFromFile(objectsPath);
 }
 
-void Map::loadFromFile(std::string& objectsPath, std::string& charactersPath) {
+void Map::loadFromFile(std::string& objectsPath) {
 	std::ifstream objectsIN(objectsPath);
-	std::ifstream charactersIN(charactersPath);
 
 	int bground;
 	objectsIN >> bground;
@@ -50,20 +54,8 @@ void Map::loadFromFile(std::string& objectsPath, std::string& charactersPath) {
 		insertObject(obj, objectsIN);
 	}
 
-	std::string			characterType;
-	size_t				nrCharaters;
-
-	charactersIN >> nrCharaters;
-
-	for (size_t i = 0; i < nrCharaters; i++)
-	{
-		charactersIN >> characterType;
-		insertObject(characterType, charactersIN);
-	}
 
 	objectsIN.close();
-	charactersIN.close();
-
 	initObstacleMap();
 }
 
