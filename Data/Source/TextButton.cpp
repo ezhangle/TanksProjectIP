@@ -7,6 +7,7 @@
 #include "GameState_Options_Resolution.h"
 #include "GameState_Options_Vsync.h"
 #include "GameState_Play.h"
+#include "GameState_ChangeTanks.h"
 #include <iostream>
 
 TextButton::TextButton(sf::Vector2f initialPosition, Action action)
@@ -77,6 +78,12 @@ void TextButton::triggerAction()
 		case Action::buildGamePlay:
 		{
 			game->pushState(new GameState_GameBuild());
+			break;
+		}
+
+		case Action::buildGamePlay_ChangeTanks:
+		{
+			game->pushState(new GameState_ChangeTanks());
 			break;
 		}
 

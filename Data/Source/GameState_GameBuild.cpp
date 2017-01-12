@@ -2,18 +2,22 @@
 
 #include <algorithm>
 
+
 GameState_GameBuild *GameState_GameBuild::instance = nullptr;
 
 GameState_GameBuild::GameState_GameBuild()
 	: game(Game::get())
-	, teamOne(sf::Vector2f(150.0f, 100.0f), sf::Vector2f(0.0f, 0.0f), sf::Vector2f(260.0f, 70.0f), 1, "Team 1")
-	, teamTwo(sf::Vector2f(650.0f, 100.0f), sf::Vector2f(0.0f, 0.0f), sf::Vector2f(750.0f, 70.0f), 2, "Team 2")
+	, player1TankData(100.0, 15.0, 100.0, "tank1")
+	, player2TankData(100.0, 15.0, 100.0, "tank1")
+	, teamOne(sf::Vector2f(150.0f, 100.0f), sf::Vector2f(0.0f, 0.0f), sf::Vector2f(260.0f, 70.0f), 1, "Team 1", player1TankData, player2TankData)
+	, teamTwo(sf::Vector2f(650.0f, 100.0f), sf::Vector2f(0.0f, 0.0f), sf::Vector2f(750.0f, 70.0f), 2, "Team 2", player1TankData, player2TankData)
 	, mTextMap("Map", game->mFonts.get(Font::VanillaExtractRegular), 20)
 	, mBorderMapSelector(game->mTextures.get(Texture::border_Half))
 	, mTip1("Tip: Use the mouse to navigate this menu, it's a lot faster.", game->mFonts.get(Font::VanillaExtractRegular), 15)
 	, mTip2("To change the map, hold left mouse button and drag the red button.", game->mFonts.get(Font::VanillaExtractRegular), 15)
 	, mMapSelector(mMaps)
 	, mButtonSelector(game->mTextures.get(Texture::button_Selector), sf::Vector2f(20.0f, game->mWindow.getSize().y - 270.0f), 50.0f, mButtons)
+
 {
 
 	//teamOne.mTeamMembers.resize(100);

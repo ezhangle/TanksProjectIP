@@ -1,4 +1,5 @@
 #include "GameState_Play.h"
+#include "GameState_MainMenu.h"
 
 GameState_Play *GameState_Play::instance = nullptr;
 
@@ -54,6 +55,24 @@ void GameState_Play::handleEvents()
 				break;
 			}
 
+			case sf::Event::KeyPressed:
+			{
+				switch (eventToBeHandled.key.code)
+				{
+					case sf::Keyboard::Escape:
+					{
+						while (game->getActiveState() != nullptr)
+							game->popState();
+
+						game->pushState(new GameState_MainMenu());
+						break;
+					}
+					
+
+					default:break;
+				}
+
+			}
 			
 			default:break;
 		}

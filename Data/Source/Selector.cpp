@@ -6,6 +6,7 @@
 #include "VSyncButton.h"
 #include "AddButton.h"
 #include "Team_Record.h"
+#include "TankButton.h"
 
 
 template <typename buttonType>
@@ -76,6 +77,17 @@ Selector<AddButton>::Selector(sf::Texture &texture, sf::Vector2f startLocation, 
 }
 
 Selector<teamRecord>::Selector(sf::Texture &texture, sf::Vector2f startLocation, float moveDistance, std::vector<teamRecord> &vector)
+	: mSprite(texture)
+	, mIndex(0)
+	, mSelectedButton(&vector[0])
+	, mMoveDistance(moveDistance)
+	, mButtons(vector)
+{
+	mSprite.setPosition(startLocation);
+	mNumberOfButtons = vector.size();
+}
+
+Selector<TankButton>::Selector(sf::Texture &texture, sf::Vector2f startLocation, float moveDistance, std::vector<TankButton> &vector)
 	: mSprite(texture)
 	, mIndex(0)
 	, mSelectedButton(&vector[0])

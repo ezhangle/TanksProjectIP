@@ -2,7 +2,7 @@
 #include "GameState_MainMenu.h"
 #include <iostream>
 
-const sf::Time Game::timePerFrame = sf::seconds(1.0f / 120.0f);
+const sf::Time Game::timePerFrame = sf::seconds(1.0f / 60.0f);
 Game *Game::instance = nullptr;
 
 Game::Game(unsigned int w, unsigned int h, bool Vsync)
