@@ -1,4 +1,5 @@
 Assets/Textures/Background/green_bg.png
+Assets/Textures/Background/aged.jpg
 
 Assets/Textures/PowerUps/damage.png
 Assets/Textures/PowerUps/fast_attacks.png
