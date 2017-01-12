@@ -65,8 +65,8 @@ void GameState_GameBuild::buildGUI()
 	teamTwo.teamNumber = 2;
 
 
-	MapButton map_Plains(mBorderMapSelector.getPosition() + sf::Vector2f(15.0f, 15.0f), "Plains", 20, "Assets/Maps/map1_Characters.tmap", "Assets/Maps/map1_Objects.tmap");
-	MapButton map_test(mBorderMapSelector.getPosition() + sf::Vector2f(15.0f, 45.0f), "TEST", 20, "Assets/Maps/maptest_Characters.tmap", "Assets/Maps/maptest_Objects.tmap");
+	MapButton map_Plains(mBorderMapSelector.getPosition() + sf::Vector2f(15.0f, 15.0f), "Island", 20, "Assets/Maps/map1_Characters.tmap", "Assets/Maps/map1_Objects.tmap");
+	MapButton map_test(mBorderMapSelector.getPosition() + sf::Vector2f(15.0f, 45.0f), "Stone", 20, "Assets/Maps/maptest_Characters.tmap", "Assets/Maps/map2_Objects.tmap");
 	mMaps.push_back(map_Plains);
 	mMaps.push_back(map_test);
 

@@ -3,6 +3,7 @@ enum class Texture {
 
 	//backgrounds
 	green_bg,
+	aged,
 
 	//start_pu
 	pu_damage,
