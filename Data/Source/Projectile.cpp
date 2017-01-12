@@ -56,6 +56,7 @@ bool Projectile::checkCollision() {
 						if (mParent->mTeam != proj->mTeam) {
 							collideSolid = true;
 							proj->mHealth -= mDamage;
+							mParent->mScore += (1 + mDamage) * 0.1f;
 							if (proj->mHealth <= 0.f) {
 					
 								//assign new target to AI's
@@ -67,6 +68,8 @@ bool Projectile::checkCollision() {
 											
 									}
 								}
+								
+								mParent->mScore += (proj->mMaxHealth + mDamage) * 0.1f;
 							}
 						}
 					}

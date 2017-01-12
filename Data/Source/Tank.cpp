@@ -19,17 +19,16 @@ mHealth(health),
 mMaxHealth(health),
 mDamage(damage),
 mTeam(team),
-mIsProjectileHollow(false),
-mProjectileType(ProjectileType::Basic),
-mProjectileSpeed(new sf::Vector2f(500.f, 500.f))
+mProjectileSpeed(new sf::Vector2f(0.f, 0.f)),
+mIsProjectileHollow(false)
 {
+
 	sf::Vector2f topPos = top->getPosition();
 	top->setOrigin((float)top->getTexture()->getSize().x / 2, (float)top->getTexture()->getSize().y / 2);
 	base->setOrigin((float)base->getTexture()->getSize().x / 2, (float)base->getTexture()->getSize().y / 2);
 	base->setPosition(pos->x, pos->y);
 	top->setPosition(base->getPosition());
 
-	mHitCooldown = 0.6f;
 	mHitCooldownClock.restart();
 
 	mAcceleration = 0.f;
@@ -41,10 +40,11 @@ mProjectileSpeed(new sf::Vector2f(500.f, 500.f))
 	mHpBarTop.setPosition(mBase->getPosition().x - mHpBarTop.getLocalBounds().width / 2.f, mBase->getPosition().y - 50.f);
 	mHpBarBase.setPosition(mBase->getPosition().x - mHpBarBase.getLocalBounds().width / 2.f, mBase->getPosition().y - 50.f);
 
-
 	mMovingState = 0;
 	mLastPoint = mBase->getPosition();
 	mMovingStateClock.restart();
+
+	changeProjectile(ProjectileType::Basic);
 }
 
 Tank::~Tank()
@@ -86,15 +86,33 @@ void Tank::update(sf::Time dt) {
 			}
 		}
 
-		//end all power up objects
-		for (auto it = mPowerUpList.begin(); it != mPowerUpList.end(); ++it) {
+		//end all power ups from this object's list
+		auto it = mPowerUpList.end();
+		--it;
+
+		while (!mPowerUpList.empty()) {
+			auto auxIt = it;
+			--auxIt;
 			(*it)->onDurationEnd();
+			it = auxIt;
+		}
+
+		//disable targeting of powerups on this entity
+		auto it3 = GameState_Play::getStatePointer()->mMap->mEntities[Map::POWERUP].begin();
+		auto it4 = GameState_Play::getStatePointer()->mMap->mEntities[Map::POWERUP].end();
+
+		for (; it3 != it4; ++it3) {
+			if (PowerUp* pu = dynamic_cast<PowerUp*>((*it3))) {
+				if (pu->mTarget == this)
+					pu->mTarget = nullptr;
+			}
 		}
 
 		GameState_Play::getStatePointer()->mMap->mEffects.insert(GameState_Play::getStatePointer()->mMap->mEffects.begin(), new Animation(new sf::Vector2f(mBase->getPosition()), Texture::expl_10_0000, Texture::expl_10_0031, 50, false));
 		mDelete = true;
 	}
 	else {
+
 		//handle hp bar
 		sf::Vector2f newScale;
 		newScale.x = mHealth / mMaxHealth;
@@ -163,18 +181,12 @@ void Tank::shoot() {
 		Map* map = GameState_Play::getStatePointer()->mMap;
 		
 		if (mProjectileType == ProjectileType::Basic) {
-			mProjectileSpeed->x = 500.f;
-			mProjectileSpeed->y = 500.f;
 			projectile = new BasicBullet(this);
 		}
 		if (mProjectileType == ProjectileType::Missile) {
-			mProjectileSpeed->x = 300.f;
-			mProjectileSpeed->y = 300.f;
 			projectile = new Missile(this);
 		}	
 		if (mProjectileType == ProjectileType::LaserBall) {
-			mProjectileSpeed->x = 200.f;
-			mProjectileSpeed->y = 200.f;
 			projectile = new LaserBall(this);
 		}
 			
@@ -187,6 +199,7 @@ void Tank::shoot() {
 }
 
 bool Tank::checkCollision() {
+
 	bool collideSolid;
 
 	Map* map = GameState_Play::getStatePointer()->mMap;
@@ -236,6 +249,26 @@ void Tank::setPosition(sf::Vector2f& newPos) {
 
 	mHpBarTop.setPosition(mBase->getPosition().x - mHpBarTop.getLocalBounds().width / 2.f, mBase->getPosition().y - 50.f);
 	mHpBarBase.setPosition(mBase->getPosition().x - mHpBarBase.getLocalBounds().width / 2.f, mBase->getPosition().y - 50.f);
+}
+
+void Tank::changeProjectile(ProjectileType newProj)
+{
+	mProjectileType = newProj;
+	if (newProj == ProjectileType::Basic) {
+		mProjectileSpeed->x = 600.f;
+		mProjectileSpeed->y = 600.f;
+		mHitCooldown = 0.5f;
+	}
+	if (newProj == ProjectileType::Missile) {
+		mProjectileSpeed->x = 300.f;
+		mProjectileSpeed->y = 300.f;
+		mHitCooldown = 1.f;
+	}
+	if (newProj == ProjectileType::LaserBall) {
+		mProjectileSpeed->x = 200.f;
+		mProjectileSpeed->y = 200.f;
+		mHitCooldown = 0.7f;
+	}
 }
 
 sf::Sprite* Tank::getCollisionSprite() {

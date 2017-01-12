@@ -14,13 +14,16 @@ void PU_HollowProj::onTrigger(Tank* target)
 	PowerUp::onTrigger(target);
 
 	mTarget->mIsProjectileHollow = true;
+
+	checkForDuplicate();
 }
 
 void PU_HollowProj::onDurationEnd()
 {
-	PowerUp::onDurationEnd();
+	if(mTarget != nullptr)
+		mTarget->mIsProjectileHollow = false;
 
-	mTarget->mIsProjectileHollow = false;
+	PowerUp::onDurationEnd();
 }
 
 void PU_HollowProj::checkForDuplicate()

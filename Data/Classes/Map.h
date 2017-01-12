@@ -9,6 +9,7 @@
 #include "Animation.h"
 
 class Map {
+public:
 	enum {
 		OBSTACLE,
 		POWERUP,

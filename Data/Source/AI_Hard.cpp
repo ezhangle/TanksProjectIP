@@ -56,6 +56,7 @@ void AI_Hard::assignNewPoint() {
 
 void AI_Hard::update(sf::Time dt) {
 	
+	AI::update(dt);
 
 	if (mPathFindMap == nullptr) {
 		assignNewPoint();
@@ -167,6 +168,4 @@ void AI_Hard::update(sf::Time dt) {
 				shoot();
 		
 	}
-
-	AI::update(dt);
 }
