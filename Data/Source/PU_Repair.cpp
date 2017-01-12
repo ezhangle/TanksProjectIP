@@ -30,6 +30,8 @@ void PU_Repair::onTrigger(Tank * target)
 	PowerUp::onTrigger(target);
 
 	mHpPerSecond = target->mMaxHealth / 10.f;
+
+	checkForDuplicate();
 }
 
 void PU_Repair::checkForDuplicate()

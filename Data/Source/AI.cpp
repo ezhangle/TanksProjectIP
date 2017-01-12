@@ -119,7 +119,7 @@ void AI::calculatePathMap() {
 	LeePoint currentPoint;
 	startPoint.x = (int)(mBase->getPosition().y / mTileLength);
 	startPoint.y = (int)(mBase->getPosition().x / mTileLength);
-	std::cout << startPoint.x << " " << startPoint.y << "\n";
+
 	if(mPathFindMap[startPoint.x][startPoint.y] != -1)
 		mPathFindMap[startPoint.x][startPoint.y] = 1;
 

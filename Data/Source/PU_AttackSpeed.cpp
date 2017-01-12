@@ -24,9 +24,12 @@ void PU_AttackSpeed::onTrigger(Tank* target) {
 
 void PU_AttackSpeed::onDurationEnd() {
 
+	if (mTarget != nullptr) {
+		mTarget->mHitCooldown *= mAttackSpeedMultiplier;
+		mTarget->mHitCooldownClock.restart();
+	}
+	
 	PowerUp::onDurationEnd();
-	mTarget->mHitCooldown *= mAttackSpeedMultiplier;
-	mTarget->mHitCooldownClock.restart();
 }
 
 void PU_AttackSpeed::checkForDuplicate() {

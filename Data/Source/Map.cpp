@@ -123,8 +123,8 @@ void Map::insertObject(std::string& obj, std::ifstream& stream) {
 void Map::update(sf::Time dt) {
 
 		
-	if (mEntities[1].size() < 3) {
-		if (mPowerUpRespawnClock.getElapsedTime().asSeconds() > 1.f) {
+	if (mEntities[1].size() < 4) {
+		if (mPowerUpRespawnClock.getElapsedTime().asSeconds() > 3.f) {
 			sf::Vector2f* position = new sf::Vector2f;
 
 			do {

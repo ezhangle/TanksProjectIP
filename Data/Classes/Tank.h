@@ -35,12 +35,14 @@ public:
 	bool					MoveX(float inc);
 	void					shoot();
 	void					setPosition(sf::Vector2f& newPos);
+	void					changeProjectile(ProjectileType newProj);
 
 	bool					checkCollision();
 	bool					checkOutOfBounds();
 	virtual sf::Sprite*		getCollisionSprite();
 
 public:
+	float					mScore;
 	size_t					mTeam;
 	Collision				SAT;
 

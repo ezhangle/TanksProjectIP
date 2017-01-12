@@ -58,9 +58,10 @@ void PowerUp::onDurationEnd()
 		auto it = mTarget->mPowerUpList.begin();
 
 		for (; it != mTarget->mPowerUpList.end(); ++it) {
-			if ((*it) == this)
+			if ((*it) == this) {
 				mTarget->mPowerUpList.erase(it);
+			}
+				
 		}
 	}
-	
 }

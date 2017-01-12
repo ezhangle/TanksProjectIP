@@ -45,9 +45,12 @@ void PU_Speed::onTrigger(Tank * target)
 
 void PU_Speed::onDurationEnd()
 {
+	if (mTarget != nullptr) {
+		mTarget->mVelocity->x /= mMovementSpeedMultiplier;
+		mTarget->mVelocity->y /= mMovementSpeedMultiplier;
+	}
+	
 	PowerUp::onDurationEnd();
-	mTarget->mVelocity->x /= mMovementSpeedMultiplier;
-	mTarget->mVelocity->y /= mMovementSpeedMultiplier;
 }
 
 void PU_Speed::checkForDuplicate() {
