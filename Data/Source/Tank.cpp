@@ -75,6 +75,15 @@ void Tank::update(sf::Time dt) {
 	if (mHealth <= 0) {
 		auto it1 = GameState_Play::getStatePointer()->mMap->mEntities[2].begin();
 		auto it2 = GameState_Play::getStatePointer()->mMap->mEntities[2].end();
+		if (this->mTeam == 1)
+		{
+			GameState_GameBuild::get()->teamOne.numberOfMembers--;
+		}
+		else
+		{
+			GameState_GameBuild::get()->teamTwo.numberOfMembers--;
+		}
+		GameState_Play::getStatePointer()->timeUntilRestart.restart();
 
 		//disable all kind of targeting on this entity
 		for (; it1 != it2; ++it1) {
