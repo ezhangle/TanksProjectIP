@@ -37,6 +37,15 @@ inline team::team(sf::Vector2f borderPosition, sf::Vector2f removeButtonsPositio
 	, player1TankData(player1Tank)
 	, player2TankData(player2Tank)
 {
+	player1TankData.mTextureIdentifier = "tank1";
+	player1TankData.mDamage = 15.0f;
+	player1TankData.mHealth = 100.0f;
+	player1TankData.mSpeed = 100.0f;
+	player2TankData.mTextureIdentifier = "tank1";
+	player2TankData.mDamage = 15.0f;
+	player2TankData.mHealth = 100.0f;
+	player2TankData.mSpeed = 100.0f;
+
 	mText.setPosition(textPosition);
 	mBorder.setPosition(borderPosition);
 	numberOfMembers = 0;

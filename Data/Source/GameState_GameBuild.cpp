@@ -81,6 +81,9 @@ void GameState_GameBuild::buildGUI()
 
 void GameState_GameBuild::update(sf::Time deltaTime)
 {
+	teamOne_NumberOfMembers = teamOne.numberOfMembers;
+	teamTwo_NumberOfMembers = teamTwo.numberOfMembers;
+
 	if (Game::get()->getActiveState() == this) {
 		handleInput();
 		//mButtons[0].getText().setPosition(Game::get()->mWidth - game->mWindow.getSize().x/10.f, Game::get()->mHeight - game->mWindow.getSize().y/5.f);

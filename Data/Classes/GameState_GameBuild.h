@@ -55,6 +55,9 @@ private:
 	size_t											player1_team;
 	size_t											player2_team;
 
+	size_t											teamOne_NumberOfMembers;
+	size_t											teamTwo_NumberOfMembers;
+
 
 
 	TankBuildData									player1TankData;
