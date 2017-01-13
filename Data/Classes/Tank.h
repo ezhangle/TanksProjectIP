@@ -6,9 +6,6 @@
 #include <SFML\Graphics.hpp>
 #include <SFML\System\Time.hpp>
 
-
-class GameState_Play;
-
 class PowerUp;
 
 class Tank: public Entity {
@@ -19,6 +16,13 @@ public:
 		SHOOT,
 
 		NUMBER,
+	};
+	enum class ProjectileType {
+		Basic,
+		Missile,
+		LaserBall,
+
+		NUMBER
 	};
 public:
 							Tank(sf::Sprite* base, sf::Sprite* top, sf::Vector2f* pos, sf::Vector2f* vel, float health, float damage, size_t team);
@@ -31,12 +35,14 @@ public:
 	bool					MoveX(float inc);
 	void					shoot();
 	void					setPosition(sf::Vector2f& newPos);
+	void					changeProjectile(ProjectileType newProj);
 
 	bool					checkCollision();
 	bool					checkOutOfBounds();
 	virtual sf::Sprite*		getCollisionSprite();
 
 public:
+	float					mScore;
 	size_t					mTeam;
 	Collision				SAT;
 
@@ -61,5 +67,8 @@ public:
 	const float				mMaxHealth;
 	float					mHealth;
 	float					mDamage;
+
+	bool					mIsProjectileHollow;
+	ProjectileType			mProjectileType;
 
 };

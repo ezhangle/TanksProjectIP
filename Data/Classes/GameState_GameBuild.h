@@ -8,6 +8,7 @@
 #include "MapSelector.h"
 #include "Selector.h"
 #include "Team.h"
+#include "TankBuildData.h"
 
 
 class GameState_GameBuild
@@ -18,6 +19,8 @@ class GameState_GameBuild
 
 public:
 
+	team											teamOne;
+	team											teamTwo;
 
 public:
 	GameState_GameBuild();
@@ -52,9 +55,13 @@ private:
 	size_t											player1_team;
 	size_t											player2_team;
 
+	size_t											teamOne_NumberOfMembers;
+	size_t											teamTwo_NumberOfMembers;
 
-	team											teamOne;
-	team											teamTwo;
+
+
+	TankBuildData									player1TankData;
+	TankBuildData									player2TankData;
 
 
 private:

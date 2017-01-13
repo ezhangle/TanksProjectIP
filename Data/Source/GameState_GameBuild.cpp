@@ -2,26 +2,30 @@
 
 #include <algorithm>
 
+
 GameState_GameBuild *GameState_GameBuild::instance = nullptr;
 
 GameState_GameBuild::GameState_GameBuild()
 	: game(Game::get())
-	, teamOne(sf::Vector2f(150.0f, 100.0f), sf::Vector2f(0.0f, 0.0f), sf::Vector2f(260.0f, 70.0f), 1, "Team 1")
-	, teamTwo(sf::Vector2f(650.0f, 100.0f), sf::Vector2f(0.0f, 0.0f), sf::Vector2f(750.0f, 70.0f), 2, "Team 2")
+	, player1TankData(100.0, 15.0, 100.0, "tank1")
+	, player2TankData(100.0, 15.0, 100.0, "tank1")
+	, teamOne(sf::Vector2f(150.0f, 100.0f), sf::Vector2f(0.0f, 0.0f), sf::Vector2f(260.0f, 70.0f), 1, "Team 1", player1TankData, player2TankData)
+	, teamTwo(sf::Vector2f(650.0f, 100.0f), sf::Vector2f(0.0f, 0.0f), sf::Vector2f(750.0f, 70.0f), 2, "Team 2", player1TankData, player2TankData)
 	, mTextMap("Map", game->mFonts.get(Font::VanillaExtractRegular), 20)
 	, mBorderMapSelector(game->mTextures.get(Texture::border_Half))
 	, mTip1("Tip: Use the mouse to navigate this menu, it's a lot faster.", game->mFonts.get(Font::VanillaExtractRegular), 15)
 	, mTip2("To change the map, hold left mouse button and drag the red button.", game->mFonts.get(Font::VanillaExtractRegular), 15)
 	, mMapSelector(mMaps)
 	, mButtonSelector(game->mTextures.get(Texture::button_Selector), sf::Vector2f(20.0f, game->mWindow.getSize().y - 270.0f), 50.0f, mButtons)
+
 {
 
 	//teamOne.mTeamMembers.resize(100);
 	//teamTwo.mTeamMembers.resize(100);
-	mTextMap.setPosition(1230.0f, 70.0f);
-	mBorderMapSelector.setPosition(1100.0f, 100.0f);
-	mTip1.setPosition(sf::Vector2f(30.0f, game->mWindow.getSize().y - 75.0f));
-	mTip2.setPosition((sf::Vector2f(30.0f, game->mWindow.getSize().y - 50.0f)));
+	mTextMap.setPosition(1120.0f, 70.0f);
+	mBorderMapSelector.setPosition(1000.0f, 100.0f);
+	mTip1.setPosition(sf::Vector2f(30.0f, game->mWindow.getSize().y - 50.0f));
+	mTip2.setPosition((sf::Vector2f(30.0f, game->mWindow.getSize().y - 25.0f)));
 	buildGUI();
 	mMapSelector.mNumberOfButtons = mMaps.size();
 	mMapSelector.setSelected(mMaps[0]);
@@ -61,8 +65,8 @@ void GameState_GameBuild::buildGUI()
 	teamTwo.teamNumber = 2;
 
 
-	MapButton map_Plains(mBorderMapSelector.getPosition() + sf::Vector2f(15.0f, 15.0f), "Plains", 20, "Assets/Maps/map1_Characters.tmap", "Assets/Maps/map1_Objects.tmap");
-	MapButton map_test(mBorderMapSelector.getPosition() + sf::Vector2f(15.0f, 45.0f), "TEST", 20, "Assets/Maps/maptest_Characters.tmap", "Assets/Maps/maptest_Objects.tmap");
+	MapButton map_Plains(mBorderMapSelector.getPosition() + sf::Vector2f(15.0f, 15.0f), "Island", 20, "Assets/Maps/map1_Characters.tmap", "Assets/Maps/map1_Objects.tmap");
+	MapButton map_test(mBorderMapSelector.getPosition() + sf::Vector2f(15.0f, 45.0f), "Stone", 20, "Assets/Maps/maptest_Characters.tmap", "Assets/Maps/map2_Objects.tmap");
 	mMaps.push_back(map_Plains);
 	mMaps.push_back(map_test);
 
@@ -77,7 +81,14 @@ void GameState_GameBuild::buildGUI()
 
 void GameState_GameBuild::update(sf::Time deltaTime)
 {
-	handleInput();
+	teamOne_NumberOfMembers = teamOne.numberOfMembers;
+	teamTwo_NumberOfMembers = teamTwo.numberOfMembers;
+
+	if (Game::get()->getActiveState() == this) {
+		handleInput();
+		//mButtons[0].getText().setPosition(Game::get()->mWidth - game->mWindow.getSize().x/10.f, Game::get()->mHeight - game->mWindow.getSize().y/5.f);
+	}
+		
 }
 
 void GameState_GameBuild::draw()

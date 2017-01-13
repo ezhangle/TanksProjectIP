@@ -8,15 +8,21 @@
 #include "AI_Easy.h"
 #include "AI_Medium.h"
 #include "AI_Hard.h"
+
 #include "PU_AttackSpeed.h"
 #include "PU_Speed.h"
+#include "PU_HollowProj.h"
+#include "PU_Repair.h"
+#include "PU_Ally.h"
+#include "PU_Missile.h"
+#include "PU_Laser.h"
 
 #include <fstream>
 #include <vector>
 #include <cstdlib>
 #include <iostream>
 
-Map::Map(std::string& objectsPath, std::vector<Entity*>& entities):
+Map::Map(std::string& path, std::vector<Entity*>& entities):
 mTileLength(64.f){
 	mEntities.resize(NUMBER);
 	mWidth = Game::get()->mWidth / mTileLength;
@@ -28,16 +34,16 @@ mTileLength(64.f){
 		mEntities[2].push_back(entity);
 	}
 
-	loadFromFile(objectsPath);
+	loadFromFile(path);
 }
 
-void Map::loadFromFile(std::string& objectsPath) {
-	std::ifstream objectsIN(objectsPath);
+void Map::loadFromFile(std::string& path) {
+	std::ifstream in(path);
 
-	int bground;
-	objectsIN >> bground;
+	int backgroundSpriteIndex;
+	in >> backgroundSpriteIndex;
 
-	mBackground.setTexture(Game::get()->mTextures.get((Texture)bground));
+	mBackground.setTexture(Game::get()->mTextures.get((Texture)backgroundSpriteIndex));
 	sf::Vector2f scale;
 	scale.x = Game::get()->mWidth / mBackground.getLocalBounds().width;
 	scale.y = Game::get()->mHeight / mBackground.getLocalBounds().height;
@@ -47,15 +53,14 @@ void Map::loadFromFile(std::string& objectsPath) {
 	std::string obj;
 	size_t		noObjects;
 
-	objectsIN >> noObjects;
+	in >> noObjects;
 
 	for (size_t i = 0; i < noObjects; ++i) {
-		objectsIN >> obj;
-		insertObject(obj, objectsIN);
+		in >> obj;
+		insertObject(obj, in);
 	}
+	in.close();
 
-
-	objectsIN.close();
 	initObstacleMap();
 }
 
@@ -64,7 +69,6 @@ void Map::insertObject(std::string& obj, std::ifstream& stream) {
 	sf::Vector2f*		position, *velocity;
 	std::string			tankType;
 	float				health, damage;
-
 
 	if (obj == "player1") {
 		
@@ -120,8 +124,9 @@ void Map::insertObject(std::string& obj, std::ifstream& stream) {
 
 void Map::update(sf::Time dt) {
 
-	if (mEntities[1].size() < 3) {
-		if (mPowerUpRespawnClock.getElapsedTime().asSeconds() > 5.f) {
+		
+	if (mEntities[1].size() < 4) {
+		if (mPowerUpRespawnClock.getElapsedTime().asSeconds() > 4.f) {
 			sf::Vector2f* position = new sf::Vector2f;
 
 			do {
@@ -233,7 +238,7 @@ void Map::insertPlayerTwo(const std::string& tankType, sf::Vector2f* position, s
 		new sf::Sprite(Game::get()->mTextures.get(baseTexture)),
 		new sf::Sprite(Game::get()->mTextures.get(topTexture)),
 		position,
-		velocity,
+		new sf::Vector2f(150.f, 150.f),
 		health,
 		damage,
 		keys,
@@ -338,14 +343,29 @@ void Map::insertAI(const std::string& difficulty, const std::string& tankType, s
 
 void Map::insertRandomPowerUp(sf::Vector2f* position)
 {
-	int randomIndex = rand() % 2;
+	int randomIndex = rand() % 7;
 
 	switch (randomIndex) {
 	case 0:
-		mEntities[1].insert(mEntities[1].begin(), new PU_Speed(position, new sf::Sprite(Game::get()->mTextures.get(Texture::pu_speed))));
+		mEntities[1].insert(mEntities[1].begin(), new PU_Speed(position));
 		break;
 	case 1:
-		mEntities[1].insert(mEntities[1].begin(), new PU_AttackSpeed(position, new sf::Sprite(Game::get()->mTextures.get(Texture::pu_fast_attacks))));
+		mEntities[1].insert(mEntities[1].begin(), new PU_AttackSpeed(position));
+		break;
+	case 2:
+		mEntities[1].insert(mEntities[1].begin(), new PU_HollowProj(position));
+		break;
+	case 3:
+		mEntities[1].insert(mEntities[1].begin(), new PU_Repair(position));
+		break;
+	case 4:
+		mEntities[1].insert(mEntities[1].begin(), new PU_Ally(position));
+		break;
+	case 5:
+		mEntities[1].insert(mEntities[1].begin(), new PU_Missile(position));
+		break;
+	case 6:
+		mEntities[1].insert(mEntities[1].begin(), new PU_Laser(position));
 		break;
 	default:
 		break;
@@ -385,6 +405,8 @@ void Map::initObstacleMap() {
 			edgeX = j * mTileLength;
 			if (edgeX < 64.f || edgeY < 64.f || edgeX >= Game::get()->mWidth - 64.f || edgeY >= Game::get()->mHeight - 64.f)
 				mObstacleMap[i][j] = -1;
+			
 		}
+
 	}
 }

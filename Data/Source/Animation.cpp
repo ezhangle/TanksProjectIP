@@ -1,5 +1,6 @@
 #include "Animation.h"
 #include "Game.h"
+#include <iostream>
 
 Animation::Animation(sf::Vector2f* pos, Texture start, Texture end, int frameduration, bool repeated)
 :mPos(pos), mFrameDuration(frameduration), bRepeated(repeated), mFrameClock(frameduration){
@@ -8,11 +9,11 @@ Animation::Animation(sf::Vector2f* pos, Texture start, Texture end, int framedur
 
 	int s = (int)start;
 	int e = (int)end;
-	mNumberOfFrames = e - s;
-	mSprites.resize(e - s);
+	mNumberOfFrames = e - s + 1;
+	mSprites.resize(e - s + 2);
 
 	int j;
-	for (int i = s; i < e; ++i) {
+	for (int i = s; i <= e; ++i) {
 		j = i - s;
 		mSprites[j] = new sf::Sprite(Game::get()->mTextures.get((Texture)i));
 		mSprites[j]->setPosition(*pos);
@@ -28,23 +29,21 @@ void Animation::update(sf::Time dt) {
 		if (mFrameClock < 0) {
 			mFrameClock = mFrameDuration;
 			mCurrentFrame++;
+
+			if (mCurrentFrame == mNumberOfFrames - 1) {
+				if (bRepeated == true)
+					mCurrentFrame = 0;
+				else
+					bFinished = true;
+			}
 		}
 	}
-	else
-		bFinished = true;
 }
 
 void Animation::draw(sf::RenderWindow* window) {
 
 	if (bFinished == false) {
 		window->draw(*mSprites[mCurrentFrame]);
-
-		if (mCurrentFrame == mNumberOfFrames - 1) {
-			if (bRepeated == true)
-				mCurrentFrame = 0;
-			else
-				bFinished = true;
-		}
 	}
 	
 }

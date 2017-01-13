@@ -11,6 +11,8 @@ public:
 	virtual void	update(sf::Time dt);
 	void			setTarget();
 	void			rotateMissile(float deltaAsSeconds);
+	virtual void    spawnOnHitAnimation();
 public:
 	Tank*			mTarget;
+	float			mAcceleration;
 };

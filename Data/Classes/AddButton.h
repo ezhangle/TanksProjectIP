@@ -32,9 +32,9 @@ public:
 	AddButton(sf::Vector2f initialPosition, Action action);
 
 	void											triggerAction(team& team);
-	void											insertPlayerOne(const std::string& tankType, sf::Vector2f position, sf::Vector2f velocity, float health, float damage, team& team, sf::Vector2f buttonPosition);
-	void											insertPlayerTwo(const std::string& tankType, sf::Vector2f position, sf::Vector2f velocity, float health, float damage, team& team, sf::Vector2f buttonPosition);
-	void											insertAI(const std::string& difficulty, const std::string& tankType, sf::Vector2f position, sf::Vector2f velocity, float health, float damage, team& team, sf::Vector2f buttonPosition);
+	void											insertPlayerOne(const std::string& tankType, sf::Vector2f* position, sf::Vector2f* velocity, float health, float damage, team& team, sf::Vector2f buttonPosition);
+	void											insertPlayerTwo(const std::string& tankType, sf::Vector2f* position, sf::Vector2f* velocity, float health, float damage, team& team, sf::Vector2f buttonPosition);
+	void											insertAI(const std::string& difficulty, const std::string& tankType, sf::Vector2f* position, sf::Vector2f* velocity, float health, float damage, team& team, sf::Vector2f buttonPosition);
 	void											getTextureIDs(const std::string& textureString, Texture& baseTexture, Texture& topTexture);
 
 private:

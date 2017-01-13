@@ -1,9 +1,11 @@
 #include "PU_Speed.h"
 #include "Enums.h"
 #include "Game.h"
+#include <cstdlib>
+#include "GameState_Play.h"
 
-PU_Speed::PU_Speed(sf::Vector2f * position, sf::Sprite * sprite)
-	:PowerUp(position, sprite),
+PU_Speed::PU_Speed(sf::Vector2f * position)
+	:PowerUp(position, new sf::Sprite(Game::get()->mTextures.get(Texture::pu_speed))),
 	mMovementSpeedMultiplier(3.f)
 {
 	mDuration = 10.f;
@@ -20,7 +22,9 @@ void PU_Speed::update(sf::Time dt)
 			sf::Vector2f* position = new sf::Vector2f(-sin(mTarget->mBase->getRotation()*3.14f / 180.f)*mTarget->mBase->getLocalBounds().width / 3.f + mTarget->mBase->getPosition().x,
 				+cos(mTarget->mBase->getRotation()*3.14f / 180.f)*mTarget->mBase->getLocalBounds().height / 3.f + mTarget->mBase->getPosition().y);
 
-			Game::get()->mMap->mEffects.insert(Game::get()->mMap->mEffects.begin(), new Animation(position, Texture::expl_01_0000, Texture::expl_01_0023, 20, false));
+			Animation* anim = new Animation(position, Texture::expl_01_0000, Texture::expl_01_0023, 20, false);
+
+			GameState_Play::getStatePointer()->mMap->mEffects.insert(GameState_Play::getStatePointer()->mMap->mEffects.begin(), anim);
 
 			mAnimationSpawnClock.restart();
 		}
@@ -41,9 +45,12 @@ void PU_Speed::onTrigger(Tank * target)
 
 void PU_Speed::onDurationEnd()
 {
+	if (mTarget != nullptr) {
+		mTarget->mVelocity->x /= mMovementSpeedMultiplier;
+		mTarget->mVelocity->y /= mMovementSpeedMultiplier;
+	}
+	
 	PowerUp::onDurationEnd();
-	mTarget->mVelocity->x /= mMovementSpeedMultiplier;
-	mTarget->mVelocity->y /= mMovementSpeedMultiplier;
 }
 
 void PU_Speed::checkForDuplicate() {

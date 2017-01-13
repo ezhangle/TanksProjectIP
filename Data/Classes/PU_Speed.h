@@ -5,7 +5,7 @@
 
 class PU_Speed : public PowerUp {
 public:
-	PU_Speed(sf::Vector2f* position, sf::Sprite* sprite);
+	PU_Speed(sf::Vector2f* position);
 	
 	virtual void update(sf::Time dt);
 	virtual void onTrigger(Tank* target);
@@ -16,3 +16,4 @@ public:
 	float	   mMovementSpeedMultiplier;
 	sf::Clock  mAnimationSpawnClock;
 };
+

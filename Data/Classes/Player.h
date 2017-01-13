@@ -1,6 +1,7 @@
 #pragma once
 #include "Tank.h"
 #include <vector>
+#include <string>
 
 class Player : public Tank {
 public:
@@ -10,4 +11,5 @@ public:
 	void	update(sf::Time dt);
 public:
 	std::vector<sf::Keyboard::Key> mKeys;
+	std::string					   mName;
 };

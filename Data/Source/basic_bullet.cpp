@@ -1,7 +1,7 @@
 #include "basic_bullet.h"
 #include "Enums.h"
 #include "Game.h"
-
+#include "GameState_Play.h"
 
 BasicBullet::BasicBullet(Tank* parent):
 Projectile(new sf::Sprite(Game::get()->mTextures.get(Texture::bullet_orange)), parent)
@@ -16,4 +16,9 @@ Projectile(new sf::Sprite(Game::get()->mTextures.get(Texture::bullet_orange)), p
 	mSprite->setPosition(pos);
 
 	
+}
+
+void BasicBullet::spawnOnHitAnimation()
+{
+	GameState_Play::getStatePointer()->mMap->mEffects.insert(GameState_Play::getStatePointer()->mMap->mEffects.begin(), new Animation(new sf::Vector2f(mSprite->getPosition()), Texture::expl_01_0000, Texture::expl_01_0023, 20, false));
 }

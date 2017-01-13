@@ -2,14 +2,14 @@
 #include "GameState_MainMenu.h"
 #include <iostream>
 
-const sf::Time Game::timePerFrame = sf::seconds(1.f / 60.f);
+const sf::Time Game::timePerFrame = sf::seconds(1.0f / 60.0f);
 Game *Game::instance = nullptr;
 
 Game::Game(unsigned int w, unsigned int h, bool Vsync)
-	: mWidth(w),
-	mHeight(h),
-	mWindow(sf::VideoMode(1600, 832), "Thunder Tanks", sf::Style::Default)
-{
+	: mWidth(1344),
+	mHeight(768),
+	mWindow(sf::VideoMode(1344, 768), "Thunder Tanks", sf::Style::Default) {
+
 	mWindow.setVerticalSyncEnabled(Vsync);
 	mWindow.setKeyRepeatEnabled(false);
 	
@@ -25,17 +25,13 @@ Game::Game(unsigned int w, unsigned int h, bool Vsync)
 
 
 	changeState(new GameState_MainMenu());
-	/*std::string mapObjectsPath("Assets/Maps/map1_Objects.tmap");
-	std::string mapCharactersPath("Assets/Maps/map1_Characters.tmap");
-	mMap = new Map(mapObjectsPath, mapCharactersPath);*/
-	
 	mClock.restart();
 }
 
 Game::Game(unsigned int w, unsigned int h, bool vSync, bool fullscreen)
-	: mWidth(w),
-	mHeight(h),
-	mWindow(sf::VideoMode(1600, 832), "Thunder Tanks", sf::Style::Fullscreen)
+	: mWidth(1344),
+	mHeight(768),
+	mWindow(sf::VideoMode(1344, 768), "Thunder Tanks", sf::Style::Fullscreen)
 {
 	mWindow.setVerticalSyncEnabled(vSync);
 
@@ -83,12 +79,15 @@ Map* Game::getMap() {
 
 void Game::update(sf::Time deltaTime)
 {	
+
 	GameState *currentState = getActiveState();
+//	handleInput();
 	if (currentState != nullptr)
 	{
 		currentState->update(deltaTime);
 	}
 
+	
 
 	//mMap->update(deltaTime);
 }
@@ -129,6 +128,8 @@ void Game::processEvents()
 
 				break;
 			}
+
+			
 			
 			default:break;
 		}

@@ -24,21 +24,7 @@ void RemoveButton::triggerAction(team &team, unsigned int index, size_t& player1
 			if (team.numberOfMembers == 0)
 				return;
 
-			if (team.numberOfMembers == 1)
-			{
-				
-				if ((team.mTeamMembers.begin() + index)->mText.getString() == "Player 1" && player1_team != 0)
-					player1_team = 0;
-
-				else if ((team.mTeamMembers.begin() + index)->mText.getString() == "Player 2" && player2_team != 0)
-					player2_team = 0;
-
-				team.mTeamMembers.clear();
-				team.numberOfMembers = 0;
-				team.mAddPosition.y -= 30.0f;
-
-				return;
-			}
+			
 
 
 			if ((team.mTeamMembers.begin() + index)->mText.getString() == "Player 1" && player1_team != 0)
@@ -48,6 +34,7 @@ void RemoveButton::triggerAction(team &team, unsigned int index, size_t& player1
 				player2_team = 0;
 
 			team.mTeamMembers.erase(team.mTeamMembers.begin() + index);
+			
 			team.numberOfMembers--;
 			for (unsigned int i = index; i < team.numberOfMembers; i++)
 			{
@@ -55,7 +42,8 @@ void RemoveButton::triggerAction(team &team, unsigned int index, size_t& player1
 				team.mTeamMembers[i].mText.move(0.0f, -30.0f);
 				team.mTeamMembers[i].index--;
 			}
-			
+
+
 		
 			team.mAddPosition.y -= 30.0f;
 			break;

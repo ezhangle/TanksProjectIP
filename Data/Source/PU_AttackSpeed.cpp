@@ -1,7 +1,9 @@
 #include "PU_AttackSpeed.h"
+#include "Game.h"
+#include "Enums.h"
 
-PU_AttackSpeed::PU_AttackSpeed(sf::Vector2f* position, sf::Sprite* sprite) :
-	PowerUp(position, sprite),
+PU_AttackSpeed::PU_AttackSpeed(sf::Vector2f* position) :
+	PowerUp(position, new sf::Sprite(Game::get()->mTextures.get(Texture::pu_fast_attacks))),
 	mAttackSpeedMultiplier(5.f){
 
 }
@@ -22,9 +24,12 @@ void PU_AttackSpeed::onTrigger(Tank* target) {
 
 void PU_AttackSpeed::onDurationEnd() {
 
+	if (mTarget != nullptr) {
+		mTarget->mHitCooldown *= mAttackSpeedMultiplier;
+		mTarget->mHitCooldownClock.restart();
+	}
+	
 	PowerUp::onDurationEnd();
-	mTarget->mHitCooldown *= mAttackSpeedMultiplier;
-	mTarget->mHitCooldownClock.restart();
 }
 
 void PU_AttackSpeed::checkForDuplicate() {

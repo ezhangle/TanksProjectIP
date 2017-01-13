@@ -5,14 +5,14 @@
 #include "AI.h"
 #include "Obstacle.h"
 #include <iostream>
-
 #include "GameState_Play.h"
 
 Projectile::Projectile(sf::Sprite* sprite, Tank* parent):
 Entity(sprite),
 mVelocity(parent->mProjectileSpeed),
 mDamage(parent->mDamage),
-mParent(parent){
+mParent(parent),
+mHollow(false){
 
 	mSprite->setRotation(mParent->mTop->getRotation());
 }
@@ -52,11 +52,14 @@ bool Projectile::checkCollision() {
 				if (SAT.collision(mSprite, (*it2)->getCollisionSprite())) {
 
 					if (Tank* proj = dynamic_cast<Tank*>((*it2))) {
+
 						if (mParent->mTeam != proj->mTeam) {
 							collideSolid = true;
 							proj->mHealth -= mDamage;
+							mParent->mScore += (1 + mDamage) * 0.1f;
 							if (proj->mHealth <= 0.f) {
 					
+								//assign new target to AI's
 								for (auto itAi = GameState_Play::getStatePointer()->mMap->mEntities[2].begin(); itAi != GameState_Play::getStatePointer()->mMap->mEntities[2].end(); ++itAi) {
 									if (AI* ai = dynamic_cast<AI*>((*itAi))) {
 										if (ai->mTarget == proj) {
@@ -65,12 +68,15 @@ bool Projectile::checkCollision() {
 											
 									}
 								}
+								
+								mParent->mScore += (proj->mMaxHealth + mDamage) * 0.1f;
 							}
 						}
 					}
 
 					if (Obstacle* obs = dynamic_cast<Obstacle*>((*it2))) {
-						collideSolid = true;
+						if(!mHollow)
+							collideSolid = true;
 					}
 					
 				}
@@ -78,14 +84,21 @@ bool Projectile::checkCollision() {
 		}
 	}
 
-	if(collideSolid == true)
-		GameState_Play::getStatePointer()->mMap->mEffects.insert(GameState_Play::getStatePointer()->mMap->mEffects.begin(), new Animation(new sf::Vector2f(mSprite->getPosition()), Texture::expl_01_0000, Texture::expl_01_0023, 20, false));
+	if (collideSolid == true)
+		spawnOnHitAnimation();
 
 	return collideSolid;
 
 }
 
 
+
 Projectile::~Projectile() {
 	delete mVelocity;
+}
+
+void Projectile::setHollow()
+{
+	mHollow = true;
+	mSprite->setColor(sf::Color(255, 255, 255, 128));
 }

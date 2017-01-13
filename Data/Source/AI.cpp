@@ -4,7 +4,9 @@
 #include "Obstacle.h"
 #include "VectorUtility.h"
 #include <cstdlib>
+#include <ctime>
 #include <queue>
+#include <iostream>
 #include "GameState_Play.h"
 
 AI::AI(sf::Sprite* base, sf::Sprite* top, sf::Vector2f* pos, sf::Vector2f* vel, float health, float damage, size_t team):
@@ -12,8 +14,10 @@ Tank(base, top, pos, vel, health, damage, team),
 mTileLength(64.f),
 mTarget(nullptr){
 
-	mWidth = Game::get()->mWidth / mTileLength;
-	mHeight = Game::get()->mHeight / mTileLength;
+	srand(time(0));
+
+	mWidth = (int)(Game::get()->mWidth / mTileLength);
+	mHeight = (int)(Game::get()->mHeight / mTileLength);
 
 	mNextPoint.x = -1.f;
 	mNextPoint.y = -1.f;
@@ -113,8 +117,9 @@ void AI::calculatePathMap() {
 	std::queue<LeePoint> que;
 	LeePoint startPoint;
 	LeePoint currentPoint;
-	startPoint.x = mBase->getPosition().y / mTileLength;
-	startPoint.y = mBase->getPosition().x / mTileLength;
+	startPoint.x = (int)(mBase->getPosition().y / mTileLength);
+	startPoint.y = (int)(mBase->getPosition().x / mTileLength);
+
 	if(mPathFindMap[startPoint.x][startPoint.y] != -1)
 		mPathFindMap[startPoint.x][startPoint.y] = 1;
 
@@ -147,8 +152,8 @@ void AI::calculateRandomPath() {
 	sf::Vector2f toInsert;
 
 	do {
-		startPoint.x = rand() % mHeight;
-		startPoint.y = rand() % mWidth;
+		startPoint.x = (float)(rand() % mHeight);
+		startPoint.y = (float)(rand() % mWidth);
 	} while (mPathFindMap[(int)(startPoint.x)][(int)(startPoint.y)] <= 0);
 
 	calculatePath(startPoint);
@@ -187,17 +192,22 @@ void AI::calculatePath(sf::Vector2f& startPoint) {
 
 void AI::findNewTarget() {
 
+
 	mTarget = nullptr;
 	auto it = GameState_Play::getStatePointer()->mMap->mEntities[2].begin();
 	for (; it != GameState_Play::getStatePointer()->mMap->mEntities[2].end(); ++it) {
 		if (Tank* enemy = dynamic_cast<Tank*>(*it)) {
-			if(enemy->mTeam != mTeam && enemy->mHealth > 0.f)
+
+			if(enemy->mTeam != mTeam && enemy->mHealth > 0.f && rand() % 2)
 				mTarget = enemy;
 		}
 	}
 }
 
 bool AI::isProjectilePathClear() {
+
+	if (mIsProjectileHollow)
+		return true;
 
 	float xRot = sin(mTop->getRotation()*3.14f / 180.f);
 	float yRot = -cos(mTop->getRotation()*3.14f / 180.f);

@@ -2,6 +2,7 @@
 #include "VectorUtility.h"
 #include "Game.h"
 #include "PowerUp.h"
+#include "GameState_Play.h"
 
 AI_Medium::AI_Medium(sf::Sprite* base, sf::Sprite* top, sf::Vector2f* pos, sf::Vector2f* vel, float health, float damage, size_t team) :
 	AI(base, top, pos, vel, health, damage, team) {
@@ -19,13 +20,13 @@ void AI_Medium::assignNewPoint() {
 	else {
 		calculatePathMap();
 		
-		int noPowerUps = Game::get()->mMap->mEntities[1].size();
+		int noPowerUps = GameState_Play::getStatePointer()->mMap->mEntities[1].size();
 		bool foundPU = false;
 
 		if (noPowerUps > 0) {
 			int puTarget = rand() % noPowerUps;
 
-			auto it = Game::get()->mMap->mEntities[1].begin();
+			auto it = GameState_Play::getStatePointer()->mMap->mEntities[1].begin();
 
 			for (int i = 0; i < puTarget; ++i) {
 				++it;
@@ -100,52 +101,30 @@ void AI_Medium::update(sf::Time dt) {
 			return;
 		}
 
-		sf::Vector2f turretProjection(mBase->getPosition());
 		sf::Vector2f playerPosition(mTarget->mBase->getPosition());
+		sf::Vector2f tankPos(mBase->getPosition());
 
-		float distanceToPlayer = Vector2f::distance(turretProjection, playerPosition);
+		float angle = 180.f - atan2(playerPosition.x - tankPos.x, playerPosition.y - tankPos.y) * 180.f / 3.14f;
+		float currentTurretRotation = mTop->getRotation();
+		float angleDiff = abs(currentTurretRotation - angle);
 
-		turretProjection.x += sin(mTop->getRotation()*3.14f / 180.f)* distanceToPlayer;
-		turretProjection.y -= cos(mTop->getRotation()*3.14f / 180.f)* distanceToPlayer;
-
-		if (abs(turretProjection.y - playerPosition.y) > 5.f && abs(turretProjection.x - playerPosition.x) > 5.f) {
-
-			float distProjPlayer = Vector2f::distance(turretProjection, playerPosition);
-			float angle = acos(1.f - distProjPlayer / (2 * distanceToPlayer));
-
-			if (playerPosition.x < mBase->getPosition().x) {
-				if (360.f - angle > 180.f)
-					if (turretProjection.y > playerPosition.y)
-						rotateTurret(dt.asSeconds());
-					else
-						rotateTurret(-dt.asSeconds());
-				else {
-					if (turretProjection.y > playerPosition.y)
-						rotateTurret(-dt.asSeconds());
-					else
-						rotateTurret(dt.asSeconds());
-				}
+		if (angleDiff > 3.f) {
+			if (abs(currentTurretRotation - angle) < 180.f) {
+				if (currentTurretRotation < angle)
+					rotateTurret(dt.asSeconds());
+				else
+					rotateTurret(-dt.asSeconds());
 			}
 			else {
-				if (360.f - angle > 180.f)
-					if (turretProjection.y > playerPosition.y)
-						rotateTurret(-dt.asSeconds());
-					else
-						rotateTurret(dt.asSeconds());
-				else {
-					if (turretProjection.y > playerPosition.y)
-						rotateTurret(dt.asSeconds());
-					else
-						rotateTurret(-dt.asSeconds());
-				}
+				if (currentTurretRotation < angle)
+					rotateTurret(-dt.asSeconds());
+				else
+					rotateTurret(dt.asSeconds());
 			}
-
-
 		}
-		else {
+		else
 			if (isProjectilePathClear())
 				shoot();
-		}
 	}
 
 	AI::update(dt);

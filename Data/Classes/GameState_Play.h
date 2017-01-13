@@ -23,7 +23,7 @@ public:
 	void											handleRealTimeInput();
 	void											rePositionButtons(sf::Vector2u &currentPosition, sf::Vector2u &newPosition);
 
-
+	sf::Clock										timeUntilRestart;
 	Map*											mMap;
 
 private:
@@ -35,6 +35,8 @@ private:
 private:
 	std::string										mMapObjectsPath;
 	std::vector<Entity*>							mEntities;
+	sf::Text										gameOver;
+	bool											drawGameOver;
 
 
 public:

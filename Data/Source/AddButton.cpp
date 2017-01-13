@@ -61,35 +61,50 @@ void AddButton::triggerAction(team& team)
 		case Action::addPlayer1:
 		{
 			if (team.numberOfMembers < 18)
-				insertPlayerOne("tank1", sf::Vector2f(100.0f, 100.0f), sf::Vector2f(10.0f, 10.0f), 100.0f, 100.0f, team, team.mAddPosition);
+			{
+				insertPlayerOne("tank1", team.spawnPosition, new sf::Vector2f(100.0f, 100.0f), 100.0f, 15.0f, team, team.mAddPosition);
+				//team.spawnPosition->x += 50.0f;
+			}
 			break;
 		}
 
 		case Action::addPlayer2:
 		{
 			if (team.numberOfMembers < 18)
-				insertPlayerTwo("tank1", sf::Vector2f(100.0f, 100.0f), sf::Vector2f(10.0f, 10.0f), 100.0f, 100.0f, team, team.mAddPosition);
+			{
+				insertPlayerTwo("tank1", team.spawnPosition, new sf::Vector2f(100.0f, 100.0f), 100.0f, 15.0f, team, team.mAddPosition);
+				//team.spawnPosition->x += 50.0f;
+			}
 			break;
 		}
 
 		case Action::addAI_easy:
 		{
 			if (team.numberOfMembers < 18)
-				insertAI("easy", "tank2", sf::Vector2f(100.0f, 100.0f), sf::Vector2f(10.0f, 10.0f), 100.0f, 100.0f, team, team.mAddPosition);
+			{
+				insertAI("easy", "tank2", team.spawnPosition, new sf::Vector2f(60.0f, 60.0f), 200.0f, 17.0f, team, team.mAddPosition);
+				//team.spawnPosition->x += 50.0f;
+			}
 			break;
 		}
 
 		case Action::addAI_medium:
 		{
 			if (team.numberOfMembers < 18)
-				insertAI("medium", "tank2", sf::Vector2f(100.0f, 100.0f), sf::Vector2f(10.0f, 10.0f), 100.0f, 100.0f, team, team.mAddPosition);
+			{
+				insertAI("medium", "tank2", team.spawnPosition, new sf::Vector2f(80.0f, 80.0f), 250.0f, 25.0f, team, team.mAddPosition);
+				//team.spawnPosition->x += 50.0f;
+			}
 			break;
 		}
 
 		case Action::addAI_hard:
 		{
-			if(team.numberOfMembers < 18)
-				insertAI("hard", "tank2", sf::Vector2f(100.0f, 100.0f), sf::Vector2f(10.0f, 10.0f), 100.0f, 100.0f, team, team.mAddPosition);
+			if (team.numberOfMembers < 18)
+			{
+				insertAI("hard", "tank2", team.spawnPosition, new sf::Vector2f(100.0f, 100.0f), 350.0f, 30.0f, team, team.mAddPosition);
+				//team.spawnPosition->x += 50.0f;
+			}
 			break;
 		}
 
@@ -99,7 +114,7 @@ void AddButton::triggerAction(team& team)
 	}
 }
 
-void AddButton::insertPlayerOne(const std::string& tankType, sf::Vector2f position, sf::Vector2f velocity, float health, float damage, team& team, sf::Vector2f buttonPosition)
+void AddButton::insertPlayerOne(const std::string& tankType, sf::Vector2f* position, sf::Vector2f* velocity, float health, float damage, team& team, sf::Vector2f buttonPosition)
 {
 	std::vector<sf::Keyboard::Key> keys;
 	keys.resize(20);
@@ -115,21 +130,39 @@ void AddButton::insertPlayerOne(const std::string& tankType, sf::Vector2f positi
 	keys[(int)Tank::Command::SHOOT] = sf::Keyboard::Space;
 
 	Texture baseTexture, topTexture;
-	getTextureIDs(tankType, baseTexture, topTexture);
+	getTextureIDs(team.player1TankData.mTextureIdentifier, baseTexture, topTexture);
 	team.numberOfMembers++;
 
-	team.mTeamMembers.push_back(teamRecord(new Player(new sf::Sprite(Game::get()->mTextures.get(baseTexture)),
-		new sf::Sprite(Game::get()->mTextures.get(topTexture)),
-		&position,
-		&velocity,
-		health,
-		damage,
-		keys,
-		team.teamNumber),
-		new RemoveButton(buttonPosition + sf::Vector2f(250.0f, 0.0f), "X", 20, RemoveButton::Action::remove),
-		sf::Text("Player 1", Game::get()->mFonts.get(Font::VanillaExtractRegular), 20),
-		team.numberOfMembers - 1));
+	
 
+	if (team.teamNumber == 1)
+	{
+		team.mTeamMembers.push_back(teamRecord(new Player(new sf::Sprite(Game::get()->mTextures.get(baseTexture)),
+			new sf::Sprite(Game::get()->mTextures.get(topTexture)),
+			position,
+			new sf::Vector2f(team.player1TankData.mSpeed, team.player1TankData.mSpeed),
+			team.player1TankData.mHealth,
+			team.player1TankData.mDamage,
+			keys,
+			team.teamNumber),
+			new RemoveButton(buttonPosition + sf::Vector2f(250.0f, 0.0f), "X", 20, RemoveButton::Action::remove),
+			sf::Text("Player 1", Game::get()->mFonts.get(Font::VanillaExtractRegular), 20),
+			team.numberOfMembers - 1));
+	}
+	else
+	{
+		team.mTeamMembers.push_back(teamRecord(new Player(new sf::Sprite(Game::get()->mTextures.get(baseTexture)),
+			new sf::Sprite(Game::get()->mTextures.get(topTexture)),
+			position,
+			new sf::Vector2f(team.player1TankData.mSpeed, team.player1TankData.mSpeed),
+			team.player1TankData.mHealth,
+			team.player1TankData.mDamage,
+			keys,
+			team.teamNumber),
+			new RemoveButton(buttonPosition + sf::Vector2f(250.0f, 0.0f), "X", 20, RemoveButton::Action::remove),
+			sf::Text("Player 1", Game::get()->mFonts.get(Font::VanillaExtractRegular), 20),
+			team.numberOfMembers - 1));
+	}
 	
 		team.mTeamMembers.back().mRemoveButton->getText().setFillColor(sf::Color(110, 28, 28));
 		team.mTeamMembers.back().mText.setFillColor(sf::Color(110, 28, 28));
@@ -138,7 +171,7 @@ void AddButton::insertPlayerOne(const std::string& tankType, sf::Vector2f positi
 		team.mAddPosition.y += 30.0f;
 }
 
-void AddButton::insertPlayerTwo(const std::string& tankType, sf::Vector2f position, sf::Vector2f velocity, float health, float damage, team& team, sf::Vector2f buttonPosition)
+void AddButton::insertPlayerTwo(const std::string& tankType, sf::Vector2f* position, sf::Vector2f* velocity, float health, float damage, team& team, sf::Vector2f buttonPosition)
 {
 	std::vector<sf::Keyboard::Key> keys;
 	keys.resize(20);
@@ -154,106 +187,162 @@ void AddButton::insertPlayerTwo(const std::string& tankType, sf::Vector2f positi
 	keys[(int)Tank::Command::SHOOT] = sf::Keyboard::P;
 
 	Texture baseTexture, topTexture;
-	getTextureIDs(tankType, baseTexture, topTexture);
+	getTextureIDs(team.player2TankData.mTextureIdentifier, baseTexture, topTexture);
 	team.numberOfMembers++;
 
-	team.mTeamMembers.push_back(teamRecord(new Player(new sf::Sprite(Game::get()->mTextures.get(baseTexture)),
-		new sf::Sprite(Game::get()->mTextures.get(topTexture)),
-		&position,
-		&velocity,
-		health,
-		damage,
-		keys,
-		team.teamNumber),
-		new RemoveButton(buttonPosition + sf::Vector2f(250.0f, 0.0f), "X", 20, RemoveButton::Action::remove),
-		sf::Text("Player 2", Game::get()->mFonts.get(Font::VanillaExtractRegular), 20),
-		team.numberOfMembers - 1));
+	
 
+	if (team.teamNumber == 1)
+	{
+		team.mTeamMembers.push_back(teamRecord(new Player(new sf::Sprite(Game::get()->mTextures.get(baseTexture)),
+			new sf::Sprite(Game::get()->mTextures.get(topTexture)),
+			position,
+			new sf::Vector2f(team.player2TankData.mSpeed, team.player2TankData.mSpeed),
+			team.player2TankData.mHealth,
+			team.player2TankData.mDamage,
+			keys,
+			team.teamNumber),
+			new RemoveButton(buttonPosition + sf::Vector2f(250.0f, 0.0f), "X", 20, RemoveButton::Action::remove),
+			sf::Text("Player 2", Game::get()->mFonts.get(Font::VanillaExtractRegular), 20),
+			team.numberOfMembers - 1));
+	}
+	else
+	{
+		team.mTeamMembers.push_back(teamRecord(new Player(new sf::Sprite(Game::get()->mTextures.get(baseTexture)),
+			new sf::Sprite(Game::get()->mTextures.get(topTexture)),
+			position,
+			new sf::Vector2f(team.player2TankData.mSpeed, team.player2TankData.mSpeed),
+			team.player2TankData.mHealth,
+			team.player2TankData.mDamage,
+			keys,
+			team.teamNumber),
+			new RemoveButton(buttonPosition + sf::Vector2f(250.0f, 0.0f), "X", 20, RemoveButton::Action::remove),
+			sf::Text("Player 2", Game::get()->mFonts.get(Font::VanillaExtractRegular), 20),
+			team.numberOfMembers - 1));
+	}
 
-	team.mAddPosition.y += 30.0f;
+		team.mAddPosition.y += 30.0f;
 
 	
 		team.mTeamMembers.back().mRemoveButton->getText().setFillColor(sf::Color(110, 28, 28));
 		team.mTeamMembers.back().mText.setFillColor(sf::Color(110, 28, 28));
 }
 
-void AddButton::insertAI(const std::string& difficulty, const std::string& tankType, sf::Vector2f position, sf::Vector2f velocity, float health, float damage, team& team, sf::Vector2f buttonPosition)
+void AddButton::insertAI(const std::string& difficulty, const std::string& tankType, sf::Vector2f* position, sf::Vector2f* velocity, float health, float damage, team& team, sf::Vector2f buttonPosition)
 {
 	Texture baseTexture, topTexture;
 	getTextureIDs(tankType, baseTexture, topTexture);
 	team.numberOfMembers++;
 
 	if (difficulty == "easy") {
-		team.mTeamMembers.push_back(teamRecord(new AI_Easy(new sf::Sprite(Game::get()->mTextures.get(baseTexture)),
-			new sf::Sprite(Game::get()->mTextures.get(topTexture)),
-			&position,
-			&velocity,
-			health,
-			damage,
-			team.teamNumber),
-			new RemoveButton(buttonPosition + sf::Vector2f(250.0f, 0.0f), "X", 20, RemoveButton::Action::remove),
-			sf::Text("AI(easy)", Game::get()->mFonts.get(Font::VanillaExtractRegular), 20),
-			team.numberOfMembers - 1));
+		
 
 		team.mAddPosition.y += 30.0f;
 
 		if (team.teamNumber == 1)
 		{
+			team.mTeamMembers.push_back(teamRecord(new AI_Easy(new sf::Sprite(Game::get()->mTextures.get(baseTexture)),
+				new sf::Sprite(Game::get()->mTextures.get(topTexture)),
+				position,
+				velocity,
+				health,
+				damage,
+				team.teamNumber),
+				new RemoveButton(buttonPosition + sf::Vector2f(250.0f, 0.0f), "X", 20, RemoveButton::Action::remove),
+				sf::Text("AI(easy)", Game::get()->mFonts.get(Font::VanillaExtractRegular), 20),
+				team.numberOfMembers - 1));
+
 			team.mTeamMembers.back().mRemoveButton->getText().setFillColor(sf::Color(0, 0, 153));
 			team.mTeamMembers.back().mText.setFillColor(sf::Color(0, 0, 153));
 		}
 		else if (team.teamNumber == 2)
 		{
+			team.mTeamMembers.push_back(teamRecord(new AI_Easy(new sf::Sprite(Game::get()->mTextures.get(baseTexture)),
+				new sf::Sprite(Game::get()->mTextures.get(topTexture)),
+				position,
+				velocity,
+				health,
+				damage,
+				team.teamNumber),
+				new RemoveButton(buttonPosition + sf::Vector2f(250.0f, 0.0f), "X", 20, RemoveButton::Action::remove),
+				sf::Text("AI(easy)", Game::get()->mFonts.get(Font::VanillaExtractRegular), 20),
+				team.numberOfMembers - 1));
+
 			team.mTeamMembers.back().mRemoveButton->getText().setFillColor(sf::Color(0, 102, 51));
 			team.mTeamMembers.back().mText.setFillColor(sf::Color(0, 102, 51));
 		}
 	}
 	else if (difficulty == "medium") {
-		team.mTeamMembers.push_back(teamRecord(new AI_Medium(new sf::Sprite(Game::get()->mTextures.get(baseTexture)),
-			new sf::Sprite(Game::get()->mTextures.get(topTexture)),
-			&position,
-			&velocity,
-			health,
-			damage,
-			team.teamNumber),
-			new RemoveButton(buttonPosition + sf::Vector2f(250.0f, 0.0f), "X", 20, RemoveButton::Action::remove),
-			sf::Text("AI(medium)", Game::get()->mFonts.get(Font::VanillaExtractRegular), 20),
-			team.numberOfMembers - 1));
-
 		team.mAddPosition.y += 30.0f;
 
 		if (team.teamNumber == 1)
 		{
+			team.mTeamMembers.push_back(teamRecord(new AI_Medium(new sf::Sprite(Game::get()->mTextures.get(baseTexture)),
+				new sf::Sprite(Game::get()->mTextures.get(topTexture)),
+				position,
+				velocity,
+				health,
+				damage,
+				team.teamNumber),
+				new RemoveButton(buttonPosition + sf::Vector2f(250.0f, 0.0f), "X", 20, RemoveButton::Action::remove),
+				sf::Text("AI(medium)", Game::get()->mFonts.get(Font::VanillaExtractRegular), 20),
+				team.numberOfMembers - 1));
+
+
 			team.mTeamMembers.back().mRemoveButton->getText().setFillColor(sf::Color(0, 0, 153));
 			team.mTeamMembers.back().mText.setFillColor(sf::Color(0, 0, 153));
 		}
 		else if (team.teamNumber == 2)
 		{
+
+			team.mTeamMembers.push_back(teamRecord(new AI_Medium(new sf::Sprite(Game::get()->mTextures.get(baseTexture)),
+				new sf::Sprite(Game::get()->mTextures.get(topTexture)),
+				position,
+				velocity,
+				health,
+				damage,
+				team.teamNumber),
+				new RemoveButton(buttonPosition + sf::Vector2f(250.0f, 0.0f), "X", 20, RemoveButton::Action::remove),
+				sf::Text("AI(medium)", Game::get()->mFonts.get(Font::VanillaExtractRegular), 20),
+				team.numberOfMembers - 1));
 			team.mTeamMembers.back().mRemoveButton->getText().setFillColor(sf::Color(0, 102, 51));
 			team.mTeamMembers.back().mText.setFillColor(sf::Color(0, 102, 51));
 		}
 	}
 	else if (difficulty == "hard") {
-		team.mTeamMembers.push_back(teamRecord(new AI_Hard(new sf::Sprite(Game::get()->mTextures.get(baseTexture)),
-			new sf::Sprite(Game::get()->mTextures.get(topTexture)),
-			&position,
-			&velocity,
-			health,
-			damage,
-			team.teamNumber),
-			new RemoveButton(buttonPosition + sf::Vector2f(250.0f, 0.0f), "X", 20, RemoveButton::Action::remove),
-			sf::Text("AI(hard)", Game::get()->mFonts.get(Font::VanillaExtractRegular), 20),
-			team.numberOfMembers - 1));
+		
 
 		team.mAddPosition.y += 30.0f;
 
 		if (team.teamNumber == 1)
 		{
+			team.mTeamMembers.push_back(teamRecord(new AI_Hard(new sf::Sprite(Game::get()->mTextures.get(baseTexture)),
+				new sf::Sprite(Game::get()->mTextures.get(topTexture)),
+				position,
+				velocity,
+				health,
+				damage,
+				team.teamNumber),
+				new RemoveButton(buttonPosition + sf::Vector2f(250.0f, 0.0f), "X", 20, RemoveButton::Action::remove),
+				sf::Text("AI(hard)", Game::get()->mFonts.get(Font::VanillaExtractRegular), 20),
+				team.numberOfMembers - 1));
+
 			team.mTeamMembers.back().mRemoveButton->getText().setFillColor(sf::Color(0, 0, 153));
 			team.mTeamMembers.back().mText.setFillColor(sf::Color(0, 0, 153));
 		}
 		else if (team.teamNumber == 2)
 		{
+			team.mTeamMembers.push_back(teamRecord(new AI_Hard(new sf::Sprite(Game::get()->mTextures.get(baseTexture)),
+				new sf::Sprite(Game::get()->mTextures.get(topTexture)),
+				position,
+				velocity,
+				health,
+				damage,
+				team.teamNumber),
+				new RemoveButton(buttonPosition + sf::Vector2f(250.0f, 0.0f), "X", 20, RemoveButton::Action::remove),
+				sf::Text("AI(hard)", Game::get()->mFonts.get(Font::VanillaExtractRegular), 20),
+				team.numberOfMembers - 1));
+
 			team.mTeamMembers.back().mRemoveButton->getText().setFillColor(sf::Color(0, 102, 51));
 			team.mTeamMembers.back().mText.setFillColor(sf::Color(0, 102, 51));
 		}

@@ -1,6 +1,9 @@
 #pragma once
 
 #include "GameState.h"
+#include "GameState_GameBuild.h"
+#include "Game.h"
+#include "PlayerTank.h"
 
 
 class GameState_ChangeTanks
@@ -22,7 +25,12 @@ public:
 	void											rePositionButtons(sf::Vector2u &currentPosition, sf::Vector2u &newPosition);
 
 private:
-
+	Game*											gamePointer;
+	GameState_GameBuild*							gameBuildPointer;
+	std::vector<TextButton>							mButtons;
+	Selector<TextButton>							mButtons_Selector;
+	PlayerTank										player1;
+	PlayerTank										player2;
 
 private:
 

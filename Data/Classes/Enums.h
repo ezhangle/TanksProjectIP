@@ -3,12 +3,14 @@ enum class Texture {
 
 	//backgrounds
 	green_bg,
+	aged,
 
 	//start_pu
 	pu_damage,
 	pu_fast_attacks,
-	pu_health,
+	pu_ally,
 	pu_missile,
+	pu_laser,
 	pu_repair,
 	pu_speed,
 	//end_pu
@@ -219,6 +221,7 @@ enum class Texture {
 	expl_10_0031,
 
 	bullet_orange,
+	bullet_laser_ball,
 	missile,
 
 	hp_base,
