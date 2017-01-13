@@ -20,7 +20,6 @@
 #include <fstream>
 #include <vector>
 #include <cstdlib>
-#include <iostream>
 
 Map::Map(std::string& path, std::vector<Entity*>& entities):
 mTileLength(64.f){
@@ -45,8 +44,8 @@ void Map::loadFromFile(std::string& path) {
 
 	mBackground.setTexture(Game::get()->mTextures.get((Texture)backgroundSpriteIndex));
 	sf::Vector2f scale;
-	scale.x = Game::get()->mWidth / mBackground.getLocalBounds().width;
-	scale.y = Game::get()->mHeight / mBackground.getLocalBounds().height;
+	scale.x = static_cast<float>(Game::get()->mWidth) / mBackground.getLocalBounds().width;
+	scale.y = static_cast<float>(Game::get()->mHeight) / mBackground.getLocalBounds().height;
 
 	mBackground.setScale(scale);
 
@@ -299,6 +298,8 @@ void Map::getStaticObjectTextureId(const std::string& textureString, Texture& te
 		texture = Texture::box_2x2;
 	else if (textureString == "box_small")
 		texture = Texture::box_small;
+	else if (textureString == "barrel")
+		texture = Texture::barrel;
 	else
 		throw std::runtime_error("Map->getStaticObjectTextureId: The specified texture doesn't exist");
 }

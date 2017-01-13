@@ -1,9 +1,9 @@
 Assets/Textures/Background/green_bg.png
-Assets/Textures/Background/aged.jpg
+Assets/Textures/Background/aged.png
 
 Assets/Textures/PowerUps/damage.png
 Assets/Textures/PowerUps/fast_attacks.png
-Assets/Textures/PowerUps/health.png
+Assets/Textures/PowerUps/ally.png
 Assets/Textures/PowerUps/missile.png
 Assets/Textures/PowerUps/laser.png
 Assets/Textures/PowerUps/repair.png

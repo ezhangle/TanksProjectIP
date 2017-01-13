@@ -66,9 +66,9 @@ void GameState_GameBuild::buildGUI()
 
 
 	MapButton map_Plains(mBorderMapSelector.getPosition() + sf::Vector2f(15.0f, 15.0f), "Island", 20, "Assets/Maps/map1_Characters.tmap", "Assets/Maps/map1_Objects.tmap");
-	MapButton map_test(mBorderMapSelector.getPosition() + sf::Vector2f(15.0f, 45.0f), "Stone", 20, "Assets/Maps/maptest_Characters.tmap", "Assets/Maps/map2_Objects.tmap");
+	MapButton map_Beach(mBorderMapSelector.getPosition() + sf::Vector2f(15.0f, 45.0f), "Beach", 20, "Assets/Maps/maptest_Characters.tmap", "Assets/Maps/map2_Objects.tmap");
 	mMaps.push_back(map_Plains);
-	mMaps.push_back(map_test);
+	mMaps.push_back(map_Beach);
 
 	for each  (MapButton map in mMaps)
 	{

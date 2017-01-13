@@ -6,4 +6,4 @@ static_obstacle box 600 200
 static_obstacle box_2x2 600 510
 static_obstacle box_2x2 900 200
 static_obstacle box_2x1 250 350
-static_obstacle box_small 1200 400
+static_obstacle box_small 1000 400
