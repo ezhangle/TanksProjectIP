@@ -1,8 +1,0 @@
-6
-
-Alexandru_Citea	15
-Bogdan_Patrut	-100
-Liviu_Muraru	15
-Laurentiu_Horghidan 15
-Robert_Ojoc		15
-Daniel_Popescu	15
