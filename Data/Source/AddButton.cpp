@@ -82,7 +82,7 @@ void AddButton::triggerAction(team& team)
 		{
 			if (team.numberOfMembers < 18)
 			{
-				insertAI("easy", "tank2", team.spawnPosition, new sf::Vector2f(60.0f, 60.0f), 80.0f, 10.0f, team, team.mAddPosition);
+				insertAI("easy", "tank2", team.spawnPosition, new sf::Vector2f(60.0f, 60.0f), 200.0f, 17.0f, team, team.mAddPosition);
 				//team.spawnPosition->x += 50.0f;
 			}
 			break;
@@ -92,7 +92,7 @@ void AddButton::triggerAction(team& team)
 		{
 			if (team.numberOfMembers < 18)
 			{
-				insertAI("medium", "tank2", team.spawnPosition, new sf::Vector2f(80.0f, 80.0f), 100.0f, 15.0f, team, team.mAddPosition);
+				insertAI("medium", "tank2", team.spawnPosition, new sf::Vector2f(80.0f, 80.0f), 250.0f, 25.0f, team, team.mAddPosition);
 				//team.spawnPosition->x += 50.0f;
 			}
 			break;
@@ -102,7 +102,7 @@ void AddButton::triggerAction(team& team)
 		{
 			if (team.numberOfMembers < 18)
 			{
-				insertAI("hard", "tank2", team.spawnPosition, new sf::Vector2f(100.0f, 100.0f), 120.0f, 20.0f, team, team.mAddPosition);
+				insertAI("hard", "tank2", team.spawnPosition, new sf::Vector2f(100.0f, 100.0f), 350.0f, 30.0f, team, team.mAddPosition);
 				//team.spawnPosition->x += 50.0f;
 			}
 			break;

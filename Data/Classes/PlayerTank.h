@@ -56,7 +56,7 @@ inline void PlayerTank::buildGUI()
 
 	sf::Vector2f deltaPosition(5.0f, 5.0f);
 
-	mTanks.push_back(TankButton(mBorder.getPosition() + deltaPosition, "M1-Abrams", 20, 100.0, 15.0, 100.0f, "tank1"));
+	mTanks.push_back(TankButton(mBorder.getPosition() + deltaPosition, "M1-Abrams", 20, 200.0, 15.0, 100.0f, "tank1"));
 	mTanks[0].mTextData.push_back(sf::Text("+++", Game::get()->mFonts.get(Font::VanillaExtractRegular), 20));
 	mTanks[0].mTextData.push_back(sf::Text("+", Game::get()->mFonts.get(Font::VanillaExtractRegular), 20));
 	mTanks[0].mTextData.push_back(sf::Text("++", Game::get()->mFonts.get(Font::VanillaExtractRegular), 20));
@@ -69,7 +69,7 @@ inline void PlayerTank::buildGUI()
 
 	deltaPosition.y += 30.0f;
 
-	mTanks.push_back(TankButton(mBorder.getPosition() + deltaPosition, "T-34", 20, 120.0, 15.0, 70.0f, "tank3b"));
+	mTanks.push_back(TankButton(mBorder.getPosition() + deltaPosition, "T-34", 20, 250.0, 15.0, 80.0f, "tank3b"));
 	mTanks[1].mTextData.push_back(sf::Text("++++", Game::get()->mFonts.get(Font::VanillaExtractRegular), 20));
 	mTanks[1].mTextData.push_back(sf::Text("+", Game::get()->mFonts.get(Font::VanillaExtractRegular), 20));
 	mTanks[1].mTextData.push_back(sf::Text("+", Game::get()->mFonts.get(Font::VanillaExtractRegular), 20));
@@ -81,7 +81,7 @@ inline void PlayerTank::buildGUI()
 	mTanks[1].mTextData[2].setFillColor(sf::Color::Blue);
 	deltaPosition.y += 30.0f;
 
-	mTanks.push_back(TankButton(mBorder.getPosition() + deltaPosition, "Tiger Panzer", 20, 150.0, 30.0, 60.0f, "tank2b"));
+	mTanks.push_back(TankButton(mBorder.getPosition() + deltaPosition, "Tiger Panzer", 20, 320.0, 20.0, 60.0f, "tank2b"));
 	mTanks[2].mTextData.push_back(sf::Text("+++++", Game::get()->mFonts.get(Font::VanillaExtractRegular), 20));
 	mTanks[2].mTextData.push_back(sf::Text("++", Game::get()->mFonts.get(Font::VanillaExtractRegular), 20));
 	mTanks[2].mTextData.push_back(sf::Text("-", Game::get()->mFonts.get(Font::VanillaExtractRegular), 20));
@@ -93,7 +93,7 @@ inline void PlayerTank::buildGUI()
 	mTanks[2].mTextData[2].setFillColor(sf::Color::Blue);
 	deltaPosition.y += 30.0f;
 
-	mTanks.push_back(TankButton(mBorder.getPosition() + deltaPosition, "T-55", 20, 70.0, 25.0, 150.0f, "tank3c"));
+	mTanks.push_back(TankButton(mBorder.getPosition() + deltaPosition, "T-55", 20, 150.0, 30.0, 180.0f, "tank3c"));
 	mTanks[3].mTextData.push_back(sf::Text("-", Game::get()->mFonts.get(Font::VanillaExtractRegular), 20));
 	mTanks[3].mTextData.push_back(sf::Text("++", Game::get()->mFonts.get(Font::VanillaExtractRegular), 20));
 	mTanks[3].mTextData.push_back(sf::Text("+++++", Game::get()->mFonts.get(Font::VanillaExtractRegular), 20));
