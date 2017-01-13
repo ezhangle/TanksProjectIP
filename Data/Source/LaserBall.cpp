@@ -39,6 +39,10 @@ void LaserBall::update(sf::Time dt)
 					mLasers.insert(mLasers.begin(), laser);
 
 					enemy->mHealth -= (mDamage / 2.f) * dt.asSeconds();
+					mParent->mScore += (1 + mDamage) * 0.1f;
+
+					if (enemy->mHealth <= 0.f)
+						mParent->mScore += (1 + mDamage + enemy->mMaxHealth) * 0.1f;
 
 					sf::Vector2f ballScale(mSprite->getScale());
 

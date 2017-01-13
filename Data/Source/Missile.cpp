@@ -2,9 +2,12 @@
 #include "Game.h"
 #include "Enums.h"
 #include "VectorUtility.h"
-#include <cmath>
-#include <iostream>
 #include "GameState_Play.h"
+
+#include <cmath>
+#include <list>
+#include <algorithm>
+
 
 Missile::Missile(Tank * parent)
 	:Projectile(new sf::Sprite(Game::get()->mTextures.get(Texture::missile)), parent),
@@ -54,13 +57,31 @@ void Missile::update(sf::Time dt)
 
 void Missile::setTarget()
 {
+	std::list<std::pair<float, Tank*>> distances;
+	std::pair<float, Tank*> pair;
+	pair.first = -1.f;
+
+	//find closest target
 	auto it = GameState_Play::getStatePointer()->mMap->mEntities[2].begin();
 	for (; it != GameState_Play::getStatePointer()->mMap->mEntities[2].end(); ++it) {
 		if (Tank* enemy = dynamic_cast<Tank*>(*it)) {
-			if (enemy->mTeam != mParent->mTeam && enemy->mHealth > 0.f)
-				mTarget = enemy;
+			if (enemy->mTeam != mParent->mTeam && enemy->mHealth > 0.f) {
+				pair.first = Vector2f::distance(mParent->mBase->getPosition(), enemy->mBase->getPosition());
+				pair.second = enemy;
+
+				distances.push_back(pair);
+			}
 		}
 	}
+
+	if (pair.first > -1.f) {
+		for (auto it = distances.begin(); it != distances.end(); ++it) {
+			if ((*it).first < pair.first)
+				pair = *it;
+		}
+	}
+	
+	mTarget = pair.second;
 }
 
 void Missile::rotateMissile(float deltaAsSeconds)

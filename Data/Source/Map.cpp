@@ -14,6 +14,8 @@
 #include "PU_HollowProj.h"
 #include "PU_Repair.h"
 #include "PU_Ally.h"
+#include "PU_Missile.h"
+#include "PU_Laser.h"
 
 #include <fstream>
 #include <vector>
@@ -124,7 +126,7 @@ void Map::update(sf::Time dt) {
 
 		
 	if (mEntities[1].size() < 4) {
-		if (mPowerUpRespawnClock.getElapsedTime().asSeconds() > 3.f) {
+		if (mPowerUpRespawnClock.getElapsedTime().asSeconds() > 4.f) {
 			sf::Vector2f* position = new sf::Vector2f;
 
 			do {
@@ -341,7 +343,7 @@ void Map::insertAI(const std::string& difficulty, const std::string& tankType, s
 
 void Map::insertRandomPowerUp(sf::Vector2f* position)
 {
-	int randomIndex = rand() % 5;
+	int randomIndex = rand() % 7;
 
 	switch (randomIndex) {
 	case 0:
@@ -358,6 +360,12 @@ void Map::insertRandomPowerUp(sf::Vector2f* position)
 		break;
 	case 4:
 		mEntities[1].insert(mEntities[1].begin(), new PU_Ally(position));
+		break;
+	case 5:
+		mEntities[1].insert(mEntities[1].begin(), new PU_Missile(position));
+		break;
+	case 6:
+		mEntities[1].insert(mEntities[1].begin(), new PU_Laser(position));
 		break;
 	default:
 		break;

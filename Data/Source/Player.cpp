@@ -14,17 +14,18 @@ mKeys(keys){
 
 void Player::handleInput(sf::Time dt) {
 
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num1))
+	//cheats
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num1) && sf::Keyboard::isKeyPressed(sf::Keyboard::Tilde))
 		changeProjectile(ProjectileType::Basic);
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num2))
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num2) && sf::Keyboard::isKeyPressed(sf::Keyboard::Tilde))
 		changeProjectile(ProjectileType::Missile);
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num3))
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num3) && sf::Keyboard::isKeyPressed(sf::Keyboard::Tilde))
 		changeProjectile(ProjectileType::LaserBall);
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num6))
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Num4) && sf::Keyboard::isKeyPressed(sf::Keyboard::Tilde))
 		mHitCooldown = 0.1f;
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::M))
-		std::cout << mScore << '\n';
 
+
+	//handle input
 	if (sf::Keyboard::isKeyPressed(mKeys[(int)Command::SHOOT]))
 		shoot();
 

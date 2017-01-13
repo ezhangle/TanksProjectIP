@@ -15,6 +15,11 @@ void PU_Ally::onTrigger(Tank * target)
 {
 	PowerUp::onTrigger(target);
 
+	if (target->mTeam == 1)
+		GameState_GameBuild::get()->teamOne.numberOfMembers++;
+	else
+		GameState_GameBuild::get()->teamTwo.numberOfMembers++;
+
 	Tank::ProjectileType projType = (Tank::ProjectileType)(rand() % (int)Tank::ProjectileType::NUMBER);
 
 	AI_Easy* ally = new AI_Easy(
@@ -23,10 +28,10 @@ void PU_Ally::onTrigger(Tank * target)
 		new sf::Vector2f(100.f, 100.f),
 		new sf::Vector2f(150.f, 150.f),
 		mTarget->mMaxHealth / 10.f,
-		mTarget->mDamage,
+		mTarget->mDamage / 2.f,
 		mTarget->mTeam);
 
-	ally->mProjectileType = projType;
+	ally->changeProjectile(projType);
 
 	GameState_Play::getStatePointer()->mMap->mEntities[2].insert(GameState_Play::getStatePointer()->mMap->mEntities[2].begin(), ally);
 	onDurationEnd();

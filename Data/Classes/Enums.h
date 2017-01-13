@@ -10,6 +10,7 @@ enum class Texture {
 	pu_fast_attacks,
 	pu_ally,
 	pu_missile,
+	pu_laser,
 	pu_repair,
 	pu_speed,
 	//end_pu

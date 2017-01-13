@@ -40,6 +40,9 @@ mIsProjectileHollow(false)
 	mHpBarTop.setPosition(mBase->getPosition().x - mHpBarTop.getLocalBounds().width / 2.f, mBase->getPosition().y - 50.f);
 	mHpBarBase.setPosition(mBase->getPosition().x - mHpBarBase.getLocalBounds().width / 2.f, mBase->getPosition().y - 50.f);
 
+	if (mTeam == 1)
+		mHpBarTop.setColor(sf::Color(0, 128, 128));
+
 	mMovingState = 0;
 	mLastPoint = mBase->getPosition();
 	mMovingStateClock.restart();
@@ -76,13 +79,9 @@ void Tank::update(sf::Time dt) {
 		auto it1 = GameState_Play::getStatePointer()->mMap->mEntities[2].begin();
 		auto it2 = GameState_Play::getStatePointer()->mMap->mEntities[2].end();
 		if (this->mTeam == 1)
-		{
 			GameState_GameBuild::get()->teamOne.numberOfMembers--;
-		}
 		else
-		{
 			GameState_GameBuild::get()->teamTwo.numberOfMembers--;
-		}
 		GameState_Play::getStatePointer()->timeUntilRestart.restart();
 
 		//disable all kind of targeting on this entity

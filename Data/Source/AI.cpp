@@ -192,11 +192,13 @@ void AI::calculatePath(sf::Vector2f& startPoint) {
 
 void AI::findNewTarget() {
 
+
 	mTarget = nullptr;
 	auto it = GameState_Play::getStatePointer()->mMap->mEntities[2].begin();
 	for (; it != GameState_Play::getStatePointer()->mMap->mEntities[2].end(); ++it) {
 		if (Tank* enemy = dynamic_cast<Tank*>(*it)) {
-			if(enemy->mTeam != mTeam && enemy->mHealth > 0.f)
+
+			if(enemy->mTeam != mTeam && enemy->mHealth > 0.f && rand() % 2)
 				mTarget = enemy;
 		}
 	}
